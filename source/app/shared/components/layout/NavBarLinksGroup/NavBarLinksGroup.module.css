@@ -1,0 +1,46 @@
+.chevron {
+  transition: transform 200ms ease;
+}
+
+.link {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  text-decoration: none;
+  font-size: var(--mantine-font-size-md);
+  color: var(--mantine-color-white);
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  border-radius: var(--mantine-radius-sm);
+  font-weight: 500;
+}
+
+.link:hover,
+.link:focus {
+  background-color: var(--mantine-color-blue-7);
+  color: var(--mantine-color-white);
+}
+
+.linkActive {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  font-size: var(--mantine-font-size-md);
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  border-radius: var(--mantine-radius-sm);
+  font-weight: 500;
+
+  box-shadow: var(--mantine-shadow-sm);
+  background-color: var(--mantine-color-white);
+  color: var(--mantine-color-blue-filled);
+}
+
+.nestedLink {
+  composes: link;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  padding-left: var(--mantine-spacing-xl);
+}
+
+.nestedLinkActive {
+  composes: linkActive;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+}

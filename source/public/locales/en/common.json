@@ -1,3 +1,5 @@
 {
-  "action.save": "Save"
+  "action.save": "Save",
+
+  "auth.logout": "Log Out"
 }

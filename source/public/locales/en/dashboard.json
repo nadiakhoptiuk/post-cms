@@ -1,0 +1,12 @@
+{
+  "dashboardLinks": {
+    "DASHBOARD": "Home",
+    "DASHBOARD_MY_POSTS": "My Posts",
+    "DASHBOARD_POSTS": "Posts",
+    "DASHBOARD_ALL_POSTS": "All",
+    "DASHBOARD_POSTS_ON_MODERATION": "On moderation",
+    "DASHBOARD_POSTS_COMPLAINTS": "Complaints",
+    "DASHBOARD_USERS": "Users",
+    "DASHBOARD_TAGS": "Tags"
+  }
+}
