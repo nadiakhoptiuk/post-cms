@@ -1,3 +1,14 @@
-export default function Index() {
-  return <div className="flex h-screen items-center justify-center"></div>;
+import { Outlet } from "@remix-run/react";
+import { Home } from "~/shared/components/layout/Home";
+
+export const handle = {
+  i18n: "common",
+};
+
+export default function HomeLayout() {
+  return (
+    <Home>
+      <Outlet />
+    </Home>
+  );
 }

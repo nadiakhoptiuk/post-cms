@@ -18,27 +18,39 @@ export const enum NavigationLink {
   DASHBOARD_USERS = "/dashboard/users",
   DASHBOARD_TAGS = "/dashboard/tags",
   LOGIN = "/login",
-  SIGNUP = "/signup",
   LOGOUT = "/logout",
+  MY_POSTS = "/my-posts",
+  PROFILE = "/profile",
+  SIGNUP = "/signup",
 }
 
 export const DashboardNavLinks = [
-  { id: "DASHBOARD", link: NavigationLink.DASHBOARD },
-  { id: "DASHBOARD_MY_POSTS", link: NavigationLink.DASHBOARD_MY_POSTS },
+  { id: "dashboard", link: NavigationLink.DASHBOARD },
+  { id: "dashboard.myPosts", link: NavigationLink.DASHBOARD_MY_POSTS },
   {
-    id: "DASHBOARD_POSTS",
+    id: "dashboard.posts",
     links: [
-      { id: "DASHBOARD_ALL_POSTS", link: NavigationLink.DASHBOARD_ALL_POSTS },
+      { id: "dashboard.allPosts", link: NavigationLink.DASHBOARD_ALL_POSTS },
       {
-        id: "DASHBOARD_POSTS_ON_MODERATION",
+        id: "dashboard.onModeration",
         link: NavigationLink.DASHBOARD_POSTS_ON_MODERATION,
       },
       {
-        id: "DASHBOARD_POSTS_COMPLAINTS",
+        id: "dashboard.postsComplains",
         link: NavigationLink.DASHBOARD_POSTS_COMPLAINTS,
       },
     ],
   },
-  { id: "DASHBOARD_USERS", link: NavigationLink.DASHBOARD_USERS },
-  { id: "DASHBOARD_TAGS", link: NavigationLink.DASHBOARD_TAGS },
+  { id: "dashboard.users", link: NavigationLink.DASHBOARD_USERS },
+  { id: "dashboard.tags", link: NavigationLink.DASHBOARD_TAGS },
+];
+
+export const AuthNavLinks = [
+  { id: "auth.login", link: NavigationLink.LOGIN },
+  { id: "auth.signup", link: NavigationLink.SIGNUP },
+];
+
+export const UserBarNavLinks = [
+  { id: "profile", link: NavigationLink.PROFILE },
+  { id: "myPosts", link: NavigationLink.MY_POSTS },
 ];

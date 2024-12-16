@@ -57,13 +57,7 @@
 }
 
 .linkActive {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  font-size: var(--mantine-font-size-md);
-  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
-  border-radius: var(--mantine-radius-sm);
-  font-weight: 500;
+  composes: link;
 
   box-shadow: var(--mantine-shadow-sm);
   background-color: var(--mantine-color-white);

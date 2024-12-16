@@ -1,5 +1,12 @@
 {
   "action.save": "Зберегти",
 
-  "auth.logout": "Вийти"
+  "auth.logout": "Вийти",
+  "auth.login": "Увійти",
+  "auth.signup": "Зареєструватися",
+
+  "userBarNavLinks": {
+    "profile": "Профіль",
+    "myPosts": "Мої пости"
+  }
 }

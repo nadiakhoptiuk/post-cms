@@ -1,12 +1,12 @@
 {
   "dashboardLinks": {
-    "DASHBOARD": "Головна",
-    "DASHBOARD_MY_POSTS": "Мої пости",
-    "DASHBOARD_POSTS": "Пости",
-    "DASHBOARD_ALL_POSTS": "Всі",
-    "DASHBOARD_POSTS_ON_MODERATION": "На модерації",
-    "DASHBOARD_POSTS_COMPLAINTS": "Скарги",
-    "DASHBOARD_USERS": "Користувачі",
-    "DASHBOARD_TAGS": "Теги"
+    "dashboard": "Головна",
+    "dashboard.myPosts": "Мої пости",
+    "dashboard.posts": "Пости",
+    "dashboard.allPosts": "Всі",
+    "dashboard.onModeration": "На модерації",
+    "dashboard.postsComplains": "Скарги",
+    "dashboard.users": "Користувачі",
+    "dashboard.tags": "Теги"
   }
 }

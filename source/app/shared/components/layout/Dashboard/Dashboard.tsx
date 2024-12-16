@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { NavLink } from "@remix-run/react";
-import { Group, ScrollArea } from "@mantine/core";
+import { Box, Group, ScrollArea } from "@mantine/core";
 
 // import { Logo } from "../../ui/Logo";
 // import { IconLogout } from "@tabler/icons-react";
@@ -13,6 +13,7 @@ import {
 import { WithChildren } from "~/shared/types/remix";
 
 import classes from "./Dashboard.module.css";
+import { Logo } from "../../ui/Logo";
 
 export const DashboardLayout = ({ children }: WithChildren) => {
   const { t } = useTranslation("common");
@@ -28,26 +29,17 @@ export const DashboardLayout = ({ children }: WithChildren) => {
           <div className={classes.navbarMain}>
             <div className={classes.header}>
               <Group justify="space-between ">
-                {/* <Logo style={{ width: 120 }} /> */}
+                <Logo accent={false} />
               </Group>
             </div>
 
             <ScrollArea className={classes.links}>
-              <div className={classes.linksInner}>{links}</div>
+              <Box className={classes.linksInner}>{links}</Box>
             </ScrollArea>
           </div>
 
           <div className={classes.footer}>
-            <NavLink
-              to={NavigationLink.LOGOUT}
-              className={({ isActive, isPending }) =>
-                isPending
-                  ? classes.linkPending
-                  : isActive
-                  ? classes.linkActive
-                  : classes.link
-              }
-            >
+            <NavLink to={NavigationLink.LOGOUT} className={classes.link}>
               {t("auth.logout")}
             </NavLink>
           </div>

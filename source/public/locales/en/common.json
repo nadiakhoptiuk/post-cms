@@ -1,5 +1,12 @@
 {
   "action.save": "Save",
 
-  "auth.logout": "Log Out"
+  "auth.logout": "Log Out",
+  "auth.login": "Log In",
+  "auth.signup": "Register",
+
+  "userBarNavLinks": {
+    "profile": "Profile",
+    "myPosts": "My Posts"
+  }
 }

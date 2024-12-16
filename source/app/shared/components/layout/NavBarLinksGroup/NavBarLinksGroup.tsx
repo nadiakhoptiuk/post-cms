@@ -17,12 +17,8 @@ export function LinksGroup({ links, link, id }: TDashboardNavLink) {
       <NavLink
         key={link.id}
         to={link.link}
-        className={({ isActive, isPending }) =>
-          isPending
-            ? classes.nestedLinkPending
-            : isActive
-            ? classes.nestedLinkActive
-            : classes.nestedLink
+        className={({ isActive }) =>
+          isActive ? classes.nestedLinkActive : classes.nestedLink
         }
       >
         {/* <Icon /> */}
@@ -61,12 +57,8 @@ export function LinksGroup({ links, link, id }: TDashboardNavLink) {
       {!hasLinks && link && (
         <NavLink
           to={link}
-          className={({ isActive, isPending }) =>
-            isPending
-              ? classes.linkPending
-              : isActive
-              ? classes.linkActive
-              : classes.link
+          className={({ isActive }) =>
+            isActive ? classes.linkActive : classes.link
           }
         >
           {t(`dashboardLinks.${id}`)}
