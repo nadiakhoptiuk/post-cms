@@ -1,0 +1,71 @@
+.link {
+  display: block;
+  line-height: 1;
+  width: max-content;
+  padding: 8px 12px;
+  border-radius: var(--mantine-radius-sm);
+  text-decoration: none;
+
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+}
+
+.accentLink {
+  composes: link;
+
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+}
+
+.accentLink:hover,
+.accentLink:focus {
+  background-color: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-6)
+  );
+  box-shadow: var(--mantine-shadow-xs);
+}
+
+.accentLink:hover .linkIcon,
+.accentLink:focus .linkIcon {
+  color: var(--mantine-color-white);
+}
+
+.unstyledLink {
+  composes: link;
+
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+}
+
+.unstyledLink:hover,
+.unstyledLink:focus {
+  background-color: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-6)
+  );
+  box-shadow: var(--mantine-shadow-xs);
+}
+
+.unstyledActiveLink {
+  composes: unstyledLink;
+
+  box-shadow: var(--mantine-shadow-sm);
+  background-color: var(--mantine-color-blue-1);
+  color: var(--mantine-color-blue-filled);
+}
+
+.unstyledActiveWideLink {
+  composes: unstyledActiveLink;
+  width: 100%;
+}
+
+.grayLink {
+  composes: link;
+  color: var(--mantine-color-gray-6);
+}
+
+.linkIcon {
+  color: var(--mantine-color-blue-1);
+  margin-right: var(--mantine-spacing-sm);
+  width: 25px;
+  height: 25px;
+}

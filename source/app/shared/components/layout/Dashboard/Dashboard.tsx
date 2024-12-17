@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { NavLink } from "@remix-run/react";
-import { Box, Group, ScrollArea } from "@mantine/core";
+import { AppShell, Burger, Group, ScrollArea } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 
-// import { Logo } from "../../ui/Logo";
-// import { IconLogout } from "@tabler/icons-react";
+import { Logo } from "../../ui/Logo";
 import { LinksGroup } from "../NavBarLinksGroup";
+import { RemixLink } from "../../ui/RemixLink";
 
 import {
   DashboardNavLinks,
@@ -13,10 +13,10 @@ import {
 import { WithChildren } from "~/shared/types/remix";
 
 import classes from "./Dashboard.module.css";
-import { Logo } from "../../ui/Logo";
 
 export const DashboardLayout = ({ children }: WithChildren) => {
   const { t } = useTranslation("common");
+  const [menuOpened, { toggle: toggleMenu }] = useDisclosure();
 
   const links = DashboardNavLinks.map((item) => (
     <LinksGroup {...item} key={item.id} />
@@ -24,29 +24,41 @@ export const DashboardLayout = ({ children }: WithChildren) => {
 
   return (
     <div>
-      <aside>
-        <nav className={classes.navbar}>
-          <div className={classes.navbarMain}>
-            <div className={classes.header}>
-              <Group justify="space-between ">
-                <Logo accent={false} />
-              </Group>
-            </div>
+      <AppShell
+        header={{ height: 60 }}
+        navbar={{
+          width: 200,
+          breakpoint: "xs",
+          collapsed: { mobile: !menuOpened },
+        }}
+        padding="md"
+      >
+        <AppShell.Header>
+          <Group h="100%" px="md">
+            <Burger
+              opened={menuOpened}
+              onClick={toggleMenu}
+              hiddenFrom="xs"
+              aria-label={t("aria.toggleMenu")}
+            />
+            <Logo />
+          </Group>
+        </AppShell.Header>
 
-            <ScrollArea className={classes.links}>
-              <Box className={classes.linksInner}>{links}</Box>
-            </ScrollArea>
-          </div>
+        <AppShell.Navbar p="md">
+          <ScrollArea>
+            <Group gap="xs">{links}</Group>
+          </ScrollArea>
 
           <div className={classes.footer}>
-            <NavLink to={NavigationLink.LOGOUT} className={classes.link}>
+            <RemixLink to={NavigationLink.LOGOUT} variant="gray" fullWidth>
               {t("auth.logout")}
-            </NavLink>
+            </RemixLink>
           </div>
-        </nav>
-      </aside>
+        </AppShell.Navbar>
 
-      <main className="content">{children}</main>
+        <main className="content">{children}</main>
+      </AppShell>
     </div>
   );
 };

@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { NavLink } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 import { Box, Collapse, Group, UnstyledButton } from "@mantine/core";
 // import { IconCalendarStats, IconChevronRight } from "@tabler/icons-react";
 
+import { RemixLink } from "../../ui/RemixLink";
+
 import { TDashboardNavLink } from "~/shared/types/remix";
+
 import classes from "./NavBarLinksGroup.module.css";
 
 export function LinksGroup({ links, link, id }: TDashboardNavLink) {
@@ -14,16 +16,10 @@ export function LinksGroup({ links, link, id }: TDashboardNavLink) {
 
   const items = (hasLinks ? links : []).map((link) => {
     return (
-      <NavLink
-        key={link.id}
-        to={link.link}
-        className={({ isActive }) =>
-          isActive ? classes.nestedLinkActive : classes.nestedLink
-        }
-      >
+      <RemixLink variant="accent" fullWidth key={link.id} to={link.link}>
         {/* <Icon /> */}
         <span>{t(`dashboardLinks.${link.id}`)}</span>
-      </NavLink>
+      </RemixLink>
     );
   });
 
@@ -32,7 +28,7 @@ export function LinksGroup({ links, link, id }: TDashboardNavLink) {
       {hasLinks && (
         <UnstyledButton
           onClick={() => setOpened((o) => !o)}
-          className={classes.link}
+          className={classes.button}
         >
           <Group justify="space-between" gap={0}>
             <Box style={{ display: "flex", alignItems: "center" }}>
@@ -55,17 +51,16 @@ export function LinksGroup({ links, link, id }: TDashboardNavLink) {
       )}
 
       {!hasLinks && link && (
-        <NavLink
-          to={link}
-          className={({ isActive }) =>
-            isActive ? classes.linkActive : classes.link
-          }
-        >
+        <RemixLink fullWidth to={link}>
           {t(`dashboardLinks.${id}`)}
-        </NavLink>
+        </RemixLink>
       )}
 
-      {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
+      {hasLinks ? (
+        <Collapse pl="20" w="100%" in={opened}>
+          {items}
+        </Collapse>
+      ) : null}
     </>
   );
 }

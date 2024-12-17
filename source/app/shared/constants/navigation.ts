@@ -21,6 +21,7 @@ export const enum NavigationLink {
   LOGOUT = "/logout",
   MY_POSTS = "/my-posts",
   PROFILE = "/profile",
+  DELETE_ACCOUNT = "/delete-account",
   SIGNUP = "/signup",
 }
 

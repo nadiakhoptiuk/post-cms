@@ -1,33 +1,26 @@
-// import { useState } from "react";
-// import { useDisclosure } from "@mantine/hooks";
 import { Avatar, Group, Menu, Text, UnstyledButton } from "@mantine/core";
-import { NavLink } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
+
 import { NavigationLink, UserBarNavLinks } from "~/shared/constants/navigation";
+import { RemixLink } from "../RemixLink/RemixLink";
+
+import classes from "./UserBar.module.css";
 
 export const UserBar = ({ user }: { user: { name: string } }) => {
-  // const [opened, { toggle }] = useDisclosure(false);
-  // const [userMenuOpened, setUserMenuOpened] = useState(false);
-
   const { t } = useTranslation();
 
   return (
     <Menu
-      width={260}
+      width={180}
       position="bottom-end"
       transitionProps={{ transition: "pop-top-right" }}
-      // onClose={() => setUserMenuOpened(false)}
-      // onOpen={() => setUserMenuOpened(true)}
       withinPortal
     >
       <Menu.Target>
-        <UnstyledButton
-          // className={cx(classes.user, { [classes.userActive]: userMenuOpened })}
-          className=""
-        >
+        <UnstyledButton>
           <Group gap={7}>
-            <Avatar alt={user.name} radius="xl" size={20} />
-            <Text fw={500} size="sm" lh={1} mr={3}>
+            <Avatar alt={user.name} color="cyan" radius="xl" size={30} />
+            <Text fw={500} size="sm" visibleFrom="xs" lh={1} mr={3}>
               {user.name}
             </Text>
             {/* <IconChevronDown size={12} stroke={1.5} /> */}
@@ -35,47 +28,44 @@ export const UserBar = ({ user }: { user: { name: string } }) => {
         </UnstyledButton>
       </Menu.Target>
 
-      <Menu.Dropdown>
+      <Menu.Dropdown component="div">
         {UserBarNavLinks.map(({ id, link }) => {
           return (
             <Menu.Item
               key={id}
+              component="div"
+              className={classes.item}
               // leftSection={
               //   <IconStar size={16} color={theme.colors.yellow[6]} stroke={1.5} />
               // }
             >
-              <NavLink
-                to={link}
-                // className={classes.link}
-              >
+              <RemixLink to={link} fullWidth>
                 {t(`userBarNavLinks.${id}`)}
-              </NavLink>
+              </RemixLink>
             </Menu.Item>
           );
         })}
 
         <Menu.Divider />
         <Menu.Item
-          color="red"
+          component="div"
+          className={classes.item}
           // leftSection={<IconTrash size={16} stroke={1.5} />}
         >
-          <NavLink
-            to={NavigationLink.LOGOUT}
-            // className={classes.link}
-          >
+          <RemixLink to={NavigationLink.LOGOUT} fullWidth>
             {t("auth.logout")}
-          </NavLink>
+          </RemixLink>
         </Menu.Item>
 
         <Menu.Divider />
-
-        <Menu.Label>Danger zone</Menu.Label>
-
         <Menu.Item
+          className={classes.item}
           color="red"
           // leftSection={<IconTrash size={16} stroke={1.5} />}
         >
-          Delete account
+          <RemixLink to={NavigationLink.DELETE_ACCOUNT} fullWidth dangerous>
+            {t("auth.deleteAccount")}
+          </RemixLink>
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

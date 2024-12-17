@@ -1,26 +1,24 @@
-import { NavLink } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
-import { Group, List, ListItem } from "@mantine/core";
+import { Burger, Group, List, ListItem } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 
-import { AuthNavLinks } from "~/shared/constants/navigation";
+import { Logo } from "../../ui/Logo";
+import { BurgerMenu } from "../../ui/BurgerMenu";
+import { RemixLink } from "../../ui/RemixLink";
 
 import { WithChildren } from "~/shared/types/remix";
+import { AuthNavLinks } from "~/shared/constants/navigation";
+
 import classes from "./Auth.module.css";
-import { Logo } from "../../ui/Logo";
 
 export function AuthLayout({ children }: WithChildren) {
   const { t } = useTranslation(["common", "auth"]);
+  const [menuOpened, { toggle: toggleMenu, close: closeMenu }] =
+    useDisclosure(false);
 
   const items = AuthNavLinks.map(({ id, link }) => (
     <ListItem key={id}>
-      <NavLink
-        to={link}
-        className={({ isActive }) =>
-          isActive ? classes.linkActive : classes.link
-        }
-      >
-        {t(id)}
-      </NavLink>
+      <RemixLink to={link}>{t(id)}</RemixLink>
     </ListItem>
   ));
 
@@ -28,18 +26,32 @@ export function AuthLayout({ children }: WithChildren) {
     <>
       <header className={classes.header}>
         <div className={classes.inner}>
-          <Group>
-            {/* <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" /> */}
+          <Group className={classes.mobileInner}>
             <Logo />
+
+            <Burger
+              opened={menuOpened}
+              onClick={toggleMenu}
+              hiddenFrom="xs"
+              aria-label={t("aria.toggleMenu")}
+            />
           </Group>
 
           <Group>
-            <List visibleFrom="sm" className={classes.links}>
+            <List visibleFrom="xs" className={classes.links}>
               {items}
             </List>
           </Group>
         </div>
       </header>
+
+      <BurgerMenu close={closeMenu} opened={menuOpened} hiddenFrom="xs">
+        <Group p={20}>
+          <List spacing={10} className={classes.menuLinks}>
+            {items}
+          </List>
+        </Group>
+      </BurgerMenu>
 
       <main className="content">{children}</main>
     </>
