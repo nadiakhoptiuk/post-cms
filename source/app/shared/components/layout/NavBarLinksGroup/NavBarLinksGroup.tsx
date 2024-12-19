@@ -1,14 +1,14 @@
 import { useState } from "react";
+import { useLocation } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 import { Box, Collapse, Group, List, UnstyledButton } from "@mantine/core";
 // import { IconCalendarStats, IconChevronRight } from "@tabler/icons-react";
 
 import { RemixLink } from "../../ui/RemixLink";
 
-import { TDashboardNavLink } from "~/shared/types/remix";
+import { TDashboardNavLink } from "./NavBarLinksGroup.types";
 
 import classes from "./NavBarLinksGroup.module.css";
-import { useLocation } from "@remix-run/react";
 
 export function LinksGroup({ links, link, id }: TDashboardNavLink) {
   const hasLinks = Array.isArray(links);

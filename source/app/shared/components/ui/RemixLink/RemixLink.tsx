@@ -1,18 +1,14 @@
-import { NavLink, NavLinkProps } from "@remix-run/react";
+import { NavLink } from "@remix-run/react";
 
 import classes from "./RemixLink.module.css";
+import { TRemixLink } from "./RemixLink.types";
 
 export const RemixLink = ({
   to,
   children,
   variant = "unstyled",
   fullWidth = false,
-}: NavLinkProps & {
-  children: React.ReactNode;
-  variant?: "accent" | "unstyled" | "gray" | "dangerous";
-  insideBox?: boolean;
-  fullWidth?: boolean;
-}) => {
+}: TRemixLink) => {
   return (
     <NavLink
       to={to}

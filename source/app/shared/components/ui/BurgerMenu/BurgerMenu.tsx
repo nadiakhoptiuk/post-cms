@@ -2,17 +2,14 @@ import { Drawer } from "@mantine/core";
 
 import { Logo } from "../Logo";
 
+import { TBurgerMenu } from "./BurgerMenu.types";
+
 export const BurgerMenu = ({
   opened,
   close,
   children,
   hiddenFrom = "xs",
-}: {
-  opened: boolean;
-  close: () => void;
-  children: React.ReactNode;
-  hiddenFrom?: string;
-}) => {
+}: TBurgerMenu) => {
   return (
     <>
       <Drawer.Root

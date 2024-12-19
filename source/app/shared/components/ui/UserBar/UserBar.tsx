@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { NavigationLink, UserBarNavLinks } from "~/shared/constants/navigation";
 import { RemixLink } from "../RemixLink/RemixLink";
 
-import classes from "./UserBar.module.css";
+import { TUserBar } from "./UserBar.types";
 
-export const UserBar = ({ user }: { user: { name: string } }) => {
+export const UserBar = ({ user }: TUserBar) => {
   const { t } = useTranslation();
 
   return (
@@ -34,7 +34,7 @@ export const UserBar = ({ user }: { user: { name: string } }) => {
             <Menu.Item
               key={id}
               component="div"
-              className={classes.item}
+              p="0"
               // leftSection={
               //   <IconStar size={16} color={theme.colors.yellow[6]} stroke={1.5} />
               // }
@@ -49,7 +49,7 @@ export const UserBar = ({ user }: { user: { name: string } }) => {
         <Menu.Divider />
         <Menu.Item
           component="div"
-          className={classes.item}
+          p="0"
           // leftSection={<IconTrash size={16} stroke={1.5} />}
         >
           <RemixLink to={NavigationLink.LOGOUT} fullWidth>
@@ -59,7 +59,7 @@ export const UserBar = ({ user }: { user: { name: string } }) => {
 
         <Menu.Divider />
         <Menu.Item
-          className={classes.item}
+          p="0"
           color="red"
           // leftSection={<IconTrash size={16} stroke={1.5} />}
         >
