@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, Collapse, Group, UnstyledButton } from "@mantine/core";
+import { Box, Collapse, Group, List, UnstyledButton } from "@mantine/core";
 // import { IconCalendarStats, IconChevronRight } from "@tabler/icons-react";
 
 import { RemixLink } from "../../ui/RemixLink";
@@ -8,18 +8,39 @@ import { RemixLink } from "../../ui/RemixLink";
 import { TDashboardNavLink } from "~/shared/types/remix";
 
 import classes from "./NavBarLinksGroup.module.css";
+import { useLocation } from "@remix-run/react";
 
 export function LinksGroup({ links, link, id }: TDashboardNavLink) {
   const hasLinks = Array.isArray(links);
-  const [opened, setOpened] = useState(false);
+  const location = useLocation();
+
+  const shouldOpenDropdown = () => {
+    if (!links) {
+      return false;
+    }
+
+    const chidPaths = links.map(({ link }) => link);
+    return chidPaths.some((el) => el === location.pathname);
+  };
+
+  const [opened, setOpened] = useState(shouldOpenDropdown());
   const { t } = useTranslation("dashboard");
 
   const items = (hasLinks ? links : []).map((link) => {
     return (
-      <RemixLink variant="accent" fullWidth key={link.id} to={link.link}>
-        {/* <Icon /> */}
-        <span>{t(`dashboardLinks.${link.id}`)}</span>
-      </RemixLink>
+      <List.Item
+        key={link.id}
+        w="100%"
+        styles={{
+          itemWrapper: { width: "100%" },
+          itemLabel: { width: "100%" },
+        }}
+      >
+        <RemixLink variant="accent" fullWidth to={link.link}>
+          {/* <Icon /> */}
+          <span>{t(`dashboardLinks.${link.id}`)}</span>
+        </RemixLink>
+      </List.Item>
     );
   });
 
@@ -27,6 +48,8 @@ export function LinksGroup({ links, link, id }: TDashboardNavLink) {
     <>
       {hasLinks && (
         <UnstyledButton
+          mt="xs"
+          c="dark"
           onClick={() => setOpened((o) => !o)}
           className={classes.button}
         >
@@ -51,14 +74,24 @@ export function LinksGroup({ links, link, id }: TDashboardNavLink) {
       )}
 
       {!hasLinks && link && (
-        <RemixLink fullWidth to={link}>
-          {t(`dashboardLinks.${id}`)}
-        </RemixLink>
+        <List.Item
+          w="100%"
+          styles={{
+            itemWrapper: { width: "100%" },
+            itemLabel: { width: "100%" },
+          }}
+        >
+          <RemixLink fullWidth to={link}>
+            {t(`dashboardLinks.${id}`)}
+          </RemixLink>
+        </List.Item>
       )}
 
       {hasLinks ? (
         <Collapse pl="20" w="100%" in={opened}>
-          {items}
+          <List mb="0" mt="xs" spacing="xs">
+            {items}
+          </List>
         </Collapse>
       ) : null}
     </>

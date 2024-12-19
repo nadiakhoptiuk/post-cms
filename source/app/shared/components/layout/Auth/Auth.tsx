@@ -17,8 +17,17 @@ export function AuthLayout({ children }: WithChildren) {
     useDisclosure(false);
 
   const items = AuthNavLinks.map(({ id, link }) => (
-    <ListItem key={id}>
-      <RemixLink to={link}>{t(id)}</RemixLink>
+    <ListItem
+      key={id}
+      styles={{
+        itemWrapper: { width: "100%" },
+        itemLabel: { width: "100%" },
+        item: { flexWrap: "nowrap" },
+      }}
+    >
+      <RemixLink to={link} fullWidth>
+        {t(id)}
+      </RemixLink>
     </ListItem>
   ));
 
@@ -37,7 +46,7 @@ export function AuthLayout({ children }: WithChildren) {
             />
           </Group>
 
-          <Group>
+          <Group grow>
             <List visibleFrom="xs" className={classes.links}>
               {items}
             </List>

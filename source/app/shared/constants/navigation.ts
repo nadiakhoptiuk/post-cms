@@ -26,7 +26,6 @@ export const enum NavigationLink {
 }
 
 export const DashboardNavLinks = [
-  { id: "dashboard", link: NavigationLink.DASHBOARD },
   { id: "dashboard.myPosts", link: NavigationLink.DASHBOARD_MY_POSTS },
   {
     id: "dashboard.posts",

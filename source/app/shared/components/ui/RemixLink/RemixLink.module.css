@@ -30,6 +30,14 @@
   color: var(--mantine-color-white);
 }
 
+.accentActiveLink {
+  composes: accentLink;
+
+  box-shadow: var(--mantine-shadow-sm);
+  background-color: var(--mantine-color-blue-1);
+  color: var(--mantine-color-blue-filled);
+}
+
 .unstyledLink {
   composes: link;
 
@@ -58,8 +66,14 @@
   width: 100%;
 }
 
+.dangerousLink {
+  composes: link;
+  color: var(--mantine-color-red);
+}
+
 .grayLink {
   composes: link;
+
   color: var(--mantine-color-gray-6);
 }
 

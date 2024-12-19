@@ -63,7 +63,11 @@ export const UserBar = ({ user }: { user: { name: string } }) => {
           color="red"
           // leftSection={<IconTrash size={16} stroke={1.5} />}
         >
-          <RemixLink to={NavigationLink.DELETE_ACCOUNT} fullWidth dangerous>
+          <RemixLink
+            to={NavigationLink.DELETE_ACCOUNT}
+            fullWidth
+            variant="dangerous"
+          >
             {t("auth.deleteAccount")}
           </RemixLink>
         </Menu.Item>

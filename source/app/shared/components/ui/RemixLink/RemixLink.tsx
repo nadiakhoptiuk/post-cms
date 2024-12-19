@@ -7,13 +7,11 @@ export const RemixLink = ({
   children,
   variant = "unstyled",
   fullWidth = false,
-  dangerous = false,
 }: NavLinkProps & {
   children: React.ReactNode;
-  variant?: "accent" | "unstyled" | "gray";
+  variant?: "accent" | "unstyled" | "gray" | "dangerous";
   insideBox?: boolean;
   fullWidth?: boolean;
-  dangerous?: boolean;
 }) => {
   return (
     <NavLink
@@ -21,6 +19,10 @@ export const RemixLink = ({
       className={({ isActive }) => {
         if (variant === "gray") {
           return classes.grayLink;
+        }
+
+        if (variant === "dangerous") {
+          return classes.dangerousLink;
         }
 
         if (variant === "unstyled") {
@@ -31,8 +33,14 @@ export const RemixLink = ({
       }}
       style={
         fullWidth
-          ? { width: "100%", color: dangerous ? "red" : "" }
-          : { width: "max-content", color: dangerous ? "red" : "" }
+          ? {
+              width: "100%",
+              textWrap: "nowrap",
+            }
+          : {
+              width: "max-content",
+              textWrap: "nowrap",
+            }
       }
     >
       {children}

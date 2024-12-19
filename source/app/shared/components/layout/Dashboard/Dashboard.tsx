@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { AppShell, Burger, Group, ScrollArea } from "@mantine/core";
+import { AppShell, Burger, Group, List, ScrollArea } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 import { Logo } from "../../ui/Logo";
@@ -41,13 +41,17 @@ export const DashboardLayout = ({ children }: WithChildren) => {
               hiddenFrom="xs"
               aria-label={t("aria.toggleMenu")}
             />
-            <Logo />
+            <Logo link={NavigationLink.DASHBOARD} />
           </Group>
         </AppShell.Header>
 
         <AppShell.Navbar p="md">
           <ScrollArea>
-            <Group gap="xs">{links}</Group>
+            <Group>
+              <List spacing="xs" w="100%">
+                {links}
+              </List>
+            </Group>
           </ScrollArea>
 
           <div className={classes.footer}>

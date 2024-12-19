@@ -3,9 +3,15 @@ import { Link } from "@remix-run/react";
 import { NavigationLink } from "~/shared/constants/navigation";
 // import { IconFloatNone } from "@tabler/icons-react/dist/cjs/tabler-icons-react.cjs";
 
-export const Logo = ({ accent = true }: { accent?: boolean }) => {
+export const Logo = ({
+  accent = true,
+  link,
+}: {
+  accent?: boolean;
+  link?: string;
+}) => {
   return (
-    <Link to={NavigationLink.HOME} style={{ textDecoration: "none" }}>
+    <Link to={link || NavigationLink.HOME} style={{ textDecoration: "none" }}>
       {/* <ThemeIcon
         variant="gradient"
         size="xl"
@@ -14,6 +20,7 @@ export const Logo = ({ accent = true }: { accent?: boolean }) => {
       > */}
       {/* <IconFloatNone size={28} style={{ color: accent ? "blue" : "white" }} /> */}
       <Text
+        component="span"
         size="xl"
         fw={900}
         variant="gradient"
