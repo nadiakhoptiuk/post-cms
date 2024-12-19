@@ -45,7 +45,7 @@ module.exports = {
           { name: "NavLink", linkAttribute: "to" },
         ],
         "import/resolver": {
-          typescript: {},
+          typescript: { alwaysTryTypes: true, project: "./tsconfig.json" },
         },
       },
     },
@@ -63,6 +63,7 @@ module.exports = {
           },
           typescript: {
             alwaysTryTypes: true,
+            project: "./tsconfig.json",
           },
         },
       },
