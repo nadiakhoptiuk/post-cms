@@ -27,7 +27,7 @@ export const DashboardLayout = ({ children }: WithChildren) => {
       <AppShell
         header={{ height: 60 }}
         navbar={{
-          width: 200,
+          width: 250,
           breakpoint: "xs",
           collapsed: { mobile: !menuOpened },
         }}

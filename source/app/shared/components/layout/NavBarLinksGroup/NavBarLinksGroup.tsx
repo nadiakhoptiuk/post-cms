@@ -2,17 +2,18 @@ import { useState } from "react";
 import { useLocation } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 import { Box, Collapse, Group, List, UnstyledButton } from "@mantine/core";
-// import { IconCalendarStats, IconChevronRight } from "@tabler/icons-react";
+import { IconChevronRight, TablerIcon } from "@tabler/icons-react";
 
 import { RemixLink } from "../../ui/RemixLink";
 
 import { TDashboardNavLink } from "./NavBarLinksGroup.types";
 
-import classes from "./NavBarLinksGroup.module.css";
+import s from "./NavBarLinksGroup.module.css";
 
-export function LinksGroup({ links, link, id }: TDashboardNavLink) {
+export function LinksGroup({ links, link, icon, id }: TDashboardNavLink) {
   const hasLinks = Array.isArray(links);
   const location = useLocation();
+  const Icon = icon || undefined;
 
   const shouldOpenDropdown = () => {
     if (!links) {
@@ -26,19 +27,21 @@ export function LinksGroup({ links, link, id }: TDashboardNavLink) {
   const [opened, setOpened] = useState(shouldOpenDropdown());
   const { t } = useTranslation("dashboard");
 
-  const items = (hasLinks ? links : []).map((link) => {
+  const items = (hasLinks ? links : []).map(({ id, link, icon }) => {
+    const Icon: TablerIcon = icon || undefined;
+
     return (
       <List.Item
-        key={link.id}
+        key={id}
         w="100%"
         styles={{
           itemWrapper: { width: "100%" },
           itemLabel: { width: "100%" },
         }}
       >
-        <RemixLink variant="accent" fullWidth to={link.link}>
-          {/* <Icon /> */}
-          <span>{t(`dashboardLinks.${link.id}`)}</span>
+        <RemixLink variant="accent" fullWidth to={link}>
+          <Icon />
+          <span>{t(`dashboardLinks.${id}`)}</span>
         </RemixLink>
       </List.Item>
     );
@@ -51,24 +54,28 @@ export function LinksGroup({ links, link, id }: TDashboardNavLink) {
           mt="xs"
           c="dark"
           onClick={() => setOpened((o) => !o)}
-          className={classes.button}
+          className={s.button}
         >
           <Group justify="space-between" gap={0}>
-            <Box style={{ display: "flex", alignItems: "center" }}>
-              {/* <ThemeIcon variant="light" size={30}>
-              <Icon size={18} />
-            </ThemeIcon> */}
+            <Box
+              style={{
+                display: "flex",
+                alignItems: "center",
+                columnGap: "10px",
+              }}
+            >
+              {Icon && <Icon size={22} />}
               <Box>{t(`dashboardLinks.${id}`)}</Box>
             </Box>
 
-            {/* {hasLinks && (
-            <IconChevronRight
-              className={classes.chevron}
-              stroke={1.5}
-              size={16}
-              style={{ transform: opened ? "rotate(-90deg)" : "none" }}
-            />
-          )} */}
+            {hasLinks && (
+              <IconChevronRight
+                className={s.chevron}
+                stroke={1.5}
+                size={16}
+                style={{ transform: opened ? "rotate(-90deg)" : "none" }}
+              />
+            )}
           </Group>
         </UnstyledButton>
       )}
@@ -82,7 +89,8 @@ export function LinksGroup({ links, link, id }: TDashboardNavLink) {
           }}
         >
           <RemixLink fullWidth to={link}>
-            {t(`dashboardLinks.${id}`)}
+            {Icon && <Icon size={22} />}
+            <span>{t(`dashboardLinks.${id}`)}</span>
           </RemixLink>
         </List.Item>
       )}

@@ -1,12 +1,14 @@
-// import {
-//   IconHome,
-//   IconTags,
-//   IconUsers,
-//   IconMessageExclamation,
-//   IconPencilMinus,
-// } from "@tabler/icons-react";
-// import { FaHome, FaPencilAlt, FaUsersCog, FaTags } from "react-icons/fa";
-// import { LuMessageSquareWarning } from "react-icons/lu";
+import {
+  IconTags,
+  IconUsers,
+  IconAlertSquareRounded,
+  IconPencilMinus,
+  IconNotebook,
+  IconHourglassHigh,
+  IconLogin,
+  IconUserScan,
+  IconUserPlus,
+} from "@tabler/icons-react";
 
 export const enum NavigationLink {
   HOME = "/",
@@ -26,31 +28,50 @@ export const enum NavigationLink {
 }
 
 export const DashboardNavLinks = [
-  { id: "dashboard.myPosts", link: NavigationLink.DASHBOARD_MY_POSTS },
+  {
+    id: "dashboard.myPosts",
+    link: NavigationLink.DASHBOARD_MY_POSTS,
+    icon: IconPencilMinus,
+  },
   {
     id: "dashboard.posts",
+    icon: IconNotebook,
     links: [
-      { id: "dashboard.allPosts", link: NavigationLink.DASHBOARD_ALL_POSTS },
+      {
+        id: "dashboard.allPosts",
+        link: NavigationLink.DASHBOARD_ALL_POSTS,
+        icon: IconNotebook,
+      },
       {
         id: "dashboard.onModeration",
         link: NavigationLink.DASHBOARD_POSTS_ON_MODERATION,
+        icon: IconHourglassHigh,
       },
       {
         id: "dashboard.postsComplains",
         link: NavigationLink.DASHBOARD_POSTS_COMPLAINTS,
+        icon: IconAlertSquareRounded,
       },
     ],
   },
-  { id: "dashboard.users", link: NavigationLink.DASHBOARD_USERS },
-  { id: "dashboard.tags", link: NavigationLink.DASHBOARD_TAGS },
+  {
+    id: "dashboard.users",
+    link: NavigationLink.DASHBOARD_USERS,
+    icon: IconUsers,
+  },
+  {
+    id: "dashboard.tags",
+    link: NavigationLink.DASHBOARD_TAGS,
+    icon: IconTags,
+  },
 ];
 
 export const AuthNavLinks = [
-  { id: "auth.login", link: NavigationLink.LOGIN },
-  { id: "auth.signup", link: NavigationLink.SIGNUP },
+  { id: "auth.login", link: NavigationLink.LOGIN, icon: IconLogin },
+  { id: "auth.signup", link: NavigationLink.SIGNUP, icon: IconUserPlus },
 ];
 
 export const UserBarNavLinks = [
-  { id: "profile", link: NavigationLink.PROFILE },
-  { id: "myPosts", link: NavigationLink.MY_POSTS },
+  { id: "profile", link: NavigationLink.PROFILE, icon: IconUserScan },
+  { id: "myPosts", link: NavigationLink.MY_POSTS, icon: IconPencilMinus },
 ];
