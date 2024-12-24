@@ -1,3 +1,15 @@
 {
-  "action.save": "Save"
+  "action.save": "Зберегти",
+
+  "auth.logout": "Вийти",
+  "auth.login": "Увійти",
+  "auth.signup": "Зареєструватися",
+  "auth.deleteAccount": "Видалити акаунт",
+
+  "userBarNavLinks": {
+    "profile": "Профіль",
+    "myPosts": "Мої пости"
+  },
+
+  "aria.toggleMenu": "Відкрити мобільне меню"
 }

@@ -1,3 +1,15 @@
 {
-  "action.save": "Save"
+  "action.save": "Save",
+
+  "auth.logout": "Log Out",
+  "auth.login": "Log In",
+  "auth.signup": "Register",
+  "auth.deleteAccount": "Delete account",
+
+  "userBarNavLinks": {
+    "profile": "Profile",
+    "myPosts": "My Posts"
+  },
+
+  "aria.toggleMenu": "Open Mobile Menu"
 }
