@@ -20,6 +20,7 @@ import {
 import { TRootLoader } from "~/shared/.server/root/loader";
 
 export { loader } from "~/shared/.server/root/loader";
+export { action } from "~/shared/.server/root/action";
 export { meta } from "~/shared/utils/meta";
 
 import appStylesHref from "./app.css?url";
