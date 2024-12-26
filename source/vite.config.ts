@@ -23,7 +23,9 @@ export default defineConfig({
       routes(defineRoutes) {
         return defineRoutes((route) => {
           // Home
-          route(NavigationLink.HOME, "routes/home/route.tsx", { index: true });
+          route(NavigationLink.HOME, "routes/_index/route.tsx", {
+            index: true,
+          });
           // Dashboard
           route(NavigationLink.DASHBOARD, "routes/dashboard/route.tsx", {
             index: true,
