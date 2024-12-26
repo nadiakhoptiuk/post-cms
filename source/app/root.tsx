@@ -8,6 +8,8 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
+import { useChangeLanguage } from "remix-i18next/react";
+
 import { ReactNode } from "react";
 import { LinksFunction } from "@remix-run/node";
 import {
@@ -20,6 +22,7 @@ import {
 import { TRootLoader } from "~/shared/.server/root/loader";
 
 export { loader } from "~/shared/.server/root/loader";
+export { action } from "~/shared/.server/root/action";
 export { meta } from "~/shared/utils/meta";
 
 import appStylesHref from "./app.css?url";
@@ -37,6 +40,7 @@ export const links: LinksFunction = () => [
 
 export function Layout({ children }: { children: ReactNode }) {
   const { theme, locale } = useLoaderData<TRootLoader>();
+  useChangeLanguage(locale);
 
   return (
     <html lang={locale} data-mantine-color-scheme={theme}>
