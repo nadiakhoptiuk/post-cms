@@ -13,7 +13,7 @@ export const UserBar = ({ user, locale }: TUserBar) => {
 
   return (
     <Menu
-      width={180}
+      width={200}
       position="bottom-end"
       transitionProps={{ transition: "pop-top-right" }}
       withinPortal
@@ -32,7 +32,7 @@ export const UserBar = ({ user, locale }: TUserBar) => {
         </UnstyledButton>
       </Menu.Target>
 
-      <Menu.Dropdown component="div">
+      <Menu.Dropdown component="div" p="xs">
         {UserBarNavLinks.map(({ id, link, icon: Icon }) => {
           return (
             <Menu.Item key={id} component="div" p="0">

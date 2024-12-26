@@ -1,7 +1,7 @@
 import { ActionFunctionArgs } from "@remix-run/node";
 
 import i18n from "~/shared/services/i18n";
-import { commitSession, getSession } from "../services/session.server";
+import { commitSession, getSession } from "../services/session";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();

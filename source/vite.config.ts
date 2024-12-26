@@ -23,7 +23,7 @@ export default defineConfig({
       routes(defineRoutes) {
         return defineRoutes((route) => {
           // Home
-          route(NavigationLink.HOME, "routes/_index/route.tsx", {
+          route(NavigationLink.HOME, "routes/home/route.tsx", {
             index: true,
           });
           // Dashboard
@@ -53,6 +53,9 @@ export default defineConfig({
           //   NavigationLink.DASHBOARD_COMPLAINTS,
           //   "routes/dashboard.complaints/route.tsx"
           // );
+
+          route(NavigationLink.LOGIN, "routes/_auth.login/route.tsx");
+          route(NavigationLink.SIGNUP, "routes/_auth.signup/route.tsx");
         });
       },
     }),

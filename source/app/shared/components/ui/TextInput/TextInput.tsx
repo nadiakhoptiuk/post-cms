@@ -4,9 +4,9 @@ import { TextInput as MTextInput } from "@mantine/core";
 
 import "@mantine/core/styles/Input.css";
 
-import { TextInputProps } from "~/shared/types/remix";
+import { TTextInput } from "~/shared/types/remix";
 
-export const TextInput = ({ label, scope, placeholder }: TextInputProps) => {
+export const TextInput = ({ label, scope, placeholder }: TTextInput) => {
   const field = useField(scope);
   const inputId = useId();
   const errorId = useId();

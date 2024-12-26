@@ -1,6 +1,6 @@
 import { Box, Container } from "@mantine/core";
 
-import { AuthForm } from "~/shared/components/modules/forms/AuthForm";
+import { SignupForm } from "~/shared/components/modules/forms/SignupForm";
 
 export { action } from "./action";
 
@@ -20,10 +20,7 @@ export default function SignupPage() {
           },
         }}
       >
-        <AuthForm
-          defaultValues={{ email: "", password: "" }}
-          formType="signup"
-        />
+        <SignupForm />
       </Container>
     </Box>
   );

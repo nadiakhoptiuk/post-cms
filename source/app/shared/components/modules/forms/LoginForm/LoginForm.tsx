@@ -6,18 +6,21 @@ import { PasswordField } from "~/shared/components/ui/PasswordInput";
 import { TextInput } from "~/shared/components/ui/TextInput";
 import { Button } from "~/shared/components/ui/Button";
 
-import { authValidator } from "~/shared/utils/validators/authValidator";
+import { loginValidator } from "~/shared/utils/validators/loginValidator";
 
-import { TAuthForm } from "./AuthForm.types";
+import s from "./LoginForm.module.css";
 
-import s from "./AuthForm.module.css";
-
-export const AuthForm = ({ defaultValues, formType }: TAuthForm) => {
+export const LoginForm = () => {
   const { t } = useTranslation("auth", { keyPrefix: "authForm" });
 
   const form = useForm({
-    validator: authValidator,
-    defaultValues,
+    validator: loginValidator,
+    defaultValues: {
+      email: "",
+      password: "",
+      lastName: "",
+      firstName: "",
+    },
     method: "POST",
   });
 
@@ -26,7 +29,9 @@ export const AuthForm = ({ defaultValues, formType }: TAuthForm) => {
       <TextInput label={t("email")} scope={form.scope("email")} />
       <PasswordField label={t("password")} scope={form.scope("password")} />
 
-      <Button type="submit">{t(`button.${formType}`)}</Button>
+      <Button type="submit" loading={form.formState.isSubmitting}>
+        {t("button.login")}
+      </Button>
     </Form>
   );
 };

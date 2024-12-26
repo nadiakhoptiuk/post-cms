@@ -1,6 +1,6 @@
 import { Box, Container } from "@mantine/core";
 
-import { AuthForm } from "~/shared/components/modules/forms/AuthForm";
+import { AuthForm } from "~/shared/components/modules/forms/LoginForm";
 
 export { action } from "./action";
 
