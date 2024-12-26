@@ -1,17 +1,23 @@
+import { useRouteLoaderData } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 import { Burger, Group, List, ListItem } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
+import { TRootLoader } from "~/shared/.server/root/loader";
+
 import { Logo } from "../../ui/Logo";
 import { BurgerMenu } from "../../ui/BurgerMenu";
 import { RemixLink } from "../../ui/RemixLink";
+import { LanguageSelector } from "../../ui/LanguageSelector";
 
 import { WithChildren } from "~/shared/types/remix";
 import { AuthNavLinks } from "~/shared/constants/navigation";
+import { DEFAULT_LANG } from "~/shared/constants/locale";
 
 import classes from "./Auth.module.css";
 
 export function AuthLayout({ children }: WithChildren) {
+  const data = useRouteLoaderData<TRootLoader>("root");
   const { t } = useTranslation(["common", "auth"]);
   const [menuOpened, { toggle: toggleMenu, close: closeMenu }] =
     useDisclosure(false);
@@ -46,11 +52,19 @@ export function AuthLayout({ children }: WithChildren) {
             />
           </Group>
 
-          <Group grow>
-            <List visibleFrom="xs" className={classes.links}>
-              {items}
-            </List>
+          <Group
+            grow
+            styles={{ root: { marginRight: "20px" } }}
+            visibleFrom="xs"
+          >
+            <List className={classes.links}>{items}</List>
           </Group>
+
+          <LanguageSelector
+            locale={data?.locale || DEFAULT_LANG}
+            styles={{ root: { flexShrink: 0 } }}
+            visibleFrom="xs"
+          />
         </div>
       </header>
 
@@ -60,6 +74,17 @@ export function AuthLayout({ children }: WithChildren) {
             {items}
           </List>
         </Group>
+
+        <LanguageSelector
+          locale={data?.locale || DEFAULT_LANG}
+          styles={{
+            root: {
+              width: "fit-content",
+              paddingLeft: "20px",
+              marginTop: "auto",
+            },
+          }}
+        />
       </BurgerMenu>
 
       <main className="content">{children}</main>

@@ -1,7 +1,7 @@
 import { useFetcher } from "@remix-run/react";
 import { NativeSelect } from "@mantine/core";
 
-import { LANGUAGES } from "~/shared/constants/locale";
+import { DEFAULT_LANG, LANGUAGES } from "~/shared/constants/locale";
 import { TLanguageSelector } from "./LanguageSelector.types";
 
 export const LanguageSelector = ({ locale, ...rest }: TLanguageSelector) => {
@@ -14,12 +14,12 @@ export const LanguageSelector = ({ locale, ...rest }: TLanguageSelector) => {
           { locale: e.target.value.toLowerCase() },
           {
             method: "POST",
-            action: "/",
+            action: "/?index",
           }
         )
       }
       data={LANGUAGES.map((lng) => lng.toUpperCase())}
-      defaultValue={locale}
+      defaultValue={locale.toUpperCase() || DEFAULT_LANG}
       size="sm"
       {...rest}
     />

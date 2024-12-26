@@ -8,6 +8,8 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
+import { useChangeLanguage } from "remix-i18next/react";
+
 import { ReactNode } from "react";
 import { LinksFunction } from "@remix-run/node";
 import {
@@ -38,6 +40,7 @@ export const links: LinksFunction = () => [
 
 export function Layout({ children }: { children: ReactNode }) {
   const { theme, locale } = useLoaderData<TRootLoader>();
+  useChangeLanguage(locale);
 
   return (
     <html lang={locale} data-mantine-color-scheme={theme}>
