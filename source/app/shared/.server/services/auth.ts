@@ -1,0 +1,165 @@
+import { redirect } from "@remix-run/node";
+import { Authenticator } from "remix-auth";
+import { FormStrategy } from "remix-auth-form";
+
+import prisma from "prisma/prismaClient";
+import { createNewUser, verifyUserAndSerialize } from "../repository/users";
+import { commitSession, getSession } from "./session";
+
+import { TSerializedUser } from "~/shared/types/remix";
+import { GetCurrentUserOptions, GetRouteOptions } from "../types/common";
+import { NavigationLink } from "~/shared/constants/navigation";
+import { SESSION_ERROR_KEY, SESSION_USER_KEY } from "~/shared/constants/common";
+
+export const authenticator = new Authenticator<TSerializedUser>();
+
+authenticator.use(
+  new FormStrategy(async ({ form }) => {
+    const email = form.get("email");
+    const password = form.get("password");
+
+    if (typeof email !== "string" || typeof password !== "string") {
+      throw new Error("invalid data");
+    }
+
+    const serializedUser = await verifyUserAndSerialize(email, password);
+
+    return serializedUser;
+  }),
+  "user-login"
+);
+
+export const loginUser = async (request: Request) => {
+  const session = await getSession(request.headers.get("cookie"));
+
+  try {
+    const serializedUser = await authenticator.authenticate(
+      "user-login",
+      request
+    );
+
+    session.set(SESSION_USER_KEY, serializedUser);
+    const userRole = serializedUser.role;
+
+    const successRedirect =
+      userRole === "ADMIN" ? NavigationLink.DASHBOARD : NavigationLink.HOME;
+
+    throw redirect(successRedirect, {
+      headers: { "Set-Cookie": await commitSession(session) },
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      session.set(SESSION_ERROR_KEY, error.message);
+
+      throw redirect(NavigationLink.LOGIN, {
+        headers: { "Set-Cookie": await commitSession(session) },
+      });
+    }
+  }
+};
+
+export const signupUser = async (request: Request) => {
+  const formData = await request.formData();
+
+  const email = formData.get("email");
+  const firstName = formData.get("firstName");
+  const lastName = formData.get("lastName");
+  const password = formData.get("password");
+
+  if (
+    typeof firstName !== "string" ||
+    typeof email !== "string" ||
+    typeof lastName !== "string" ||
+    typeof password !== "string"
+  ) {
+    throw new Error("invalid data");
+  }
+
+  const role = "USER";
+  const session = await getSession(request.headers.get("cookie"));
+  try {
+    await createNewUser({
+      firstName,
+      lastName,
+      email,
+      password,
+      role,
+    });
+
+    throw redirect(NavigationLink.LOGIN, {
+      headers: { "Set-Cookie": await commitSession(session) },
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      session.set(SESSION_ERROR_KEY, error.message);
+
+      throw redirect(NavigationLink.SIGNUP, {
+        headers: { "Set-Cookie": await commitSession(session) },
+      });
+    }
+  }
+};
+
+export const logoutUser = async (
+  request: Request,
+  options?: GetCurrentUserOptions
+) => {
+  const { successRedirect } = options || {};
+
+  const session = await getSession(request.headers.get("Cookie"));
+  session.unset(SESSION_USER_KEY);
+
+  throw redirect(successRedirect || NavigationLink.HOME, {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
+};
+
+export const getAuthUser = async (
+  request: Request,
+  routeOptions: GetRouteOptions,
+  options?: GetCurrentUserOptions
+) => {
+  const { failureRedirect } = options || {};
+  const { isPublicRoute, allowedRoles, allowedRoutes } = routeOptions;
+
+  const session = await getSession(request.headers.get("Cookie"));
+  const sessionUser: TSerializedUser = session.get(SESSION_USER_KEY);
+
+  if (!sessionUser && !isPublicRoute) {
+    session.unset(SESSION_USER_KEY);
+    throw redirect(failureRedirect || NavigationLink.LOGIN, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  }
+
+  if (!sessionUser && isPublicRoute) {
+    return Response.json({ user: null });
+  }
+
+  const existedUser = await prisma.user.findUnique({
+    where: { id: sessionUser.id },
+  });
+
+  if (!existedUser && !isPublicRoute) {
+    session.unset(SESSION_USER_KEY);
+    throw redirect(failureRedirect || NavigationLink.LOGIN, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  }
+
+  if (existedUser && !allowedRoles.includes(sessionUser.role)) {
+    throw redirect(allowedRoutes[sessionUser.role] || NavigationLink.HOME, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  }
+
+  return Response.json({ user: sessionUser });
+};

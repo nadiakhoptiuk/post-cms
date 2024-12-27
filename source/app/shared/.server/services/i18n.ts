@@ -1,13 +1,16 @@
 import Backend from "i18next-fs-backend/cjs";
 import { resolve } from "node:path";
 import { RemixI18Next } from "remix-i18next/server";
+
 import i18n from "~/shared/services/i18n"; // your i18n configuration file
-import { sessionStorage } from "./session.server";
+import { sessionStorage } from "./session";
+
+import { SESSION_LOCALE_KEY } from "~/shared/constants/common";
 
 const i18next = new RemixI18Next({
   detection: {
     sessionStorage: sessionStorage,
-    sessionKey: "locale",
+    sessionKey: SESSION_LOCALE_KEY,
     supportedLanguages: i18n.supportedLngs,
     fallbackLanguage: i18n.fallbackLng,
   },

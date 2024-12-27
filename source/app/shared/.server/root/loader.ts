@@ -4,7 +4,7 @@ import i18next from "~/shared/.server/services/i18n";
 
 import { NewSerializeFrom, TLocale } from "~/shared/types/remix";
 import { DEFAULT_LANG, LANGUAGES } from "~/shared/constants/locale";
-import { commitSession, sessionStorage } from "../services/session.server";
+import { commitSession, sessionStorage } from "../services/session";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const locale = await i18next.getLocale(request);

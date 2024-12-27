@@ -19,7 +19,7 @@
 }
 
 .accentLink:hover,
-.accentLink:focus {
+.accentLink:focus-visible {
   background-color: light-dark(
     var(--mantine-color-gray-0),
     var(--mantine-color-dark-6)
@@ -28,7 +28,7 @@
 }
 
 .accentLink:hover .linkIcon,
-.accentLink:focus .linkIcon {
+.accentLink:focus-visible .linkIcon {
   color: var(--mantine-color-white);
 }
 
@@ -49,7 +49,7 @@
 }
 
 .unstyledLink:hover,
-.unstyledLink:focus {
+.unstyledLink:focus-visible {
   background-color: light-dark(
     var(--mantine-color-gray-0),
     var(--mantine-color-dark-6)

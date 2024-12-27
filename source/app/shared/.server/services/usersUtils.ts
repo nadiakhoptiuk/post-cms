@@ -1,0 +1,35 @@
+import bcrypt from "bcryptjs";
+import { TDBUser, TSerializedUser } from "~/shared/types/remix";
+
+export async function passwordHash(password: string): Promise<string> {
+  const saltRounds = 10;
+
+  const salt = await bcrypt.genSalt(saltRounds);
+  return await bcrypt.hash(password, salt);
+}
+
+export async function checkPassword(
+  password: string,
+  hashedPassword: string
+): Promise<boolean> {
+  return await bcrypt.compare(password, hashedPassword);
+}
+
+export const serializeUser = (user: TDBUser): TSerializedUser => {
+  const { id, firstName, lastName, role } = user;
+
+  return { firstName, lastName, role, id };
+};
+
+export const verifyPassword = async (
+  user: TDBUser,
+  enteredPassword: string
+): Promise<TSerializedUser | null> => {
+  const isPasswordValid = await checkPassword(enteredPassword, user.password);
+
+  if (!isPasswordValid) {
+    return null;
+  }
+
+  return serializeUser(user);
+};
