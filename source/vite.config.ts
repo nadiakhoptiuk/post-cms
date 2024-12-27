@@ -56,6 +56,7 @@ export default defineConfig({
 
           route(NavigationLink.LOGIN, "routes/_auth.login/route.tsx");
           route(NavigationLink.SIGNUP, "routes/_auth.signup/route.tsx");
+          // route(NavigationLink.LOGOUT, "routes/_auth.logout/route.tsx");
         });
       },
     }),

@@ -31,7 +31,12 @@ export const SignupForm = () => {
       <TextInput label={t("email")} scope={form.scope("email")} />
       <PasswordField label={t("password")} scope={form.scope("password")} />
 
-      <Button type="submit" loading={form.formState.isSubmitting}>
+      <Button
+        type="submit"
+        loading={form.formState.isSubmitting}
+        mt={15}
+        w="100%"
+      >
         {t("button.signup")}
       </Button>
     </Form>

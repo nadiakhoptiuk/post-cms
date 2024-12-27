@@ -1,23 +1,23 @@
 import { useTranslation } from "react-i18next";
-import { useRouteLoaderData } from "@remix-run/react";
+import { Form, useRouteLoaderData } from "@remix-run/react";
 import { AppShell, Burger, Group, List, ScrollArea } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { IconLogout } from "@tabler/icons-react";
 
 import { Logo } from "../../ui/Logo";
 import { LinksGroup } from "../NavBarLinksGroup";
-import { RemixLink } from "../../ui/RemixLink";
+import { LanguageSelector } from "../../ui/LanguageSelector/LanguageSelector";
+import { Button } from "../../ui/Button";
 
 import {
   DashboardNavLinks,
   NavigationLink,
 } from "~/shared/constants/navigation";
 import { WithChildren } from "~/shared/types/remix";
-
-import classes from "./Dashboard.module.css";
-import { LanguageSelector } from "../../ui/LanguageSelector/LanguageSelector";
-
 import { TRootLoader } from "~/shared/.server/root/loader";
 import { DEFAULT_LANG } from "~/shared/constants/locale";
+
+import classes from "./Dashboard.module.css";
 
 export const DashboardLayout = ({ children }: WithChildren) => {
   const data = useRouteLoaderData<TRootLoader>("root");
@@ -66,9 +66,24 @@ export const DashboardLayout = ({ children }: WithChildren) => {
           </ScrollArea>
 
           <div className={classes.footer}>
-            <RemixLink to={NavigationLink.LOGOUT} variant="gray" fullWidth>
-              {t("auth.logout")}
-            </RemixLink>
+            <Form action={NavigationLink.LOGOUT} method="post">
+              <Button
+                type="submit"
+                c="gray"
+                styles={{
+                  root: { width: "100%", padding: "8px 12px" },
+                  inner: { justifyContent: "flex-start" },
+                }}
+                variant="transparent"
+              >
+                <IconLogout
+                  size={22}
+                  stroke={1.5}
+                  style={{ marginRight: 10 }}
+                />
+                {t("auth.logout")}
+              </Button>
+            </Form>
           </div>
         </AppShell.Navbar>
 

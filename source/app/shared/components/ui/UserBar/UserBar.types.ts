@@ -1,3 +1,3 @@
-import { TLocale } from "~/shared/types/remix";
+import { TLocale, TSerializedUser } from "~/shared/types/remix";
 
-export type TUserBar = { user: { name: string }; locale: TLocale };
+export type TUserBar = { user: TSerializedUser; locale: TLocale };

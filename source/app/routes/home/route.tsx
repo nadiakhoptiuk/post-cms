@@ -1,10 +1,13 @@
-import { Outlet } from "@remix-run/react";
-import { Home } from "~/shared/components/layout/Home";
-
+import { Outlet, useLoaderData } from "@remix-run/react";
 import { ActionFunctionArgs } from "@remix-run/node";
+
+import { Home } from "~/shared/components/layout/Home";
 
 import i18n from "~/shared/services/i18n";
 import { commitSession, getSession } from "~/shared/.server/services/session";
+import { THomeLoader } from "~/shared/types/remix";
+
+export { loader } from "./loader";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -33,8 +36,10 @@ export const handle = {
 };
 
 export default function HomeLayout() {
+  const data = useLoaderData<THomeLoader>();
+
   return (
-    <Home>
+    <Home user={data?.user}>
       <Outlet />
     </Home>
   );

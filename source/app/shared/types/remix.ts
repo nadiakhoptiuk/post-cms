@@ -39,3 +39,7 @@ export interface TSerializedUser {
   lastName: string;
   role: User["role"];
 }
+
+export type THomeLoader = {
+  user: TSerializedUser;
+};
