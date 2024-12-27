@@ -14,7 +14,7 @@ export const LoginForm = () => {
   const { t } = useTranslation("auth", { keyPrefix: "authForm" });
 
   const form = useForm({
-    validator: loginValidator,
+    validator: loginValidator(t),
     defaultValues: {
       email: "",
       password: "",

@@ -24,7 +24,9 @@ export const TextInput = ({ label, scope, placeholder }: TTextInput) => {
         error={field.error()}
         size="md"
         styles={{
-          wrapper: { marginBottom: 2 },
+          wrapper: { marginBottom: 20 },
+          root: { position: "relative" },
+          error: { position: "absolute", bottom: -17 },
         }}
       />
     </div>

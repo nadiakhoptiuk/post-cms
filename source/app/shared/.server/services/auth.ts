@@ -1,15 +1,16 @@
+import { redirect } from "@remix-run/node";
 import { Authenticator } from "remix-auth";
 import { FormStrategy } from "remix-auth-form";
 
+import prisma from "prisma/prismaClient";
 import { createNewUser, verifyUserAndSerialize } from "../repository/users";
 import { serializeUser } from "./usersUtils";
+import { commitSession, getSession } from "./session";
 
 import { TSerializedUser } from "~/shared/types/remix";
 import { GetCurrentUserOptions, GetRouteOptions } from "../types/common";
-import { commitSession, getSession } from "./session";
-import { redirect } from "@remix-run/node";
 import { NavigationLink } from "~/shared/constants/navigation";
-import prisma from "prisma/prismaClient";
+import { SESSION_ERROR_KEY, SESSION_USER_KEY } from "~/shared/constants/common";
 
 export const authenticator = new Authenticator<TSerializedUser>();
 
@@ -65,20 +66,31 @@ export const loginUser = async (
   authenticatorKey: "user-signup" | "user-login",
   options?: GetCurrentUserOptions
 ) => {
-  const { successRedirect } = options || {};
-
-  const serializedUser = await authenticator.authenticate(
-    authenticatorKey,
-    request
-  );
+  const { successRedirect, failureRedirect } = options || {};
 
   const session = await getSession(request.headers.get("cookie"));
-  session.set("user", serializedUser);
 
-  if (successRedirect) {
-    throw redirect(successRedirect, {
-      headers: { "Set-Cookie": await commitSession(session) },
-    });
+  try {
+    const serializedUser = await authenticator.authenticate(
+      authenticatorKey,
+      request
+    );
+
+    session.set(SESSION_USER_KEY, serializedUser);
+
+    if (successRedirect) {
+      throw redirect(successRedirect, {
+        headers: { "Set-Cookie": await commitSession(session) },
+      });
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      session.set(SESSION_ERROR_KEY, error.message);
+
+      throw redirect(failureRedirect || NavigationLink.LOGIN, {
+        headers: { "Set-Cookie": await commitSession(session) },
+      });
+    }
   }
 };
 
@@ -89,7 +101,7 @@ export const logoutUser = async (
   const { successRedirect } = options || {};
 
   const session = await getSession(request.headers.get("Cookie"));
-  session.unset("user");
+  session.unset(SESSION_USER_KEY);
 
   throw redirect(successRedirect || NavigationLink.HOME, {
     headers: {
@@ -107,10 +119,10 @@ export const getAuthUser = async (
   const { isPublicRoute, allowedRoles, allowedRoutes } = routeOptions;
 
   const session = await getSession(request.headers.get("Cookie"));
-  const sessionUser: TSerializedUser = session.get("user");
+  const sessionUser: TSerializedUser = session.get(SESSION_USER_KEY);
 
   if (!sessionUser && !isPublicRoute) {
-    session.unset("user");
+    session.unset(SESSION_USER_KEY);
     throw redirect(failureRedirect || NavigationLink.LOGIN, {
       headers: {
         "Set-Cookie": await commitSession(session),
@@ -127,7 +139,7 @@ export const getAuthUser = async (
   });
 
   if (!existedUser && !isPublicRoute) {
-    session.unset("user");
+    session.unset(SESSION_USER_KEY);
     throw redirect(failureRedirect || NavigationLink.LOGIN, {
       headers: {
         "Set-Cookie": await commitSession(session),

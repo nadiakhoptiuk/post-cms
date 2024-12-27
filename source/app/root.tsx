@@ -18,6 +18,8 @@ import {
   // DEFAULT_THEME,
   // mergeMantineTheme,
 } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 
 import { TRootLoader } from "~/shared/.server/root/loader";
 
@@ -52,7 +54,11 @@ export function Layout({ children }: { children: ReactNode }) {
       </head>
 
       <body>
-        <MantineProvider>{children}</MantineProvider>
+        <MantineProvider>
+          {children}
+          <Notifications />
+        </MantineProvider>
+
         <ScrollRestoration />
         <Scripts />
       </body>
