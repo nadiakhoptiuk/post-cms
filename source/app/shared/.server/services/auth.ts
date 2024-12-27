@@ -44,14 +44,14 @@ export const loginUser = async (request: Request) => {
     const successRedirect =
       userRole === "ADMIN" ? NavigationLink.DASHBOARD : NavigationLink.HOME;
 
-    return redirect(successRedirect, {
+    throw redirect(successRedirect, {
       headers: { "Set-Cookie": await commitSession(session) },
     });
   } catch (error) {
     if (error instanceof Error) {
       session.set(SESSION_ERROR_KEY, error.message);
 
-      return redirect(NavigationLink.LOGIN, {
+      throw redirect(NavigationLink.LOGIN, {
         headers: { "Set-Cookie": await commitSession(session) },
       });
     }
@@ -86,14 +86,14 @@ export const signupUser = async (request: Request) => {
       role,
     });
 
-    return redirect(NavigationLink.LOGIN, {
+    throw redirect(NavigationLink.LOGIN, {
       headers: { "Set-Cookie": await commitSession(session) },
     });
   } catch (error) {
     if (error instanceof Error) {
       session.set(SESSION_ERROR_KEY, error.message);
 
-      return redirect(NavigationLink.SIGNUP, {
+      throw redirect(NavigationLink.SIGNUP, {
         headers: { "Set-Cookie": await commitSession(session) },
       });
     }
@@ -137,7 +137,7 @@ export const getAuthUser = async (
   }
 
   if (!sessionUser && isPublicRoute) {
-    return null;
+    return Response.json({ user: null });
   }
 
   const existedUser = await prisma.user.findUnique({
@@ -161,5 +161,5 @@ export const getAuthUser = async (
     });
   }
 
-  return sessionUser;
+  return Response.json({ user: sessionUser });
 };
