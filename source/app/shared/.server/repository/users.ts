@@ -1,9 +1,9 @@
 import prisma from "prisma/prismaClient";
 import { passwordHash, verifyPassword } from "../services/usersUtils";
 
-import { TSerializedUser, TUser } from "~/shared/types/remix";
+import { TSerializedUser, TUser, TUserPassword } from "~/shared/types/remix";
 
-export async function createNewUser(userData: TUser) {
+export async function createNewUser(userData: TUser & TUserPassword) {
   const { password, ...userDataWithOutPassword } = userData;
 
   const existedUser = await prisma.user.findUnique({
@@ -47,5 +47,18 @@ export async function verifyUserAndSerialize(email: string, password: string) {
 }
 
 export async function getAllUsers() {
-  return await prisma.user.findMany();
+  const users = await prisma.user.findMany({
+    select: {
+      firstName: true,
+      lastName: true,
+      email: true,
+      id: true,
+      createdAt: true,
+      role: true,
+      updatedAt: true,
+    },
+    orderBy: [{ lastName: "asc" }, { firstName: "asc" }],
+  });
+
+  return users;
 }

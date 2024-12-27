@@ -1,20 +1,20 @@
 import { useRouteLoaderData } from "@remix-run/react";
+import { useDisclosure } from "@mantine/hooks";
+import { useTranslation } from "react-i18next";
 import { Box, Burger, Group } from "@mantine/core";
 
 import { TRootLoader } from "~/shared/.server/root/loader";
 
 import { UserBar } from "../../ui/UserBar";
 import { Logo } from "../../ui/Logo";
+import { AuthNav } from "../../ui/AuthNavLinks";
+import { LanguageSelector } from "../../ui/LanguageSelector";
+import { BurgerMenu } from "../../ui/BurgerMenu";
 
 import { DEFAULT_LANG } from "~/shared/constants/locale";
 import { THomeLayout } from "./Home.types";
 
 import classes from "./Home.module.css";
-import { AuthNav } from "../../ui/AuthNavLinks";
-import { LanguageSelector } from "../../ui/LanguageSelector";
-import { BurgerMenu } from "../../ui/BurgerMenu";
-import { useDisclosure } from "@mantine/hooks";
-import { useTranslation } from "react-i18next";
 
 export function Home({ children, user }: THomeLayout) {
   const data = useRouteLoaderData<TRootLoader>("root");

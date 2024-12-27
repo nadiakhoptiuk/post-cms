@@ -44,7 +44,7 @@ export const loginUser = async (request: Request) => {
     const successRedirect =
       userRole === "ADMIN" ? NavigationLink.DASHBOARD : NavigationLink.HOME;
 
-    throw redirect(successRedirect, {
+    return redirect(successRedirect, {
       headers: { "Set-Cookie": await commitSession(session) },
     });
   } catch (error) {
@@ -137,7 +137,7 @@ export const getAuthUser = async (
   }
 
   if (!sessionUser && isPublicRoute) {
-    return Response.json({ user: null });
+    return null;
   }
 
   const existedUser = await prisma.user.findUnique({
@@ -161,5 +161,5 @@ export const getAuthUser = async (
     });
   }
 
-  return Response.json({ user: sessionUser });
+  return sessionUser;
 };

@@ -87,7 +87,7 @@ export const DashboardLayout = ({ children }: WithChildren) => {
           </div>
         </AppShell.Navbar>
 
-        <main className="content">{children}</main>
+        <AppShell.Main className="content">{children}</AppShell.Main>
       </AppShell>
     </div>
   );

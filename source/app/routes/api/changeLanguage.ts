@@ -1,14 +1,9 @@
-import { Outlet, useLoaderData } from "@remix-run/react";
 import { ActionFunctionArgs } from "@remix-run/node";
 
-import { Home } from "~/shared/components/layout/Home";
-
-import i18n from "~/shared/services/i18n";
 import { commitSession, getSession } from "~/shared/.server/services/session";
-import { THomeLoader } from "~/shared/types/remix";
-import { SESSION_LOCALE_KEY } from "~/shared/constants/common";
+import i18n from "~/shared/services/i18n";
 
-export { loader } from "./loader";
+import { SESSION_LOCALE_KEY } from "~/shared/constants/common";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -29,19 +24,5 @@ export async function action({ request }: ActionFunctionArgs) {
         "Set-Cookie": await commitSession(session),
       },
     }
-  );
-}
-
-export const handle = {
-  i18n: ["common", "auth"],
-};
-
-export default function HomeLayout() {
-  const data = useLoaderData<THomeLoader>();
-
-  return (
-    <Home user={data?.user}>
-      <Outlet />
-    </Home>
   );
 }

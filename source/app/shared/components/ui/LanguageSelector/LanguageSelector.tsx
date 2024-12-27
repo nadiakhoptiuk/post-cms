@@ -14,7 +14,7 @@ export const LanguageSelector = ({ locale, ...rest }: TLanguageSelector) => {
           { locale: e.target.value.toLowerCase() },
           {
             method: "POST",
-            action: "/?index",
+            action: "/api/changeLanguage",
           }
         )
       }

@@ -19,13 +19,16 @@ export interface TTextInput extends MTextInputProps {
   placeholder?: string;
 }
 
-export interface TUser {
+export type TUser = {
   firstName: string;
   lastName: string;
   email: string;
   role: User["role"];
+};
+
+export type TUserPassword = {
   password: string;
-}
+};
 
 export interface TDBUser extends TUser {
   id: number;
