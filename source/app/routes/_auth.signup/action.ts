@@ -1,11 +1,7 @@
 import { ActionFunctionArgs } from "@remix-run/node";
 
-import { loginUser } from "~/shared/.server/services/auth";
-
-import { NavigationLink } from "~/shared/constants/navigation";
+import { signupUser } from "~/shared/.server/services/auth";
 
 export async function action({ request }: ActionFunctionArgs) {
-  await loginUser(request, "user-signup", {
-    successRedirect: NavigationLink.HOME,
-  });
+  return await signupUser(request);
 }

@@ -45,3 +45,7 @@ export async function verifyUserAndSerialize(email: string, password: string) {
 
   return serializedUser;
 }
+
+export async function getAllUsers() {
+  return await prisma.user.findMany();
+}

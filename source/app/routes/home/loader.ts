@@ -6,7 +6,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const sessionUser = await getAuthUser(
     request,
     {
-      isPublicRoute: false,
+      isPublicRoute: true,
       allowedRoles: ["USER"],
       allowedRoutes: { ADMIN: NavigationLink.DASHBOARD },
     },
