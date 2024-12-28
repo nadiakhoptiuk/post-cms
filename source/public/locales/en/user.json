@@ -1,0 +1,18 @@
+{
+  "userData": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "role": "Access",
+    "createdAt": "Creating date",
+    "updatedAt": "Updating date",
+    "updatedBy": "Updated by"
+  },
+
+  "button.update": "Update",
+  "button.create": "Create",
+  "button.edit": "Edit",
+
+  "link.back": "Back to All Users"
+}

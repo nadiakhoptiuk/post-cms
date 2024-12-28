@@ -39,7 +39,7 @@ export function LinksGroup({ links, link, icon, id }: TDashboardNavLink) {
           itemLabel: { width: "100%" },
         }}
       >
-        <RemixLink variant="accent" fullWidth to={link}>
+        <RemixLink fullWidth to={link}>
           <Icon />
           <span>{t(`dashboardLinks.${id}`)}</span>
         </RemixLink>

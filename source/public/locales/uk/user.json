@@ -1,0 +1,18 @@
+{
+  "userData": {
+    "firstName": "Ім'я",
+    "lastName": "Прізвище",
+    "email": "Ел. пошта",
+    "password": "Пароль",
+    "role": "Доступ",
+    "createdAt": "Дата створення",
+    "updatedAt": "Дата оновлення",
+    "updatedBy": "Оновив"
+  },
+
+  "buttonUpdate": "Оновити",
+  "buttonCreate": "Створити",
+  "button.edit": "Редагувати",
+
+  "link.back": "Назад до всіх користувачів"
+}

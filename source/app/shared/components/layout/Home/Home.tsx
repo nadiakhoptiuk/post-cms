@@ -1,15 +1,14 @@
 import { useRouteLoaderData } from "@remix-run/react";
 import { useDisclosure } from "@mantine/hooks";
 import { useTranslation } from "react-i18next";
-import { Box, Burger, Group } from "@mantine/core";
+import { Burger, Group } from "@mantine/core";
 
 import { TRootLoader } from "~/shared/.server/root/loader";
 
 import { UserBar } from "../../ui/UserBar";
 import { Logo } from "../../ui/Logo";
-import { AuthNav } from "../../ui/AuthNavLinks";
-import { LanguageSelector } from "../../ui/LanguageSelector";
 import { BurgerMenu } from "../../ui/BurgerMenu";
+import { AuthBlockVsLang } from "../../modules/AuthBlockVsLang";
 
 import { DEFAULT_LANG } from "~/shared/constants/locale";
 import { THomeLayout } from "./Home.types";
@@ -27,7 +26,6 @@ export function Home({ children, user }: THomeLayout) {
       <header className={classes.header}>
         <Group className={classes.inner}>
           <Logo />
-
           <Burger
             opened={menuOpened}
             onClick={toggleMenu}
@@ -35,39 +33,19 @@ export function Home({ children, user }: THomeLayout) {
             aria-label={t("aria.toggleMenu")}
           />
 
-          {!user && (
-            <Box display="flex" style={{ columnGap: 20 }} visibleFrom="xs">
-              <AuthNav />
-              <LanguageSelector
-                locale={data?.locale || DEFAULT_LANG}
-                styles={{
-                  root: { width: "fit-content" },
-                }}
-              />
-            </Box>
-          )}
+          {!user && <AuthBlockVsLang locale={data?.locale || DEFAULT_LANG} />}
 
           {user && (
             <UserBar user={user} locale={data?.locale || DEFAULT_LANG} />
           )}
         </Group>
 
-        <BurgerMenu close={closeMenu} opened={menuOpened} hiddenFrom="xs">
-          <Group p={20}>
-            <AuthNav burgerMenu />
-          </Group>
-
-          <LanguageSelector
-            locale={data?.locale || DEFAULT_LANG}
-            styles={{
-              root: {
-                width: "fit-content",
-                paddingLeft: "20px",
-                marginTop: "auto",
-              },
-            }}
-          />
-        </BurgerMenu>
+        <BurgerMenu
+          close={closeMenu}
+          opened={menuOpened}
+          locale={data?.locale || DEFAULT_LANG}
+          hiddenFrom="xs"
+        />
       </header>
 
       <main className="content">{children}</main>

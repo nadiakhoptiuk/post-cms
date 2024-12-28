@@ -22,7 +22,7 @@ import classes from "./Dashboard.module.css";
 export const DashboardLayout = ({ children }: WithChildren) => {
   const data = useRouteLoaderData<TRootLoader>("root");
   const { t } = useTranslation("common");
-  const [menuOpened, { toggle: toggleMenu }] = useDisclosure();
+  const [menuOpened, { toggle: toggleMenu }] = useDisclosure(false);
 
   const links = DashboardNavLinks.map((item) => (
     <LinksGroup {...item} key={item.id} />

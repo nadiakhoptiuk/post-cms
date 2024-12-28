@@ -1,5 +1,5 @@
 import { TDBUser } from "~/shared/types/remix";
 
-export type TTable = {
+export type TUsersTable = {
   users: TDBUser[];
 };

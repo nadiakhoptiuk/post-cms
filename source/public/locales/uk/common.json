@@ -11,5 +11,13 @@
     "myPosts": "Мої пости"
   },
 
-  "aria.toggleMenu": "Відкрити мобільне меню"
+  "aria.toggleMenu": "Відкрити мобільне меню",
+
+  "formErrorsMessages": {
+    "emailError": "Введіть валідний email",
+    "passwordErrorMin": "Не менше 8 символів",
+    "passwordErrorMax": "Не більше 12 символів",
+    "stringErrorMin": "Обов'язкове поле",
+    "stringErrorMax": "Не більше 30 символів"
+  }
 }

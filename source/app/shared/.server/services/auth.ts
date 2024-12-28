@@ -86,7 +86,7 @@ export const signupUser = async (request: Request) => {
       role,
     });
 
-    throw redirect(NavigationLink.LOGIN, {
+    return redirect(NavigationLink.LOGIN, {
       headers: { "Set-Cookie": await commitSession(session) },
     });
   } catch (error) {
@@ -109,7 +109,7 @@ export const logoutUser = async (
   const session = await getSession(request.headers.get("Cookie"));
   session.unset(SESSION_USER_KEY);
 
-  throw redirect(successRedirect || NavigationLink.HOME, {
+  return redirect(successRedirect || NavigationLink.HOME, {
     headers: {
       "Set-Cookie": await commitSession(session),
     },

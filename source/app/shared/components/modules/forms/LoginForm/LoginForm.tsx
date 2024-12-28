@@ -9,12 +9,17 @@ import { Button } from "~/shared/components/ui/Button";
 import { loginValidator } from "~/shared/utils/validators/loginValidator";
 
 import s from "./LoginForm.module.css";
+import { TErrorsMessages } from "~/shared/types/remix";
 
 export const LoginForm = () => {
-  const { t } = useTranslation("auth", { keyPrefix: "authForm" });
+  const { t } = useTranslation(["auth", "common", "user"]);
+  const errorMessages = t("formErrorsMessages", {
+    ns: "common",
+    returnObjects: true,
+  }) as TErrorsMessages;
 
   const form = useForm({
-    validator: loginValidator(t),
+    validator: loginValidator(errorMessages),
     defaultValues: {
       email: "",
       password: "",
@@ -26,8 +31,14 @@ export const LoginForm = () => {
 
   return (
     <Form {...form.getFormProps()} className={s.form}>
-      <TextInput label={t("email")} scope={form.scope("email")} />
-      <PasswordField label={t("password")} scope={form.scope("password")} />
+      <TextInput
+        label={t("userData.email", { ns: "user" })}
+        scope={form.scope("email")}
+      />
+      <PasswordField
+        label={t("userData.password", { ns: "user" })}
+        scope={form.scope("password")}
+      />
 
       <Button
         type="submit"
@@ -35,7 +46,7 @@ export const LoginForm = () => {
         mt={15}
         w="100%"
       >
-        {t("button.login")}
+        {t("authForm.button.login", { ns: "auth" })}
       </Button>
     </Form>
   );

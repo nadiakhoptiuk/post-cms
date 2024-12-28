@@ -1,15 +1,16 @@
 import { withZod } from "@rvf/zod";
-import { TFunction } from "i18next";
 import { z } from "zod";
 
-export const loginValidator = (t: TFunction) =>
+import { TErrorsMessages } from "~/shared/types/remix";
+
+export const loginValidator = (errorMessages: TErrorsMessages) =>
   withZod(
     z.object({
-      email: z.string().trim().min(1).email(t("emailError")),
+      email: z.string().trim().min(1).email(errorMessages.emailError),
       password: z
         .string()
         .trim()
-        .min(8, t("passwordErrorMin"))
-        .max(12, t("passwordErrorMax")),
+        .min(8, errorMessages.passwordErrorMin)
+        .max(12, errorMessages.passwordErrorMax),
     })
   );

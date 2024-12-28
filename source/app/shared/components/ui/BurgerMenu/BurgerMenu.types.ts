@@ -1,6 +1,8 @@
+import { TLocale } from "~/shared/types/remix";
+
 export type TBurgerMenu = {
   opened: boolean;
   close: () => void;
-  children: React.ReactNode;
+  locale: TLocale;
   hiddenFrom?: string;
 };

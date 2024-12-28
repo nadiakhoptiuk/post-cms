@@ -19,12 +19,17 @@ enum Role {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String    
-  firstName String    
-  lastName  String    
-  role      Role      @default(USER)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  password    String    
+  firstName   String    
+  lastName    String    
+  role        Role      @default(USER)
+  createdAt   DateTime  @default(now())
+  
+  updatedAt   DateTime? @updatedAt
+  updatedById Int?
+  updatedBy   User?     @relation("UpdatedBy", fields: [updatedById], references: [id])
+
+  updatedUsers User[]  @relation("UpdatedBy")
 }

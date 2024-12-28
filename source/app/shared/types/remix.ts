@@ -13,6 +13,10 @@ export type WithChildren = {
 
 export type TLocale = typeof LANG_EN | typeof LANG_UK;
 
+export type TErrorsMessages = {
+  [key: string]: string;
+};
+
 export interface TTextInput extends MTextInputProps {
   label: string;
   scope: FormScope<string>;
@@ -26,6 +30,10 @@ export type TUser = {
   role: User["role"];
 };
 
+export type TUpdatedById = {
+  updatedById: number;
+};
+
 export type TUserPassword = {
   password: string;
 };
@@ -34,6 +42,8 @@ export interface TDBUser extends TUser {
   id: number;
   createdAt: Date;
   updatedAt: Date | null;
+  updatedById?: number | null;
+  updatedBy?: TDBUser;
 }
 
 export interface TSerializedUser {
