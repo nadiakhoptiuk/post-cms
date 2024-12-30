@@ -1,4 +1,4 @@
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs } from "react-router";
 import { loginUser } from "~/shared/.server/services/auth";
 
 export async function action({ request }: ActionFunctionArgs) {

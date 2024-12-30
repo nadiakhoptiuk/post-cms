@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs } from "react-router";
 import { getUserById } from "~/shared/.server/repository/users";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {

@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, redirect } from "react-router";
 import { updateUserById } from "~/shared/.server/repository/users";
 import { getSession } from "~/shared/.server/services/session";
 import { SESSION_USER_KEY } from "~/shared/constants/common";

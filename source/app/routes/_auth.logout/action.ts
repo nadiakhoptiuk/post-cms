@@ -1,4 +1,4 @@
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs } from "react-router";
 
 import { logoutUser } from "~/shared/.server/services/auth";
 

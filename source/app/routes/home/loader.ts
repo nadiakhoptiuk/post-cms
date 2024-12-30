@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs } from "react-router";
 import { getAuthUser } from "~/shared/.server/services/auth";
 import { NavigationLink } from "~/shared/constants/navigation";
 

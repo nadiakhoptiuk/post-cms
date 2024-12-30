@@ -1,4 +1,4 @@
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs } from "react-router";
 
 import i18n from "~/shared/services/i18n";
 import { commitSession, getSession } from "../services/session";

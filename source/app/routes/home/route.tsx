@@ -1,5 +1,5 @@
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs } from "react-router";
 
 import { Home } from "~/shared/components/layout/Home";
 

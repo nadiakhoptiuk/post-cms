@@ -35,35 +35,32 @@ export default defineConfig({
           //   NavigationLink.DASHBOARD_MY_POSTS,
           //   "routes/dashboard.my-posts/route.tsx"
           // );
-
           // Dashboard Users
-          // route(
-          //   NavigationLink.DASHBOARD_USERS,
-          //   "routes/dashboard.users/route.tsx"
-          // );
-
+          route(
+            NavigationLink.DASHBOARD_USERS,
+            "routes/dashboard.users/route.tsx"
+          );
           // route(
           //   NavigationLink.DASHBOARD_CURRENT_USER,
           //   "routes/dashboard.users_.$userId/route.tsx"
           // );
-
           // Dashboard Tags
           // route(
           //   NavigationLink.DASHBOARD_TAGS,
           //   "routes/dashboard.tags/route.tsx"
           // );
-
           // Dashboard Complaints
           // route(
           //   NavigationLink.DASHBOARD_COMPLAINTS,
           //   "routes/dashboard.complaints/route.tsx"
           // );
-
           route(NavigationLink.LOGIN, "routes/_auth.login/route.tsx");
           route(NavigationLink.SIGNUP, "routes/_auth.signup/route.tsx");
           // route(NavigationLink.LOGOUT, "routes/_auth.logout/route.tsx");
         });
       },
+
+      // ignoredRouteFiles: ["**/*.css"],
     }),
     tsconfigPaths(),
   ],
