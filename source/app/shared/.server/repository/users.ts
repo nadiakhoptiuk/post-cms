@@ -1,8 +1,8 @@
 import prisma from "prisma/prismaClient";
-import { passwordHash, verifyPassword } from "../services/usersUtils";
+// import prisma from "../services/prisma.client";
+import { passwordHash, verifyPassword } from "../utils/usersUtils";
 
 import {
-  TDBUser,
   TSerializedUser,
   TUpdatedById,
   TUser,

@@ -1,6 +1,6 @@
 import { Box, Container } from "@mantine/core";
 
-import { SignupForm } from "~/shared/components/modules/forms/SignupForm";
+import { AuthForm } from "~/shared/components/modules/forms/AuthForm";
 
 export { action } from "./action";
 
@@ -20,7 +20,7 @@ export default function SignupPage() {
           },
         }}
       >
-        <SignupForm />
+        <AuthForm formType="signup" />
       </Container>
     </Box>
   );

@@ -19,5 +19,15 @@
     "passwordErrorMax": "Не більше 12 символів",
     "stringErrorMin": "Обов'язкове поле",
     "stringErrorMax": "Не більше 30 символів"
-  }
+  },
+
+  "buttons": {
+    "button.update": "Оновити",
+    "button.create": "Створити",
+    "button.edit": "Редагувати",
+    "button.cancel": "Відміна",
+    "button.delete": "Видалити"
+  },
+
+  "modal.title": "Ви впевнені, що хочете видалити"
 }

@@ -4,7 +4,11 @@ import { TStyledLink } from "./StyledLink.types";
 
 import s from "./StyledLink.module.css";
 
-export const StyledLink = ({ children, variant, ...rest }: TStyledLink) => {
+export const StyledLink = ({
+  children,
+  variant = "unstyled",
+  ...rest
+}: TStyledLink) => {
   return (
     <Link
       className={variant === "accent" ? s.accentLink : s.unstyledLink}

@@ -10,4 +10,5 @@ export type GetRouteOptions = {
   isPublicRoute: boolean;
   allowedRoles: Role[];
   allowedRoutes: Partial<Record<"ADMIN" | "USER", NavigationLink>>;
+  isAuthRoute?: boolean;
 };

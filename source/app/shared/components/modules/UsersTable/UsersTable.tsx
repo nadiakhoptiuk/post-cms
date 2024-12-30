@@ -26,7 +26,7 @@ export const UsersTable = ({ users }: TUsersTable) => {
             variant="accent"
             to={`${NavigationLink.DASHBOARD_USERS}/${user.id}`}
           >
-            {t("button.edit")}
+            {t("buttons.button.edit", { ns: "common" })}
           </RemixLink>
         </TableTd>
         <TableTd>{user.lastName}</TableTd>

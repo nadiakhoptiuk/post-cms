@@ -19,5 +19,15 @@
     "passwordErrorMax": "No more than 12 symbols",
     "stringErrorMin": "Required field",
     "stringErrorMax": "Too many symbols"
-  }
+  },
+
+  "buttons": {
+    "button.update": "Update",
+    "button.create": "Create",
+    "button.edit": "Edit",
+    "button.cancel": "Cancel",
+    "button.delete": "Delete"
+  },
+
+  "modal.title": "Are you sure you want to delete"
 }

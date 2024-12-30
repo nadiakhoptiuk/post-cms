@@ -18,8 +18,8 @@ export default function DashBoardEditUserPage() {
   const { t } = useTranslation("user");
 
   const {
-    createdAt,
-    updatedAt,
+    createdAt: _createdAt,
+    updatedAt: _updatedAt,
     updatedBy,
     updatedById: _updatedById,
     ...userData
