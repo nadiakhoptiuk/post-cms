@@ -1,5 +1,5 @@
-import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
-import { ServerRuntimeMetaDescriptor } from '@remix-run/server-runtime/dist/routeModules'
+import { LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { ServerRuntimeMetaDescriptor } from '@react-router/server-runtime/dist/routeModules';
 
 export type LoaderDataWithMeta = {
   meta: Partial<ServerRuntimeMetaDescriptor>

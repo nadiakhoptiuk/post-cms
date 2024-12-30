@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "@remix-run/react";
+import { useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Box, Collapse, Group, List, UnstyledButton } from "@mantine/core";
 import { IconChevronRight, TablerIcon } from "@tabler/icons-react";

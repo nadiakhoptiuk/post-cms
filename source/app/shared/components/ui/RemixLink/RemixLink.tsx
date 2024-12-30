@@ -1,4 +1,4 @@
-import { NavLink } from "@remix-run/react";
+import { NavLink } from "react-router";
 
 import classes from "./RemixLink.module.css";
 import { TRemixLink } from "./RemixLink.types";

@@ -1,5 +1,5 @@
 import { Text, ThemeIcon } from "@mantine/core";
-import { Link } from "@remix-run/react";
+import { Link } from "react-router";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 

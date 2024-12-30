@@ -1,4 +1,4 @@
-import { Outlet } from "@remix-run/react";
+import { Outlet } from "react-router";
 import { DashboardLayout } from "~/shared/components/layout/Dashboard";
 
 export const handle = { i18n: ["dashboard", "common"] };

@@ -1,4 +1,4 @@
-import { useFetcher } from "@remix-run/react";
+import { useFetcher } from "react-router";
 import { NativeSelect } from "@mantine/core";
 
 import { DEFAULT_LANG, LANGUAGES } from "~/shared/constants/locale";

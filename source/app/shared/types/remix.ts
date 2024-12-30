@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 import { TextInputProps as MTextInputProps } from "@mantine/core";
 import { FormScope } from "@rvf/remix";
 

@@ -1,4 +1,4 @@
-import { useRouteLoaderData } from "@remix-run/react";
+import { useRouteLoaderData } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Burger, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";

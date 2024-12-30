@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Form, useRouteLoaderData } from "@remix-run/react";
+import { Form, useRouteLoaderData } from "react-router";
 import { AppShell, Burger, Group, List, ScrollArea } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconLogout } from "@tabler/icons-react";

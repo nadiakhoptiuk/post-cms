@@ -1,4 +1,4 @@
-import { NavLinkProps } from "@remix-run/react";
+import { NavLinkProps } from "react-router";
 
 export type TRemixLink = {
   children: React.ReactNode;

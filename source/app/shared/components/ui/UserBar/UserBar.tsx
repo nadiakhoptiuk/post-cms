@@ -7,7 +7,7 @@ import { LanguageSelector } from "../LanguageSelector";
 
 import { NavigationLink, UserBarNavLinks } from "~/shared/constants/navigation";
 import { TUserBar } from "./UserBar.types";
-import { Form } from "@remix-run/react";
+import { Form } from "react-router";
 import { Button } from "../Button";
 
 export const UserBar = ({ user, locale }: TUserBar) => {

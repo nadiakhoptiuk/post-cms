@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 import { TUserLoaderData } from "./types";
 import { Box, Container, Group, Text } from "@mantine/core";
 import { NavigationLink } from "~/shared/constants/navigation";

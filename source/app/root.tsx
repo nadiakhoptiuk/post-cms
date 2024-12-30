@@ -9,11 +9,11 @@ import {
   ScrollRestoration,
   useLoaderData,
   useRouteError,
-} from "@remix-run/react";
+  LinksFunction,
+} from "react-router";
 import { useChangeLanguage } from "remix-i18next/react";
 
 import { ReactNode } from "react";
-import { LinksFunction } from "@remix-run/node";
 import {
   // createTheme,
   MantineProvider,
