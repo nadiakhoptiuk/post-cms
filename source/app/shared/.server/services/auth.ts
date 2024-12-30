@@ -3,6 +3,7 @@ import { Authenticator } from "remix-auth";
 import { FormStrategy } from "remix-auth-form";
 
 import prisma from "prisma/prismaClient";
+// import prisma from "./prisma.client";
 import { createNewUser, verifyUserAndSerialize } from "../repository/users";
 import { commitSession, getSession } from "./session";
 
@@ -10,6 +11,7 @@ import { TSerializedUser } from "~/shared/types/remix";
 import { GetCurrentUserOptions, GetRouteOptions } from "../types/common";
 import { NavigationLink } from "~/shared/constants/navigation";
 import { SESSION_ERROR_KEY, SESSION_USER_KEY } from "~/shared/constants/common";
+// import { errorHandler } from "../utils/errorHandler";
 
 export const authenticator = new Authenticator<TSerializedUser>();
 
@@ -44,7 +46,7 @@ export const loginUser = async (request: Request) => {
     const successRedirect =
       userRole === "ADMIN" ? NavigationLink.DASHBOARD : NavigationLink.HOME;
 
-    throw redirect(successRedirect, {
+    return redirect(successRedirect, {
       headers: { "Set-Cookie": await commitSession(session) },
     });
   } catch (error) {
@@ -86,7 +88,7 @@ export const signupUser = async (request: Request) => {
       role,
     });
 
-    throw redirect(NavigationLink.LOGIN, {
+    return redirect(NavigationLink.LOGIN, {
       headers: { "Set-Cookie": await commitSession(session) },
     });
   } catch (error) {
@@ -109,7 +111,7 @@ export const logoutUser = async (
   const session = await getSession(request.headers.get("Cookie"));
   session.unset(SESSION_USER_KEY);
 
-  throw redirect(successRedirect || NavigationLink.HOME, {
+  return redirect(successRedirect || NavigationLink.HOME, {
     headers: {
       "Set-Cookie": await commitSession(session),
     },
@@ -122,8 +124,14 @@ export const getAuthUser = async (
   options?: GetCurrentUserOptions
 ) => {
   const { failureRedirect } = options || {};
-  const { isPublicRoute, allowedRoles, allowedRoutes } = routeOptions;
+  const {
+    isPublicRoute,
+    allowedRoles,
+    allowedRoutes,
+    isAuthRoute = false,
+  } = routeOptions;
 
+  // try {
   const session = await getSession(request.headers.get("Cookie"));
   const sessionUser: TSerializedUser = session.get(SESSION_USER_KEY);
 
@@ -136,13 +144,25 @@ export const getAuthUser = async (
     });
   }
 
+  if (!sessionUser && isAuthRoute) {
+    return null;
+  }
+
   if (!sessionUser && isPublicRoute) {
-    return Response.json({ user: null });
+    return null;
   }
 
   const existedUser = await prisma.user.findUnique({
     where: { id: sessionUser.id },
   });
+
+  if (existedUser && isAuthRoute) {
+    throw redirect(allowedRoutes[sessionUser.role] || NavigationLink.HOME, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  }
 
   if (!existedUser && !isPublicRoute) {
     session.unset(SESSION_USER_KEY);
@@ -161,5 +181,9 @@ export const getAuthUser = async (
     });
   }
 
-  return Response.json({ user: sessionUser });
+  return sessionUser;
+  // } catch (error) {
+  //   console.error("Error during auth process", error);
+  //   errorHandler(error);
+  // }
 };

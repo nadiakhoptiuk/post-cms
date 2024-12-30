@@ -42,6 +42,11 @@ export default defineConfig({
           //   "routes/dashboard.users/route.tsx"
           // );
 
+          // route(
+          //   NavigationLink.DASHBOARD_CURRENT_USER,
+          //   "routes/dashboard.users_.$userId/route.tsx"
+          // );
+
           // Dashboard Tags
           // route(
           //   NavigationLink.DASHBOARD_TAGS,

@@ -7,6 +7,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     request,
     {
       isPublicRoute: false,
+      isAuthRoute: false,
       allowedRoles: ["ADMIN"],
       allowedRoutes: { USER: NavigationLink.HOME },
     },

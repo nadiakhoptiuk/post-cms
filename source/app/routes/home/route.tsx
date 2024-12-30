@@ -33,7 +33,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export const handle = {
-  i18n: "common",
+  i18n: ["common", "auth"],
 };
 
 export default function HomeLayout() {

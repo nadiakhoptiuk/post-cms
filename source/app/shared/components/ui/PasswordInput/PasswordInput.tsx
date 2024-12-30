@@ -22,6 +22,7 @@ export const PasswordField = ({ label, scope, placeholder }: TTextInput) => {
       size="md"
       error={field.error()}
       styles={{
+        label: { fontWeight: "bold" },
         wrapper: { marginBottom: 10 },
         root: { position: "relative" },
         error: { position: "absolute", bottom: -17 },

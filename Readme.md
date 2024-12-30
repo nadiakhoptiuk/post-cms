@@ -26,6 +26,20 @@ docker-compose --env-file .env -f ./docker/local/docker-compose.yml up -d
 
 Then open a brower: http://localhost:8080/
 
+### Run migrations
+
+First instal dotenv-cli globally:
+
+```
+npm install -g dotenv-cli
+```
+
+Then from the _source directory_ run command for migrations (after generation):
+
+```
+dotenv -e ../.env -- npx prisma migrate dev --name <migration-name>
+```
+
 ## Notes
 
 - Папка `docker/local` находится в `.gitignore` и может содержать конфигурацию для локальной среды разработки

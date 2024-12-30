@@ -12,23 +12,22 @@ export const TextInput = ({ label, scope, placeholder }: TTextInput) => {
   const errorId = useId();
 
   return (
-    <div>
-      <MTextInput
-        label={label}
-        placeholder={placeholder}
-        {...field.getInputProps({
-          id: inputId,
-          "aria-describedby": errorId,
-          "aria-invalid": !!field.error(),
-        })}
-        error={field.error()}
-        size="md"
-        styles={{
-          wrapper: { marginBottom: 20 },
-          root: { position: "relative" },
-          error: { position: "absolute", bottom: -17 },
-        }}
-      />
-    </div>
+    <MTextInput
+      label={label}
+      placeholder={placeholder}
+      {...field.getInputProps({
+        id: inputId,
+        "aria-describedby": errorId,
+        "aria-invalid": !!field.error(),
+      })}
+      error={field.error()}
+      size="md"
+      styles={{
+        label: { fontWeight: "bold" },
+        wrapper: { marginBottom: 20 },
+        root: { position: "relative", flexGrow: 1 },
+        error: { position: "absolute", bottom: -17 },
+      }}
+    />
   );
 };

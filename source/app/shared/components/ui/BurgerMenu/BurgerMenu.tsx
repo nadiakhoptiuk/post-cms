@@ -1,13 +1,15 @@
-import { Drawer } from "@mantine/core";
+import { Drawer, Group } from "@mantine/core";
 
 import { Logo } from "../Logo";
 
 import { TBurgerMenu } from "./BurgerMenu.types";
+import { LanguageSelector } from "../LanguageSelector";
+import { AuthNav } from "../AuthNavLinks";
 
 export const BurgerMenu = ({
   opened,
   close,
-  children,
+  locale,
   hiddenFrom = "xs",
 }: TBurgerMenu) => {
   return (
@@ -29,7 +31,22 @@ export const BurgerMenu = ({
             <Drawer.CloseButton size="xl" />
           </Drawer.Header>
 
-          <Drawer.Body>{children}</Drawer.Body>
+          <Drawer.Body>
+            <Group p={20}>
+              <AuthNav burgerMenu />
+            </Group>
+
+            <LanguageSelector
+              locale={locale}
+              styles={{
+                root: {
+                  width: "fit-content",
+                  paddingLeft: "20px",
+                  marginTop: "auto",
+                },
+              }}
+            />
+          </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>
     </>

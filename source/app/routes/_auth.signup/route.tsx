@@ -1,11 +1,11 @@
 import { Box, Container } from "@mantine/core";
 
-import { SignupForm } from "~/shared/components/modules/forms/SignupForm";
+import { AuthForm } from "~/shared/components/modules/forms/AuthForm";
 
 export { action } from "./action";
 
 export const handle = {
-  i18n: "auth",
+  i18n: ["auth", "common", "user"],
 };
 
 export default function SignupPage() {
@@ -20,7 +20,7 @@ export default function SignupPage() {
           },
         }}
       >
-        <SignupForm />
+        <AuthForm formType="signup" />
       </Container>
     </Box>
   );

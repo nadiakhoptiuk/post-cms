@@ -15,21 +15,14 @@
 .accentLink {
   composes: link;
 
-  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+  color: var(--mantine-color-white);
+  background-color: var(--mantine-color-blue-4);
 }
 
 .accentLink:hover,
 .accentLink:focus-visible {
-  background-color: light-dark(
-    var(--mantine-color-gray-0),
-    var(--mantine-color-dark-6)
-  );
+  background-color: var(--mantine-color-blue-3);
   box-shadow: var(--mantine-shadow-xs);
-}
-
-.accentLink:hover .linkIcon,
-.accentLink:focus-visible .linkIcon {
-  color: var(--mantine-color-white);
 }
 
 .accentActiveLink {
