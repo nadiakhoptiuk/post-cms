@@ -1,4 +1,4 @@
-import { DEFAULT_LANG, DEFAULT_NS, LANGUAGES } from '~/shared/constants/locale'
+import { DEFAULT_LANG, DEFAULT_NS, LANGUAGES } from "~/shared/constants/locale";
 
 export default {
   // This is the list of languages your application supports

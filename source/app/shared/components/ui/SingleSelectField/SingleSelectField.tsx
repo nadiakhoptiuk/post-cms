@@ -1,8 +1,8 @@
 import { useId } from "react";
-import { useField } from "@rvf/remix";
+import { useField } from "@rvf/react-router";
 import { NativeSelect } from "@mantine/core";
 
-import { TSingleSelect } from "./SingleSelect.types";
+import type { TSingleSelect } from "./SingleSelect.types";
 
 export const SingleSelectField = <
   Type extends string | { label: string; value: string }
@@ -26,7 +26,8 @@ export const SingleSelectField = <
         "aria-invalid": !!field.error(),
       })}
       error={field.error()}
-      size="md"
+      styles={{ root: { flexGrow: 1 }, label: { fontWeight: "bold" } }}
+      size='md'
       {...rest}
     />
   );

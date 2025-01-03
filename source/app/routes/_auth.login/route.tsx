@@ -1,6 +1,6 @@
 import { Box, Container } from "@mantine/core";
 
-import { AuthForm } from "~/shared/components/modules/forms/AuthForm";
+import { AuthForm } from "~/shared/components/modules/AuthForm";
 
 export { action } from "./action";
 
@@ -10,7 +10,7 @@ export const handle = {
 
 export default function LoginPage() {
   return (
-    <Box component="section" py="lg">
+    <Box component='section' py='lg'>
       <Container
         styles={{
           root: {
@@ -20,7 +20,7 @@ export default function LoginPage() {
           },
         }}
       >
-        <AuthForm formType="login" />
+        <AuthForm formType='login' />
       </Container>
     </Box>
   );

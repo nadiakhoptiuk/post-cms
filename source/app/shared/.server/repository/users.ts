@@ -1,49 +1,62 @@
-import prisma from "prisma/prismaClient";
-// import prisma from "../services/prisma.client";
-import { passwordHash, verifyPassword } from "../utils/usersUtils";
+import { eq, sql } from "drizzle-orm";
 
-import {
+import { db } from "server/app";
+import { passwordHash, verifyPasswordAndSerialize } from "../utils/usersUtils";
+
+import type {
   TSerializedUser,
+  TSignupData,
   TUpdatedById,
   TUser,
   TUserPassword,
-} from "~/shared/types/remix";
+} from "~/shared/types/react";
+import { users } from "~/database/schema";
 
-export async function createNewUser(userData: TUser & TUserPassword) {
+export async function createNewUser(userData: TSignupData & TUserPassword) {
   const { password, ...userDataWithOutPassword } = userData;
 
-  const existedUser = await prisma.user.findUnique({
-    where: {
-      email: userData.email,
-    },
-  });
+  const existedUser = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, userDataWithOutPassword.email));
 
-  if (existedUser) {
+  if (existedUser[0]) {
     throw new Error("User with such email is already exist in database");
   }
 
   const hashedPassword = await passwordHash(password);
 
-  return await prisma.user.create({
-    data: { ...userDataWithOutPassword, password: hashedPassword },
-  });
+  return await db
+    .insert(users)
+    .values({ ...userDataWithOutPassword, password: hashedPassword });
 }
 
 export async function verifyUserAndSerialize(email: string, password: string) {
-  const existedUser = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
+  const existedUser = await db
+    .select({
+      firstName: users.firstName,
+      lastName: users.lastName,
+      email: users.email,
+      id: users.id,
+      role: users.role,
+      createdAt: users.createdAt,
+      updatedAt: users.updatedAt,
+      password: users.password,
+      deletedAt: users.deletedAt,
+    })
+    .from(users)
+    .where(eq(users.email, email));
 
-  if (!existedUser) {
+  if (!existedUser[0]) {
     throw new Error("User with such email does not exist in database");
   }
 
-  const serializedUser: TSerializedUser | null = await verifyPassword(
-    existedUser,
-    password as string
-  );
+  if (existedUser[0] && existedUser[0].deletedAt !== null) {
+    throw new Error("This account was deleted");
+  }
+
+  const serializedUser: TSerializedUser | null =
+    await verifyPasswordAndSerialize(existedUser[0], password);
 
   if (!serializedUser) {
     throw new Error("Invalid username or password");
@@ -53,52 +66,93 @@ export async function verifyUserAndSerialize(email: string, password: string) {
 }
 
 export async function getAllUsers() {
-  const users = await prisma.user.findMany({
-    select: {
-      firstName: true,
-      lastName: true,
-      email: true,
-      id: true,
-      createdAt: true,
-      role: true,
-      updatedAt: true,
-      updatedBy: {
-        select: { firstName: true, lastName: true },
-      },
-    },
-    orderBy: [{ lastName: "asc" }, { firstName: "asc" }],
-  });
+  const upd = db
+    .select({
+      updatedBy: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
+        "updatedBy"
+      ),
+      id: users.id,
+    })
+    .from(users)
+    .as("upd");
 
-  return users;
+  const del = db
+    .select({
+      deletedBy: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
+        "deletedBy"
+      ),
+      id: users.id,
+    })
+    .from(users)
+    .as("del");
+
+  const allUsers = await db
+    .select({
+      firstName: users.firstName,
+      lastName: users.lastName,
+      email: users.email,
+      id: users.id,
+      role: users.role,
+      createdAt: users.createdAt,
+      updatedAt: users.updatedAt,
+      updatedBy: upd.updatedBy,
+      deletedAt: users.deletedAt,
+      deletedBy: del.deletedBy,
+    })
+    .from(users)
+    .leftJoin(upd, eq(users.updatedById, upd.id))
+    .leftJoin(del, eq(users.deletedById, del.id))
+    .orderBy(users.lastName, users.firstName);
+  return allUsers;
 }
 
 export async function getUserById(id: number) {
-  const existedUser = await prisma.user.findFirst({
-    where: { id },
-    select: {
-      firstName: true,
-      lastName: true,
-      email: true,
-      id: true,
-      createdAt: true,
-      role: true,
-      updatedAt: true,
-      updatedBy: {
-        select: { firstName: true, lastName: true },
-      },
-    },
-  });
+  const upd = db
+    .select({
+      updatedBy: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
+        "updatedBy"
+      ),
+      id: users.id,
+    })
+    .from(users)
+    .as("upd");
 
-  return existedUser;
+  const del = db
+    .select({
+      deletedBy: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
+        "deletedBy"
+      ),
+      id: users.id,
+    })
+    .from(users)
+    .as("del");
+
+  const existedUser = await db
+    .select({
+      firstName: users.firstName,
+      lastName: users.lastName,
+      email: users.email,
+      id: users.id,
+      role: users.role,
+      createdAt: users.createdAt,
+      updatedAt: users.updatedAt,
+      updatedBy: upd.updatedBy,
+      deletedAt: users.deletedAt,
+      deletedBy: del.deletedBy,
+    })
+    .from(users)
+    .where(eq(users.id, id))
+    .leftJoin(upd, eq(users.updatedById, upd.id))
+    .leftJoin(del, eq(users.deletedById, del.id));
+
+  return existedUser[0];
 }
 
 export async function updateUserById(
   id: number,
   userData: TUser & TUserPassword & TUpdatedById
 ) {
-  const existedUser = await prisma.user.findFirst({
-    where: { id },
-  });
+  const existedUser = await getUserById(id);
 
   if (!existedUser) {
     throw new Error("User with such id does not exist");
@@ -108,12 +162,54 @@ export async function updateUserById(
 
   const hashedPassword = await passwordHash(password);
 
-  const updatedUser = await prisma.user.update({
-    where: {
-      id,
-    },
-    data: { ...userDataWithOutPassword, password: hashedPassword },
-  });
+  const updatedUser = await db
+    .update(users)
+    .set({
+      ...userDataWithOutPassword,
+      updatedAt: sql`NOW()`,
+      password: hashedPassword,
+    })
+    .where(eq(users.id, id));
 
   return updatedUser;
+}
+
+export async function deleteUserById(id: number, deletedById: number) {
+  const existedUser = await getUserById(id);
+
+  if (!existedUser) {
+    throw new Error("User with such id does not exist");
+  }
+
+  const updatedUser = await db
+    .update(users)
+    .set({ deletedAt: sql`NOW()`, deletedById: deletedById })
+    .where(eq(users.id, id))
+    .returning({
+      id: users.id,
+      deletedAt: users.deletedAt,
+      deletedById: users.deletedById,
+    });
+
+  return updatedUser[0];
+}
+
+export async function restoreUserById(id: number) {
+  const existedUser = await getUserById(id);
+
+  if (!existedUser) {
+    throw new Error("User with such id does not exist");
+  }
+
+  const updatedUser = await db
+    .update(users)
+    .set({ deletedAt: null, deletedById: null })
+    .where(eq(users.id, id))
+    .returning({
+      id: users.id,
+      deletedAt: users.deletedAt,
+      deletedById: users.deletedById,
+    });
+
+  return updatedUser[0];
 }

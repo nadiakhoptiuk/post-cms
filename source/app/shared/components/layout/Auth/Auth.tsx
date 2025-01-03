@@ -1,15 +1,15 @@
-import { useRouteLoaderData } from "@remix-run/react";
+import { useRouteLoaderData } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Burger, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
-import { TRootLoader } from "~/shared/.server/root/loader";
+import type { TRootLoader } from "~/shared/.server/root/loader";
 
 import { Logo } from "../../ui/Logo";
 import { BurgerMenu } from "../../ui/BurgerMenu";
 import { AuthBlockVsLang } from "../../modules/AuthBlockVsLang";
 
-import { WithChildren } from "~/shared/types/remix";
+import type { WithChildren } from "~/shared/types/react";
 import { DEFAULT_LANG } from "~/shared/constants/locale";
 
 import classes from "./Auth.module.css";
@@ -29,7 +29,7 @@ export function AuthLayout({ children }: WithChildren) {
             <Burger
               opened={menuOpened}
               onClick={toggleMenu}
-              hiddenFrom="xs"
+              hiddenFrom='xs'
               aria-label={t("aria.toggleMenu")}
             />
 
@@ -42,10 +42,10 @@ export function AuthLayout({ children }: WithChildren) {
         close={closeMenu}
         opened={menuOpened}
         locale={data?.locale || DEFAULT_LANG}
-        hiddenFrom="xs"
+        hiddenFrom='xs'
       />
 
-      <main className="content">{children}</main>
+      <main className='content'>{children}</main>
     </>
   );
 }

@@ -6,6 +6,8 @@
   column-gap: 10px;
   padding: 8px 0px;
 
+  font-size: var(--mantine-font-size-md);
+
   text-decoration: none;
 }
 

@@ -1,6 +1,6 @@
 import { Table as MTable } from "@mantine/core";
 
-import { WithChildren } from "~/shared/types/remix";
+import type { WithChildren } from "~/shared/types/react";
 
 export const TableTd = ({ children }: WithChildren) => {
   return (

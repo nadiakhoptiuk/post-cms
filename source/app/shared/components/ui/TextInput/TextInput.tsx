@@ -1,10 +1,10 @@
 import { useId } from "react";
-import { useField } from "@rvf/remix";
+import { useField } from "@rvf/react-router";
 import { TextInput as MTextInput } from "@mantine/core";
 
 import "@mantine/core/styles/Input.css";
 
-import { TTextInput } from "~/shared/types/remix";
+import type { TTextInput } from "~/shared/types/react";
 
 export const TextInput = ({ label, scope, placeholder }: TTextInput) => {
   const field = useField(scope);
@@ -21,12 +21,12 @@ export const TextInput = ({ label, scope, placeholder }: TTextInput) => {
         "aria-invalid": !!field.error(),
       })}
       error={field.error()}
-      size="md"
+      size='md'
       styles={{
         label: { fontWeight: "bold" },
-        wrapper: { marginBottom: 20 },
+        wrapper: { marginBottom: 10 },
         root: { position: "relative", flexGrow: 1 },
-        error: { position: "absolute", bottom: -17 },
+        error: { position: "absolute", bottom: -10 },
       }}
     />
   );

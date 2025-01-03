@@ -1,8 +1,8 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 
 import { UsersTable } from "~/shared/components/modules/UsersTable/UsersTable";
 
-import { TDashboardUsersLoader } from "./types";
+import type { TDashboardUsersLoader } from "./types";
 import { Box, Container } from "@mantine/core";
 
 export { loader } from "./loader";
@@ -13,7 +13,7 @@ export default function DashBoardUsersPage() {
   const { users } = useLoaderData<TDashboardUsersLoader>();
 
   return (
-    <Box component="section">
+    <Box component='section'>
       <Container>
         <UsersTable users={users} />
       </Container>

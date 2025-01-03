@@ -1,6 +1,6 @@
-import { Link } from "@remix-run/react";
+import { Link } from "react-router";
 
-import { TStyledLink } from "./StyledLink.types";
+import type { TStyledLink } from "./StyledLink.types";
 
 import s from "./StyledLink.module.css";
 

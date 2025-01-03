@@ -1,6 +1,6 @@
-import { NativeSelectProps } from "@mantine/core";
+import type { NativeSelectProps } from "@mantine/core";
 
-import { TLocale } from "~/shared/types/remix";
+import type { TLocale } from "~/shared/types/react";
 
 export interface TLanguageSelector extends NativeSelectProps {
   locale: TLocale;

@@ -1,19 +1,21 @@
-import { User } from "@prisma/client";
-import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { redirect } from "react-router";
+
 import { updateUserById } from "~/shared/.server/repository/users";
 import { getSession } from "~/shared/.server/services/session";
+
 import { SESSION_USER_KEY } from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
-import { TSerializedUser } from "~/shared/types/remix";
+import type { Route } from "../dashboard.users/+types/route";
+import type { TRolesEnum, TSerializedUser } from "~/shared/types/react";
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ request, params }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const firstName = formData.get("firstName");
   const lastName = formData.get("lastName");
   const email = formData.get("email");
   const password = formData.get("password");
-  const role = formData.get("role") as User["role"];
+  const role = formData.get("role") as TRolesEnum;
 
   if (
     !role ||

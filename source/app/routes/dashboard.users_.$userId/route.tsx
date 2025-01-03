@@ -1,12 +1,15 @@
-import { useLoaderData } from "@remix-run/react";
-import { TUserLoaderData } from "./types";
-import { Box, Container, Group, Text } from "@mantine/core";
-import { NavigationLink } from "~/shared/constants/navigation";
-import { EditUserForm } from "~/shared/components/modules/forms/EditUserForm/EditUserForm";
-import dayjs from "dayjs";
-import { StyledLink } from "~/shared/components/ui/StyledLink";
-import { IconArrowNarrowLeft } from "@tabler/icons-react";
+import { useLoaderData } from "react-router";
 import { useTranslation } from "react-i18next";
+import { Box, Container, Group, Text } from "@mantine/core";
+import { IconArrowNarrowLeft } from "@tabler/icons-react";
+
+import { StyledLink } from "~/shared/components/ui/StyledLink";
+
+import { EditUserForm } from "~/shared/components/modules/EditUserForm/EditUserForm";
+import { NavigationLink } from "~/shared/constants/navigation";
+
+import type { TUserLoaderData } from "./types";
+import { formatDateWithTime } from "~/shared/utils/dateFormat";
 
 export { loader } from "./loader";
 export { action } from "./action";
@@ -17,27 +20,19 @@ export default function DashBoardEditUserPage() {
   const { user } = useLoaderData<TUserLoaderData>();
   const { t } = useTranslation("user");
 
-  const {
-    createdAt: _createdAt,
-    updatedAt: _updatedAt,
-    updatedBy,
-    updatedById: _updatedById,
-    ...userData
-  } = user;
+  const { createdAt, updatedAt, updatedBy, deletedAt, deletedBy, ...userData } =
+    user;
 
-  const formattedCreatedDate = dayjs(user.createdAt).format(
-    "YYYY-MM-DD  HH:mm"
-  );
-  const formattedUpdatedDate = dayjs(user.updatedAt).format(
-    "YYYY-MM-DD  HH:mm"
-  );
+  const createdDate = formatDateWithTime(createdAt);
+  const updatedDate = formatDateWithTime(updatedAt);
+  const deletedDate = formatDateWithTime(deletedAt);
 
   return (
-    <Box component="section">
+    <Box component='section'>
       <Container>
         <StyledLink
           to={NavigationLink.DASHBOARD_USERS}
-          variant="unstyled"
+          variant='unstyled'
           style={{ marginBottom: "20px" }}
         >
           <IconArrowNarrowLeft size={18} />
@@ -45,33 +40,55 @@ export default function DashBoardEditUserPage() {
         </StyledLink>
 
         <Box mb={25}>
-          <Text mb={15} size="md">
-            <Text component="span" fw="bolder">
+          <Text mb={15} size='md'>
+            <Text component='span' fw='bolder'>
               Created at{"  "}
             </Text>
-            {formattedCreatedDate}
+            {createdDate}
           </Text>
 
-          {formattedCreatedDate !== formattedUpdatedDate && updatedBy && (
+          {updatedDate && updatedBy && (
             <Group>
-              <Text mb={15} size="md">
-                <Text component="span" fw="bolder">
+              <Text mb={15} size='md'>
+                <Text component='span' fw='bolder'>
                   Last updated at{"  "}
                 </Text>
-                {formattedUpdatedDate}
+                {updatedDate}
               </Text>
 
-              <Text mb={15} size="md">
-                <Text component="span" fw="bolder">
+              <Text mb={15} size='md'>
+                <Text component='span' fw='bolder'>
                   Updated by{"  "}
                 </Text>
-                {updatedBy.firstName} {updatedBy.lastName}
+                {updatedBy}
+              </Text>
+            </Group>
+          )}
+
+          {deletedDate && deletedBy && (
+            <Group>
+              <Text mb={15} size='md'>
+                <Text component='span' fw='bolder'>
+                  Deleted at{"  "}
+                </Text>
+                {deletedDate}
+              </Text>
+
+              <Text mb={15} size='md'>
+                <Text component='span' fw='bolder'>
+                  Deleted by{"  "}
+                </Text>
+                {deletedBy}
               </Text>
             </Group>
           )}
         </Box>
 
-        <EditUserForm userData={userData} formType="update" />
+        <EditUserForm
+          userData={userData}
+          formType='update'
+          hasBeenDeleted={!!deletedDate}
+        />
       </Container>
     </Box>
   );

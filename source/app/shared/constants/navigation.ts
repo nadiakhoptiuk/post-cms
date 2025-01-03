@@ -12,20 +12,28 @@ import {
 
 export const enum NavigationLink {
   HOME = "/",
+
   DASHBOARD = "/dashboard",
   DASHBOARD_MY_POSTS = "/dashboard/my-posts",
   DASHBOARD_ALL_POSTS = "/dashboard/posts/all",
   DASHBOARD_POSTS_ON_MODERATION = "/dashboard/posts/on-moderation",
   DASHBOARD_POSTS_COMPLAINTS = "/dashboard/posts/complaints",
   DASHBOARD_USERS = "/dashboard/users",
+  DASHBOARD_USERS_NEW = "/dashboard/users/new",
   DASHBOARD_CURRENT_USER = "/dashboard/users/:userId",
   DASHBOARD_TAGS = "/dashboard/tags",
+
   LOGIN = "/login",
   LOGOUT = "/logout",
+  DELETE_ACCOUNT = "/delete-account",
+
   MY_POSTS = "/my-posts",
   PROFILE = "/profile",
-  DELETE_ACCOUNT = "/delete-account",
   SIGNUP = "/signup",
+
+  CHANGE_LANGUAGE = "change-language",
+  DELETE_USER = "delete-user",
+  RESTORE_USER = "restore-user",
 }
 
 export const DashboardNavLinks = [

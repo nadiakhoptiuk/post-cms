@@ -1,5 +1,3 @@
-import "@mantine/core/styles.css";
-
 import {
   isRouteErrorResponse,
   Links,
@@ -8,41 +6,36 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useRouteError,
-} from "@remix-run/react";
-import { useChangeLanguage } from "remix-i18next/react";
-
-import { ReactNode } from "react";
-import { LinksFunction } from "@remix-run/node";
-import {
-  // createTheme,
-  MantineProvider,
-  // DEFAULT_THEME,
-  // mergeMantineTheme,
-} from "@mantine/core";
+} from "react-router";
+import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
+import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 
-import { TRootLoader } from "~/shared/.server/root/loader";
+// export { meta } from "~/shared/utils/meta";
 
 export { loader } from "~/shared/.server/root/loader";
-export { action } from "~/shared/.server/root/action";
-export { meta } from "~/shared/utils/meta";
 
-import appStylesHref from "./app.css?url";
+import type { TRootLoader } from "~/shared/.server/root/loader";
+import type { Route } from "./+types/root";
+import stylesheet from "./app.css?url";
+import { useChangeLanguage } from "./shared/services/i18n.react";
 
-// const themeOverride = createTheme({
-//   /** Your theme override here */
-//   colors: {},
-// });
-
-// export const providerTheme = mergeMantineTheme(DEFAULT_THEME, themeOverride);
-
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: appStylesHref },
+export const links: Route.LinksFunction = () => [
+  { rel: "preconnect", href: "https://fonts.googleapis.com" },
+  {
+    rel: "preconnect",
+    href: "https://fonts.gstatic.com",
+    crossOrigin: "anonymous",
+  },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+  },
+  { rel: "stylesheet", href: stylesheet },
 ];
 
-export function Layout({ children }: { children: ReactNode }) {
+export function Layout({ children }: { children: React.ReactNode }) {
   const { theme, locale } = useLoaderData<TRootLoader>();
   useChangeLanguage(locale);
 
@@ -72,31 +65,31 @@ export default function App() {
   return <Outlet />;
 }
 
-export function ErrorBoundary() {
-  const error = useRouteError();
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+  let message = "Oops!";
+  let details = "An unexpected error occurred.";
+  let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    // error.status = 500
-    // error.data = "Oh no! Something went wrong!";
-
-    return (
-      <div>
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
-        <p>{error.data}</p>
-      </div>
-    );
-  } else if (error instanceof Error) {
-    return (
-      <div>
-        <h1>Error</h1>
-        <p>{error.message}</p>
-        <p>The stack trace is:</p>
-        <pre>{error.stack}</pre>
-      </div>
-    );
-  } else {
-    return <h1>Unknown Error</h1>;
+    message = error.status === 404 ? "404" : "Error";
+    details =
+      error.status === 404
+        ? "The requested page could not be found."
+        : error.statusText || details;
+  } else if (import.meta.env.DEV && error && error instanceof Error) {
+    details = error.message;
+    stack = error.stack;
   }
+
+  return (
+    <main className="pt-16 p-4 container mx-auto">
+      <h1>{message}</h1>
+      <p>{details}</p>
+      {stack && (
+        <pre className="w-full p-4 overflow-x-auto">
+          <code>{stack}</code>
+        </pre>
+      )}
+    </main>
+  );
 }
