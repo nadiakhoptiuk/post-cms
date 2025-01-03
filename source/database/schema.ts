@@ -1,10 +1,10 @@
 import { pgEnum, pgTable } from "drizzle-orm/pg-core";
 import * as t from "drizzle-orm/pg-core";
-import { userTimestamps } from "./columns.helpers";
+import { postTimestamps, userTimestamps } from "./columns.helpers";
 
 export const rolesEnum = pgEnum("roles", ["admin", "user"]);
 
-export const users = pgTable("User", {
+export const users = pgTable("Users", {
   id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
   firstName: t.varchar({ length: 40 }).notNull(),
   lastName: t.varchar({ length: 40 }).notNull(),
@@ -12,4 +12,13 @@ export const users = pgTable("User", {
   password: t.varchar({ length: 255 }).notNull(),
   role: rolesEnum().notNull().default("user"),
   ...userTimestamps,
+});
+
+export const posts = pgTable("Posts", {
+  id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
+  slug: t.varchar({ length: 1000 }),
+  title: t.varchar({ length: 150 }),
+  content: t.varchar({ length: 3000 }),
+  ownerId: t.integer().references(() => users.id),
+  ...postTimestamps,
 });

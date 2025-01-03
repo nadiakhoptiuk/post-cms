@@ -40,16 +40,18 @@ export type TUserPassword = {
   password: string;
 };
 
-export interface TDBUser extends TUser {
+export type TDBUserRecord = {
   id: number;
   createdAt: Date;
   updatedAt?: Date | null;
-  updatedBy?: string;
+  updatedBy?: string | null;
   updatedById?: number | null;
   deletedAt?: Date | null;
-  deletedBy?: string;
+  deletedBy?: string | null;
   deletedById?: number | null;
-}
+};
+
+export type TDBUser = TUser & TDBUserRecord;
 
 export interface TSerializedUser {
   id: number;
@@ -67,3 +69,30 @@ export interface TTextInput extends MTextInputProps {
   scope: FormScope<string>;
   placeholder?: string;
 }
+
+export type TDBPostRecord = {
+  id: number;
+  ownerId: number;
+  createdAt: Date;
+  updatedAt?: Date | null;
+  updatedBy?: string | null;
+  updatedById?: number | null;
+  deletedAt?: Date | null;
+  deletedBy?: string | null;
+  deletedById?: number | null;
+  publishedAt?: Date | null;
+  moderatedById?: number | null;
+  moderatedBy?: string | null;
+  complainedAt?: Date;
+  complainedById?: number | null;
+  complainedBy?: string | null;
+  blockedAt?: Date | null;
+  blockedById?: number | null;
+  blockedBy?: string | null;
+};
+
+export type TPost = {
+  title: string;
+  slug: string;
+  content: string;
+};
