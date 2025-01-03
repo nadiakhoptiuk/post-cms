@@ -5,10 +5,16 @@
     "email": "Email",
     "password": "Password",
     "role": "Access",
-    "createdAt": "Creating date",
-    "updatedAt": "Updating date",
-    "updatedBy": "Updated by"
+    "createdAt": "Creation date",
+    "updatedAt": "Update date",
+    "updatedBy": "Updated by",
+    "deletedAt": "Deletion date",
+    "deletedBy": "Deleted by"
   },
 
-  "link.back": "Back to All Users"
+  "link.back": "Back to All Users",
+  "password.switch": "Change password?",
+  "link.addNewUser": "Add a User",
+
+  "title.newUser": "Enter data for a new User"
 }

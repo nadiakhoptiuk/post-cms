@@ -1,10 +1,10 @@
 import { Drawer, Group } from "@mantine/core";
 
 import { Logo } from "../Logo";
-
-import { TBurgerMenu } from "./BurgerMenu.types";
 import { LanguageSelector } from "../LanguageSelector";
-import { AuthNav } from "../AuthNavLinks";
+import { AuthNav } from "../AuthNav";
+
+import type { TBurgerMenu } from "./BurgerMenu.types";
 
 export const BurgerMenu = ({
   opened,
@@ -17,18 +17,18 @@ export const BurgerMenu = ({
       <Drawer.Root
         opened={opened}
         onClose={close}
-        padding="md"
+        padding='md'
         hiddenFrom={hiddenFrom}
         radius={0}
         zIndex={100}
-        size="100%"
+        size='100%'
       >
         <Drawer.Overlay />
         <Drawer.Content>
           <Drawer.Header>
             <Logo />
 
-            <Drawer.CloseButton size="xl" />
+            <Drawer.CloseButton size='xl' />
           </Drawer.Header>
 
           <Drawer.Body>

@@ -1,4 +1,4 @@
-import { TSerializedUser, WithChildren } from "~/shared/types/remix";
+import { TSerializedUser, WithChildren } from "~/shared/types/react";
 
 export type THomeLayout = {
   user: TSerializedUser;

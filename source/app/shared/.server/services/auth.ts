@@ -1,62 +1,62 @@
 import { redirect } from "react-router";
-import { Authenticator } from "remix-auth";
-import { FormStrategy } from "remix-auth-form";
+import { DrizzleError } from "drizzle-orm";
 
-import prisma from "prisma/prismaClient";
-// import prisma from "./prisma.client";
-import { createNewUser, verifyUserAndSerialize } from "../repository/users";
+import {
+  createNewUser,
+  deleteUserById,
+  getUserById,
+  verifyUserAndSerialize,
+} from "../repository/users";
 import { commitSession, getSession } from "./session";
 
-import { TSerializedUser } from "~/shared/types/remix";
-import { GetCurrentUserOptions, GetRouteOptions } from "../types/common";
+import type { TSerializedUser } from "~/shared/types/react";
+import type { GetCurrentUserOptions, GetRouteOptions } from "../types/common";
 import { NavigationLink } from "~/shared/constants/navigation";
-import { SESSION_ERROR_KEY, SESSION_USER_KEY } from "~/shared/constants/common";
+import {
+  ROLE_ADMIN,
+  SESSION_ERROR_KEY,
+  SESSION_USER_KEY,
+} from "~/shared/constants/common";
 // import { errorHandler } from "../utils/errorHandler";
 
-export const authenticator = new Authenticator<TSerializedUser>();
-
-authenticator.use(
-  new FormStrategy(async ({ form }) => {
-    const email = form.get("email");
-    const password = form.get("password");
-
-    if (typeof email !== "string" || typeof password !== "string") {
-      throw new Error("invalid data");
-    }
-
-    const serializedUser = await verifyUserAndSerialize(email, password);
-
-    return serializedUser;
-  }),
-  "user-login"
-);
-
 export const loginUser = async (request: Request) => {
+  const form = await request.formData();
+  const email = form.get("email");
+  const password = form.get("password");
+
+  if (typeof email !== "string" || typeof password !== "string") {
+    throw new Error("invalid data");
+  }
+
   const session = await getSession(request.headers.get("cookie"));
 
   try {
-    const serializedUser = await authenticator.authenticate(
-      "user-login",
-      request
-    );
+    const serializedUser = await verifyUserAndSerialize(email, password);
 
     session.set(SESSION_USER_KEY, serializedUser);
     const userRole = serializedUser.role;
 
     const successRedirect =
-      userRole === "ADMIN" ? NavigationLink.DASHBOARD : NavigationLink.HOME;
+      userRole === ROLE_ADMIN ? NavigationLink.DASHBOARD : NavigationLink.HOME;
 
     return redirect(successRedirect, {
       headers: { "Set-Cookie": await commitSession(session) },
     });
   } catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof DrizzleError) {
+      session.set(SESSION_ERROR_KEY, "Wrong request to database");
+      throw redirect(NavigationLink.SIGNUP, {
+        headers: { "Set-Cookie": await commitSession(session) },
+      });
+    } else if (error instanceof Error) {
       session.set(SESSION_ERROR_KEY, error.message);
 
       throw redirect(NavigationLink.LOGIN, {
         headers: { "Set-Cookie": await commitSession(session) },
       });
     }
+
+    return error;
   }
 };
 
@@ -77,7 +77,6 @@ export const signupUser = async (request: Request) => {
     throw new Error("invalid data");
   }
 
-  const role = "USER";
   const session = await getSession(request.headers.get("cookie"));
   try {
     await createNewUser({
@@ -85,20 +84,25 @@ export const signupUser = async (request: Request) => {
       lastName,
       email,
       password,
-      role,
     });
 
     return redirect(NavigationLink.LOGIN, {
       headers: { "Set-Cookie": await commitSession(session) },
     });
   } catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof DrizzleError) {
+      session.set(SESSION_ERROR_KEY, "Wrong request to database");
+      throw redirect(NavigationLink.SIGNUP, {
+        headers: { "Set-Cookie": await commitSession(session) },
+      });
+    } else if (error instanceof Error) {
       session.set(SESSION_ERROR_KEY, error.message);
 
       throw redirect(NavigationLink.SIGNUP, {
         headers: { "Set-Cookie": await commitSession(session) },
       });
     }
+    return error;
   }
 };
 
@@ -111,11 +115,47 @@ export const logoutUser = async (
   const session = await getSession(request.headers.get("Cookie"));
   session.unset(SESSION_USER_KEY);
 
-  return redirect(successRedirect || NavigationLink.HOME, {
+  // return redirect(successRedirect || NavigationLink.HOME, {
+  //   headers: {
+  //     "Set-Cookie": await commitSession(session),
+  //   },
+  // });
+  return new Response(null, {
+    status: 302,
     headers: {
+      Location: successRedirect || NavigationLink.HOME,
       "Set-Cookie": await commitSession(session),
     },
   });
+};
+
+export const deleteUserAccount = async (
+  request: Request,
+  options?: GetCurrentUserOptions
+) => {
+  const { successRedirect } = options || {};
+
+  const session = await getSession(request.headers.get("Cookie"));
+  const userId = session.get(SESSION_USER_KEY).id;
+
+  const deletedUser = await deleteUserById(userId, userId);
+
+  if (deletedUser.deletedAt !== null) {
+    session.unset(SESSION_USER_KEY);
+
+    // return redirect(successRedirect || NavigationLink.HOME, {
+    //   headers: {
+    //     "Set-Cookie": await commitSession(session),
+    //   },
+    // });
+    return new Response(null, {
+      status: 302,
+      headers: {
+        Location: successRedirect || NavigationLink.HOME,
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  }
 };
 
 export const getAuthUser = async (
@@ -152,9 +192,15 @@ export const getAuthUser = async (
     return null;
   }
 
-  const existedUser = await prisma.user.findUnique({
-    where: { id: sessionUser.id },
-  });
+  const existedUser = await getUserById(sessionUser.id);
+
+  if (existedUser && existedUser.deletedAt !== null) {
+    throw redirect(NavigationLink.HOME, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  }
 
   if (existedUser && isAuthRoute) {
     throw redirect(allowedRoutes[sessionUser.role] || NavigationLink.HOME, {

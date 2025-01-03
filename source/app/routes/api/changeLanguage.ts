@@ -1,15 +1,12 @@
-import { ActionFunctionArgs } from "react-router";
-
 import { commitSession, getSession } from "~/shared/.server/services/session";
 import i18n from "~/shared/services/i18n";
 
 import { SESSION_LOCALE_KEY } from "~/shared/constants/common";
+import type { Route } from "../../+types/root";
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request }: Route.LoaderArgs) {
   const formData = await request.formData();
   const locale = formData.get("locale");
-
-  console.log("EXECUTE HOME ACTION, locale", locale);
 
   const session = await getSession(request.headers.get("cookie"));
 

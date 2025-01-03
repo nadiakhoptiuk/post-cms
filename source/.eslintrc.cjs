@@ -59,12 +59,13 @@ module.exports = {
         "import/internal-regex": "^~/",
         "import/resolver": {
           node: {
-            extensions: [".ts", ".tsx"],
+            extensions: [".ts", ".tsx", ".css"],
           },
           typescript: {
             alwaysTryTypes: true,
             project: "./tsconfig.json",
           },
+          rules: { "import/no-unresolved": ["warn"] },
         },
       },
       extends: [
@@ -83,6 +84,8 @@ module.exports = {
             caughtErrorsIgnorePattern: "^_",
           },
         ],
+
+        "import/no-unresolved": ["error"],
       },
     },
 

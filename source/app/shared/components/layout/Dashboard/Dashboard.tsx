@@ -5,7 +5,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconLogout } from "@tabler/icons-react";
 
 import { Logo } from "../../ui/Logo";
-import { LinksGroup } from "../NavBarLinksGroup";
+import { LinksGroup } from "../../modules/NavBarLinksGroup";
 import { LanguageSelector } from "../../ui/LanguageSelector/LanguageSelector";
 import { Button } from "../../ui/Button";
 
@@ -13,8 +13,8 @@ import {
   DashboardNavLinks,
   NavigationLink,
 } from "~/shared/constants/navigation";
-import { WithChildren } from "~/shared/types/remix";
-import { TRootLoader } from "~/shared/.server/root/loader";
+import type { WithChildren } from "~/shared/types/react";
+import type { TRootLoader } from "~/shared/.server/root/loader";
 import { DEFAULT_LANG } from "~/shared/constants/locale";
 
 import classes from "./Dashboard.module.css";
@@ -37,14 +37,14 @@ export const DashboardLayout = ({ children }: WithChildren) => {
           breakpoint: "xs",
           collapsed: { mobile: !menuOpened },
         }}
-        padding="md"
+        padding='md'
       >
         <AppShell.Header>
-          <Group h="100%" px="md">
+          <Group h='100%' px='md'>
             <Burger
               opened={menuOpened}
               onClick={toggleMenu}
-              hiddenFrom="xs"
+              hiddenFrom='xs'
               aria-label={t("aria.toggleMenu")}
             />
             <Logo link={NavigationLink.DASHBOARD} />
@@ -56,25 +56,25 @@ export const DashboardLayout = ({ children }: WithChildren) => {
           </Group>
         </AppShell.Header>
 
-        <AppShell.Navbar p="md">
+        <AppShell.Navbar p='md'>
           <ScrollArea>
             <Group>
-              <List spacing="xs" w="100%">
+              <List spacing='xs' w='100%'>
                 {links}
               </List>
             </Group>
           </ScrollArea>
 
           <div className={classes.footer}>
-            <Form action={NavigationLink.LOGOUT} method="post">
+            <Form action={NavigationLink.LOGOUT} method='post'>
               <Button
-                type="submit"
-                c="gray"
+                type='submit'
+                c='gray'
                 styles={{
                   root: { width: "100%", padding: "8px 12px" },
                   inner: { justifyContent: "flex-start" },
                 }}
-                variant="transparent"
+                variant='transparent'
               >
                 <IconLogout
                   size={22}
@@ -87,7 +87,7 @@ export const DashboardLayout = ({ children }: WithChildren) => {
           </div>
         </AppShell.Navbar>
 
-        <AppShell.Main className="content">{children}</AppShell.Main>
+        <AppShell.Main className='content'>{children}</AppShell.Main>
       </AppShell>
     </div>
   );

@@ -1,7 +1,8 @@
-import { LoaderFunctionArgs } from "react-router";
 import { getUserById } from "~/shared/.server/repository/users";
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+import type { Route } from "../dashboard.users/+types/route";
+
+export const loader = async ({ params }: Route.LoaderArgs) => {
   const user = await getUserById(Number(params.userId));
 
   if (!user) {
