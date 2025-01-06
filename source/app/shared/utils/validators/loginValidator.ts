@@ -10,7 +10,7 @@ export const loginValidator = (errorMessages: TErrorsMessages) =>
       password: z
         .string()
         .trim()
-        .min(8, errorMessages.passwordErrorMin)
-        .max(12, errorMessages.passwordErrorMax),
+        .min(8, `${errorMessages.stringErrorMin} 8`)
+        .max(12, `${errorMessages.stringErrorMax} 12`),
     })
   );

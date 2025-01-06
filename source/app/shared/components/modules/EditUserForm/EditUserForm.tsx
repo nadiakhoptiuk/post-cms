@@ -12,16 +12,16 @@ import { TextInput } from "~/shared/components/ui/TextInput";
 import { Modal } from "~/shared/components/ui/Modal";
 import { PasswordInput } from "../../ui/PasswordInput";
 
+import { NavigationLink } from "~/shared/constants/navigation";
 import { ROLE_SELECT_OPTIONS } from "~/shared/constants/common";
 import type { TEditUserForm } from "./EditUserForm.types";
-import type { TErrorsMessages } from "~/shared/types/react";
-import { NavigationLink } from "~/shared/constants/navigation";
+import type { TErrorsMessages, TFormType } from "~/shared/types/react";
 
 export const EditUserForm = ({
   userData,
   formType,
   hasBeenDeleted = false,
-}: TEditUserForm) => {
+}: TEditUserForm & TFormType) => {
   const { t } = useTranslation(["user", "common"]);
   const [opened, { open, close }] = useDisclosure(false);
   const errorMessages = t("formErrorsMessages", {
@@ -73,7 +73,7 @@ export const EditUserForm = ({
         />
 
         <Button
-          type='submit'
+          type="submit"
           loading={form.formState.isSubmitting}
           mt={25}
           w={200}
@@ -94,9 +94,9 @@ export const EditUserForm = ({
 
       {formType === "update" && (
         <Button
-          type='button'
-          variant='light'
-          mt='lg'
+          type="button"
+          variant="light"
+          mt="lg"
           w={200}
           onClick={open}
           styles={{
@@ -117,13 +117,13 @@ export const EditUserForm = ({
         opened={opened}
         onClose={close}
         title={t("modal.title", { ns: "common" })}
-        p='lg'
+        p="lg"
         centered
       >
         {
           <Grid columns={2}>
             <Grid.Col span={1}>
-              <Button variant='light' onClick={close} w='100%'>
+              <Button variant="light" onClick={close} w="100%">
                 Cancel
               </Button>
             </Grid.Col>
@@ -131,7 +131,7 @@ export const EditUserForm = ({
             <Grid.Col span={1}>
               <Form
                 style={{}}
-                method='post'
+                method="post"
                 action={
                   hasBeenDeleted
                     ? NavigationLink.RESTORE_USER
@@ -139,11 +139,11 @@ export const EditUserForm = ({
                 }
               >
                 <Button
-                  type='submit'
+                  type="submit"
                   loading={form.formState.isSubmitting}
-                  c='white'
-                  variant='filled'
-                  bg='red'
+                  c="white"
+                  variant="filled"
+                  bg="red"
                   fullWidth
                 >
                   {hasBeenDeleted

@@ -11,7 +11,15 @@ export async function createNewPost(userId: number, postData: TPost) {
     throw new Error("User with such id does not exist");
   }
 
-  const createdPost = await db.insert(posts).values({ ...postData });
+  const createdPost = await db
+    .insert(posts)
+    .values({ ...postData, ownerId: userId })
+    .returning({
+      ownerId: posts.ownerId,
+      title: posts.title,
+      slug: posts.slug,
+      content: posts.content,
+    });
 
   console.log(createdPost);
   return createdPost;

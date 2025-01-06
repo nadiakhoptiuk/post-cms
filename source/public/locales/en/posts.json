@@ -1,0 +1,54 @@
+{
+  "postData": {
+    "title": "Title",
+    "slug": "Slug",
+    "content": "Content",
+    "createdAt": "Creation date",
+    "updatedAt": "Update date",
+    "updatedBy": "Updated by",
+    "deletedAt": "Deletion date",
+    "deletedBy": "Deleted by"
+  },
+
+  "link.back": "Back to my posts",
+  "link.addNewPost": "Create a post",
+
+  "button.generateSlug": "Generate a slug",
+
+  "richEditorLabels": {
+    "highlightControlLabel": "Highlight text",
+    "boldControlLabel": "Bold",
+    "italicControlLabel": "Italic",
+    "underlineControlLabel": "Underline",
+    "strikeControlLabel": "Strikethrough",
+    "clearFormattingControlLabel": "Clear formatting",
+
+    "h1ControlLabel": "Heading 1",
+    "h2ControlLabel": "Heading 2",
+    "h3ControlLabel": "Heading 3",
+    "h4ControlLabel": "Heading 4",
+    "h5ControlLabel": "Heading 5",
+    "h6ControlLabel": "Heading 6",
+
+    "blockquoteControlLabel": "Blockquote",
+    "hrControlLabel": "Horizontal line",
+    "bulletListControlLabel": "Bullet list",
+    "orderedListControlLabel": "Ordered list",
+    "subscriptControlLabel": "Subscript",
+    "superscriptControlLabel": "Superscript",
+
+    "linkControlLabel": "Link",
+    "unlinkControlLabel": "Remove link",
+
+    "undoControlLabel": "Undo",
+    "redoControlLabel": "Redo",
+
+    "alignLeftControlLabel": "Align text: left",
+    "alignCenterControlLabel": "Align text: center",
+    "alignJustifyControlLabel": "Align text: justify",
+    "alignRightControlLabel": "Align text: right",
+
+    "codeBlockControlLabel": "Code block"
+  },
+  "editor.placeholder": "Enter a post content"
+}

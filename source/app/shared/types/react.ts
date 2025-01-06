@@ -18,6 +18,8 @@ export type TErrorsMessages = {
   [key: string]: string;
 };
 
+export type TFormType = { formType: "create" | "update" };
+
 export type TSignupData = {
   firstName: string;
   lastName: string;

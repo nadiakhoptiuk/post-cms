@@ -15,6 +15,7 @@ export const enum NavigationLink {
 
   DASHBOARD = "/dashboard",
   DASHBOARD_MY_POSTS = "/dashboard/my-posts",
+  DASHBOARD_MY_POSTS_NEW = "/dashboard/my-posts/new",
   DASHBOARD_ALL_POSTS = "/dashboard/posts/all",
   DASHBOARD_POSTS_ON_MODERATION = "/dashboard/posts/on-moderation",
   DASHBOARD_POSTS_COMPLAINTS = "/dashboard/posts/complaints",
@@ -34,6 +35,8 @@ export const enum NavigationLink {
   CHANGE_LANGUAGE = "change-language",
   DELETE_USER = "delete-user",
   RESTORE_USER = "restore-user",
+
+  CREATE_NEW_POST = "create-new-post",
 }
 
 export const DashboardNavLinks = [

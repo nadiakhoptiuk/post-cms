@@ -15,10 +15,10 @@
 
   "formErrorsMessages": {
     "emailError": "Must be a valid email",
-    "passwordErrorMin": "At least 8 symbols",
-    "passwordErrorMax": "No more than 12 symbols",
-    "stringErrorMin": "Required field",
-    "stringErrorMax": "Too many symbols"
+    "stringErrorRequired": "Required field",
+    "stringErrorMin": "Minimal count of symbols:",
+    "stringErrorMax": "Maximum count of symbols:",
+    "invalidRegex": "Only Latin letters, numbers and dashes are allowed"
   },
 
   "buttons": {

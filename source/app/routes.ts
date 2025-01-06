@@ -18,6 +18,15 @@ export default [
 
   layout("routes/dashboard/route.tsx", [
     route(NavigationLink.DASHBOARD, "./routes/dashboard.home/route.tsx"),
+    route(
+      NavigationLink.DASHBOARD_MY_POSTS,
+      "./routes/dashboard.my-posts/route.tsx"
+    ),
+    route(
+      NavigationLink.DASHBOARD_MY_POSTS_NEW,
+      "./routes/dashboard.my-posts.new/route.tsx",
+      [route(NavigationLink.CREATE_NEW_POST, "./routes/api/createNewPost.ts")]
+    ),
     route(NavigationLink.DASHBOARD_USERS, "./routes/dashboard.users/route.tsx"),
     route(
       NavigationLink.DASHBOARD_USERS_NEW,

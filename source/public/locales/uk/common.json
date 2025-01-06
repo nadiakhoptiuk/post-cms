@@ -15,10 +15,10 @@
 
   "formErrorsMessages": {
     "emailError": "Введіть валідний email",
-    "passwordErrorMin": "Не менше 8 символів",
-    "passwordErrorMax": "Не більше 12 символів",
-    "stringErrorMin": "Обов'язкове поле",
-    "stringErrorMax": "Не більше 30 символів"
+    "stringErrorRequired": "Обов'язкове поле",
+    "stringErrorMin": "Мінімальна кількість символів:",
+    "stringErrorMax": "Максимальна кількість символів:",
+    "invalidRegex": "Дозволено тільки латинські літери, цифри та тире"
   },
 
   "buttons": {

@@ -16,9 +16,12 @@ export const users = pgTable("Users", {
 
 export const posts = pgTable("Posts", {
   id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
-  slug: t.varchar({ length: 1000 }),
-  title: t.varchar({ length: 150 }),
-  content: t.varchar({ length: 3000 }),
-  ownerId: t.integer().references(() => users.id),
+  slug: t.varchar({ length: 1000 }).notNull().unique(),
+  title: t.varchar({ length: 150 }).notNull(),
+  content: t.varchar({ length: 3000 }).notNull(),
+  ownerId: t
+    .integer()
+    .references(() => users.id)
+    .notNull(),
   ...postTimestamps,
 });

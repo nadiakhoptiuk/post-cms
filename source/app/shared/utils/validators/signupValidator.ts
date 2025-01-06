@@ -9,18 +9,18 @@ export const signupValidator = (errorMessages: TErrorsMessages) =>
       firstName: z
         .string()
         .trim()
-        .min(1, errorMessages.stringErrorMin)
-        .max(30, errorMessages.stringErrorMax),
+        .min(1, errorMessages.stringErrorRequired)
+        .max(30, `${errorMessages.passwordErrorMax} 30`),
       lastName: z
         .string()
         .trim()
-        .min(1, errorMessages.stringErrorMin)
-        .max(30, errorMessages.stringErrorMax),
+        .min(1, errorMessages.stringErrorRequired)
+        .max(30, `${errorMessages.passwordErrorMax} 30`),
       email: z.string().trim().min(1).email(errorMessages.emailError),
       password: z
         .string()
         .trim()
-        .min(8, errorMessages.passwordErrorMin)
-        .max(12, errorMessages.passwordErrorMax),
+        .min(8, `${errorMessages.stringErrorMin} 8`)
+        .max(12, `${errorMessages.stringErrorMax} 12`),
     })
   );

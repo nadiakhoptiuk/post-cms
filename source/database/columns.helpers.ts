@@ -1,4 +1,4 @@
-import { timestamp, boolean } from "drizzle-orm/pg-core";
+import { timestamp } from "drizzle-orm/pg-core";
 import * as t from "drizzle-orm/pg-core";
 import { users } from "./schema";
 
