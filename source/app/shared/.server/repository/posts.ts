@@ -28,6 +28,7 @@ export async function createNewPost(userId: number, postData: TPost) {
 export async function getAllPosts() {
   const allPosts = await db
     .select({
+      id: posts.id,
       title: posts.title,
       slug: posts.slug,
       content: posts.content,
@@ -38,7 +39,6 @@ export async function getAllPosts() {
     // .where(not(eq(users.deletedAt, null)))
     .orderBy(desc(posts.createdAt));
 
-  console.log(allPosts);
   return allPosts;
 }
 

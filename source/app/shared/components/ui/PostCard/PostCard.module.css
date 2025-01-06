@@ -1,4 +1,6 @@
 .content {
   line-clamp: 3;
   -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

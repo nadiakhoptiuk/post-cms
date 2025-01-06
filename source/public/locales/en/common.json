@@ -28,8 +28,21 @@
     "button.view": "View",
     "button.cancel": "Cancel",
     "button.delete": "Delete",
-    "button.restore": "Restore"
+    "button.restore": "Restore",
+    "button.complain": "Complain"
   },
 
-  "modal.title": "Are you sure?"
+  "modal.title": "Are you sure?",
+
+  "timestampsLabels": {
+    "createdAt": "Creation date",
+    "updatedAt": "Update date",
+    "updatedBy": "Updated by",
+    "publishedAt": "Publication date",
+    "moderatedBy": "Moderated by",
+    "deletedAt": "Deletion date",
+    "deletedBy": "Deleted by",
+    "blockedAt": "Block date",
+    "blockedBy": "Blocked by"
+  }
 }

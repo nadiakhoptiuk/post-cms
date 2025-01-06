@@ -28,8 +28,21 @@
     "button.view": "Переглянути",
     "button.cancel": "Відміна",
     "button.delete": "Видалити",
-    "button.restore": "Відновити"
+    "button.restore": "Відновити",
+    "button.complain": "Поскаржитись"
   },
 
-  "modal.title": "Ви впевнені?"
+  "modal.title": "Ви впевнені?",
+
+  "timestampsLabels": {
+    "createdAt": "Дата створення",
+    "updatedAt": "Дата оновлення",
+    "updatedBy": "Ким оновлено",
+    "publishedAt": "Дата публікації",
+    "moderatedBy": "Ким модеровано",
+    "deletedAt": "Дата видалення",
+    "deletedBy": "Ким видалено",
+    "blockedAt": "Дата блокування",
+    "blockedBy": "Ким заблоковано"
+  }
 }

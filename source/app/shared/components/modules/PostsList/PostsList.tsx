@@ -4,14 +4,14 @@ import { PostCard } from "../../ui/PostCard";
 
 import type { TPostList } from "./PostList.types";
 
-export const PostsList = ({ posts }: TPostList) => {
+export const PostsList = ({ posts, cardType = "own" }: TPostList) => {
   return (
     <Group>
       <Grid component="ul" columns={2}>
         {posts.map((itemData) => {
           return (
             <Grid.Col span={{ base: 2, md: 1, lg: 1 }} key={itemData.id}>
-              <PostCard item={itemData} />
+              <PostCard cardType={cardType} item={itemData} />
             </Grid.Col>
           );
         })}

@@ -98,3 +98,5 @@ export type TPost = {
   slug: string;
   content: string;
 };
+
+export type TPostCardType = "own" | "all";

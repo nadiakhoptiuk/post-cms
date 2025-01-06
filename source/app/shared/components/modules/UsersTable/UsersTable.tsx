@@ -21,7 +21,7 @@ export const UsersTable = ({ users }: TUsersTable) => {
       <MTable.Tr key={user.id}>
         <TableTd>
           <StyledNavLink
-            variant='accent'
+            variant="accent"
             to={`${NavigationLink.DASHBOARD_USERS}/${user.id}`}
           >
             {t("buttons.button.edit", { ns: "common" })}
@@ -41,13 +41,13 @@ export const UsersTable = ({ users }: TUsersTable) => {
   });
 
   return (
-    <MTable.ScrollContainer type='scrollarea' minWidth={500}>
+    <MTable.ScrollContainer type="scrollarea" minWidth={500}>
       <MTable highlightOnHover withColumnBorders>
         <MTable.Thead>
           <MTable.Tr>
             <TableTh>
               <StyledNavLink
-                variant='accent'
+                variant="accent"
                 to={`${NavigationLink.DASHBOARD_USERS}/new`}
                 style={{ textWrap: "wrap" }}
               >
@@ -58,11 +58,21 @@ export const UsersTable = ({ users }: TUsersTable) => {
             <TableTh>{t("userData.firstName")}</TableTh>
             <TableTh>{t("userData.email")}</TableTh>
             <TableTh>{t("userData.role")}</TableTh>
-            <TableTh>{t("userData.createdAt")}</TableTh>
-            <TableTh>{t("userData.updatedAt")}</TableTh>
-            <TableTh>{t("userData.updatedBy")}</TableTh>
-            <TableTh>{t("userData.deletedAt")}</TableTh>
-            <TableTh>{t("userData.deletedBy")}</TableTh>
+            <TableTh>
+              {t("timestampsLabels.createdAt", { ns: "common" })}
+            </TableTh>
+            <TableTh>
+              {t("timestampsLabels.updatedAt", { ns: "common" })}
+            </TableTh>
+            <TableTh>
+              {t("timestampsLabels.updatedBy", { ns: "common" })}
+            </TableTh>
+            <TableTh>
+              {t("timestampsLabels.deletedAt", { ns: "common" })}
+            </TableTh>
+            <TableTh>
+              {t("timestampsLabels.deletedBy", { ns: "common" })}
+            </TableTh>
           </MTable.Tr>
         </MTable.Thead>
 

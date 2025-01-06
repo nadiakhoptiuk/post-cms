@@ -40,6 +40,7 @@ export const Editor = ({ label, scope }: TTextInput) => {
     ],
     content: field.value() || "",
     onUpdate: ({ editor }) => {
+      console.log(editor);
       field.setValue(editor.getHTML());
       field.validate();
     },

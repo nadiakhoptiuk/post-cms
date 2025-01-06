@@ -2,6 +2,7 @@ import { redirect } from "react-router";
 
 import { getAllUserPostsById } from "~/shared/.server/repository/posts";
 import { getSession } from "~/shared/.server/services/session";
+import { getPostsWithSlicedString } from "~/shared/utils/getPostsWithSlicedString";
 
 import { SESSION_USER_KEY } from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
@@ -17,5 +18,5 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   const allUserPosts = await getAllUserPostsById(sessionUser.id);
 
-  return { allUserPosts };
+  return { posts: getPostsWithSlicedString(allUserPosts) };
 }

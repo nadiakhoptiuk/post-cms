@@ -10,6 +10,7 @@ import { NavigationLink } from "~/shared/constants/navigation";
 
 import type { TUserLoaderData } from "./types";
 import { formatDateWithTime } from "~/shared/utils/dateFormat";
+import { TimestampItem } from "~/shared/components/ui/TimestampItem";
 
 export { loader } from "./loader";
 export { action } from "./action";
@@ -28,11 +29,11 @@ export default function DashBoardEditUserPage() {
   const deletedDate = formatDateWithTime(deletedAt);
 
   return (
-    <Box component='section'>
+    <Box component="section">
       <Container>
         <StyledLink
           to={NavigationLink.DASHBOARD_USERS}
-          variant='unstyled'
+          variant="unstyled"
           style={{ marginBottom: "20px" }}
         >
           <IconArrowNarrowLeft size={18} />
@@ -40,53 +41,28 @@ export default function DashBoardEditUserPage() {
         </StyledLink>
 
         <Box mb={25}>
-          <Text mb={15} size='md'>
-            <Text component='span' fw='bolder'>
-              Created at{"  "}
-            </Text>
-            {createdDate}
-          </Text>
+          <TimestampItem type="created" date={createdDate} />
 
           {updatedDate && updatedBy && (
-            <Group>
-              <Text mb={15} size='md'>
-                <Text component='span' fw='bolder'>
-                  Last updated at{"  "}
-                </Text>
-                {updatedDate}
-              </Text>
-
-              <Text mb={15} size='md'>
-                <Text component='span' fw='bolder'>
-                  Updated by{"  "}
-                </Text>
-                {updatedBy}
-              </Text>
-            </Group>
+            <TimestampItem
+              type="updated"
+              date={updatedDate}
+              madeBy={updatedBy}
+            />
           )}
 
           {deletedDate && deletedBy && (
-            <Group>
-              <Text mb={15} size='md'>
-                <Text component='span' fw='bolder'>
-                  Deleted at{"  "}
-                </Text>
-                {deletedDate}
-              </Text>
-
-              <Text mb={15} size='md'>
-                <Text component='span' fw='bolder'>
-                  Deleted by{"  "}
-                </Text>
-                {deletedBy}
-              </Text>
-            </Group>
+            <TimestampItem
+              type="deleted"
+              date={deletedDate}
+              madeBy={deletedBy}
+            />
           )}
         </Box>
 
         <EditUserForm
           userData={userData}
-          formType='update'
+          formType="update"
           hasBeenDeleted={!!deletedDate}
         />
       </Container>

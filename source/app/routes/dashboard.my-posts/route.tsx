@@ -11,8 +11,8 @@ export { loader } from "./loader";
 export const handle = { i18n: ["posts", "common"] };
 
 export default function DashBoardMyPostsPage() {
-  const { allUserPosts } = useLoaderData();
-  const { t } = useTranslation();
+  const { posts } = useLoaderData();
+  const { t } = useTranslation("posts");
 
   return (
     <Box component="section">
@@ -23,10 +23,10 @@ export default function DashBoardMyPostsPage() {
           style={{ marginBottom: 30 }}
           to={NavigationLink.DASHBOARD_MY_POSTS_NEW}
         >
-          {t("link.addNewPost", { ns: "posts" })}
+          {t("link.addNewPost")}
         </StyledLink>
 
-        <PostsList posts={allUserPosts} />
+        <PostsList cardType="own" posts={posts} />
       </Container>
     </Box>
   );
