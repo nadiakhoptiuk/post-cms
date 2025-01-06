@@ -4,28 +4,67 @@
   align-items: center;
   justify-content: center;
   column-gap: 10px;
-  padding: 8px 0px;
+  padding: 4px 8px;
 
   font-size: var(--mantine-font-size-md);
 
   text-decoration: none;
+  border-radius: var(--mantine-radius-sm);
 }
 
 .link:hover,
 .lonk:focus-visible {
-  color: var(--mantine-color-blue-5);
   transition: all;
   transition-duration: 150ms;
 }
 
-.accentLink {
+/* ----------------- ACCENT ----------------- */
+.accentFilledLink {
   composes: link;
 
-  color: var(--mantine-color-blue-8);
+  color: var(--mantine-color-white);
+  background-color: var(--mantine-color-blue-5);
+}
+.accentFilledLink:hover,
+.accentFilledLink:focus-visible {
+  background-color: var(--mantine-color-blue-8);
 }
 
-.unstyledLink {
+.accentOutlinedLink {
+  composes: link;
+
+  color: var(--mantine-color-blue-6);
+  background-color: transparent;
+  border: 1px solid var(--mantine-color-blue-6);
+}
+.accentOutlinedLink:hover,
+.accentOutlinedLink:focus-visible {
+  color: var(--mantine-color-blue-8);
+  background-color: var(--mantine-color-blue-0);
+  border-color: var(--mantine-color-blue-8);
+}
+
+/* ----------------- UNSTYLED ----------------- */
+.unstyledFilledLink {
   composes: link;
 
   color: var(--mantine-color-dark);
+  background-color: var(--mantine-color-blue-0);
+}
+.unstyledFilledLink:hover,
+.unstyledFilledLink:focus-visible {
+  background-color: var(--mantine-color-blue-1);
+}
+
+.unstyledOutlinedLink {
+  composes: link;
+
+  color: var(--mantine-color-dark-8);
+  background-color: transparent;
+  border: 1px solid var(--mantine-color-dark-8);
+}
+.unstyledOutlinedLink:hover,
+.unstyledOutlinedLink:focus-visible {
+  color: var(--mantine-color-blue-8);
+  border-color: var(--mantine-color-blue-8);
 }

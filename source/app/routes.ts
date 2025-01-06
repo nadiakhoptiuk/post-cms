@@ -18,20 +18,31 @@ export default [
 
   layout("routes/dashboard/route.tsx", [
     route(NavigationLink.DASHBOARD, "./routes/dashboard.home/route.tsx"),
+
     route(
       NavigationLink.DASHBOARD_MY_POSTS,
       "./routes/dashboard.my-posts/route.tsx"
     ),
+
+    route(
+      NavigationLink.DASHBOARD_MY_CURRENT_POST,
+      "./routes/dashboard.my-posts.$postId/route.tsx",
+      [route(NavigationLink.UPDATE_POST, "./routes/api/updatePost.ts")]
+    ),
+
     route(
       NavigationLink.DASHBOARD_MY_POSTS_NEW,
       "./routes/dashboard.my-posts.new/route.tsx",
       [route(NavigationLink.CREATE_NEW_POST, "./routes/api/createNewPost.ts")]
     ),
+
     route(NavigationLink.DASHBOARD_USERS, "./routes/dashboard.users/route.tsx"),
+
     route(
       NavigationLink.DASHBOARD_USERS_NEW,
       "./routes/dashboard.users.new/route.tsx"
     ),
+
     route(
       NavigationLink.DASHBOARD_CURRENT_USER,
       "./routes/dashboard.users_.$userId/route.tsx",

@@ -15,6 +15,8 @@ export const enum NavigationLink {
 
   DASHBOARD = "/dashboard",
   DASHBOARD_MY_POSTS = "/dashboard/my-posts",
+  DASHBOARD_MY_CURRENT_POST = "/dashboard/my-posts/:postId",
+  // DASHBOARD_MY_CURRENT_POST_EDIT = "/dashboard/my-posts/:postId/edit",
   DASHBOARD_MY_POSTS_NEW = "/dashboard/my-posts/new",
   DASHBOARD_ALL_POSTS = "/dashboard/posts/all",
   DASHBOARD_POSTS_ON_MODERATION = "/dashboard/posts/on-moderation",
@@ -29,6 +31,8 @@ export const enum NavigationLink {
   DELETE_ACCOUNT = "/delete-account",
 
   MY_POSTS = "/my-posts",
+  MY_CURRENT_POST = "/my-posts/:postId",
+  MY_CURRENT_POST_EDIT = "/my-posts/:postId/edit",
   PROFILE = "/profile",
   SIGNUP = "/signup",
 
@@ -37,6 +41,7 @@ export const enum NavigationLink {
   RESTORE_USER = "restore-user",
 
   CREATE_NEW_POST = "create-new-post",
+  UPDATE_POST = "update-post",
 }
 
 export const DashboardNavLinks = [

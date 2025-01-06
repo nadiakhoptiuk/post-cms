@@ -7,11 +7,20 @@ import s from "./StyledLink.module.css";
 export const StyledLink = ({
   children,
   variant = "unstyled",
+  fill = "outline",
   ...rest
 }: TStyledLink) => {
   return (
     <Link
-      className={variant === "accent" ? s.accentLink : s.unstyledLink}
+      className={
+        variant === "accent" && fill === "outline"
+          ? s.accentOutlinedLink
+          : variant === "accent" && fill === "filled"
+          ? s.accentFilledLink
+          : variant === "unstyled" && fill === "outline"
+          ? s.unstyledOutlinedLink
+          : s.unstyledFilledLink
+      }
       {...rest}
     >
       {children}

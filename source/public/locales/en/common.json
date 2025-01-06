@@ -25,6 +25,7 @@
     "button.update": "Update",
     "button.create": "Create",
     "button.edit": "Edit",
+    "button.view": "View",
     "button.cancel": "Cancel",
     "button.delete": "Delete",
     "button.restore": "Restore"
