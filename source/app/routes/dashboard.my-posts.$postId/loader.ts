@@ -8,6 +8,10 @@ import { NavigationLink } from "~/shared/constants/navigation";
 import type { Route } from "./+types/route";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
+  if (!params.postId) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
   const session = await getSession(request.headers.get("cookie"));
   const sessionUser = session.get(SESSION_USER_KEY);
 
@@ -16,14 +20,6 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   }
 
   const post = await getUserPostById(sessionUser.id, Number(params.postId));
-
-  console.log("post", post);
-
-  // const { window: serverWindow } = new JSDOM("");
-  // const purify = DOMPurify(serverWindow);
-  // const sanitizedHTML = purify.sanitize(post.content.slice(0, 100));
-
-  // console.log({ ...post, content: sanitizedHTML });
 
   return { post };
 }

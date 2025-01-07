@@ -4,12 +4,14 @@
     "slug": "Slug",
     "content": "Content",
     "createdAt": "Creation date",
+    "author": "Author",
     "updatedAt": "Update date",
     "updatedBy": "Updated by",
     "deletedAt": "Deletion date",
     "deletedBy": "Deleted by"
   },
 
+  "link.back": "Back to All Posts",
   "link.backToMyPosts": "Back to my posts",
   "link.addNewPost": "Create a post",
   "link.viewPost": "View a post",

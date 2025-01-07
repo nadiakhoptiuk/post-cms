@@ -76,6 +76,7 @@ export type TDBPostRecord = {
   id: number;
   ownerId: number;
   createdAt: Date;
+  author?: string;
   updatedAt?: Date | null;
   updatedBy?: string | null;
   updatedById?: number | null;

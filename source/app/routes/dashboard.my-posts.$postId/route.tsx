@@ -25,7 +25,6 @@ export default function DashBoardMyCurrentPostPage() {
     deletedBy,
     publishedAt,
     moderatedBy,
-    ...postData
   } = post;
 
   const createdDate = formatDateWithTime(createdAt);

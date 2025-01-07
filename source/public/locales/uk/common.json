@@ -36,6 +36,7 @@
 
   "timestampsLabels": {
     "createdAt": "Дата створення",
+    "author": "Автор",
     "updatedAt": "Дата оновлення",
     "updatedBy": "Ким оновлено",
     "publishedAt": "Дата публікації",

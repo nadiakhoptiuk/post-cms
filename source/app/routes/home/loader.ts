@@ -1,19 +1,15 @@
-import { getAuthUser } from "~/shared/.server/services/auth";
-import { NavigationLink } from "~/shared/constants/navigation";
+import { getAllPosts } from "~/shared/.server/repository/posts";
+import { getSession } from "~/shared/.server/services/session";
+import { getPostsWithSlicedString } from "~/shared/utils/getPostsWithSlicedString";
+
+import { SESSION_USER_KEY } from "~/shared/constants/common";
 import type { Route } from "./+types/route";
 
-export const loader = async ({ request }: Route.LoaderArgs) => {
-  const sessionUser = await getAuthUser(
-    request,
-    {
-      isPublicRoute: true,
-      allowedRoles: ["user"],
-      allowedRoutes: { admin: NavigationLink.DASHBOARD },
-    },
-    {
-      failureRedirect: NavigationLink.LOGIN,
-    }
-  );
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("cookie"));
+  const sessionUser = session.get(SESSION_USER_KEY);
 
-  return Response.json({ user: sessionUser });
-};
+  const allPosts = await getAllPosts();
+
+  return { posts: getPostsWithSlicedString(allPosts), user: sessionUser };
+}

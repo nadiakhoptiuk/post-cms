@@ -4,12 +4,14 @@
     "slug": "Слаг",
     "content": "Контент",
     "createdAt": "Дата створення",
+    "author": "Автор",
     "updatedAt": "Дата оновлення",
     "updatedBy": "Оновив",
     "deletedAt": "Дата видалення",
     "deletedBy": "Видалив"
   },
 
+  "link.back": "Назад до всіх дописів",
   "link.backToMyPosts": "Назад до моїх дописів",
   "link.addNewPost": "Новий допис",
   "link.viewPost": "Переглянути допис",

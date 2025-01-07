@@ -8,22 +8,33 @@ export const TimestampItem = ({
 }: {
   type: "created" | "updated" | "deleted" | "published" | "blocked";
   date: string | null;
-  madeBy?: string | undefined;
+  madeBy?: string | undefined | null;
 }) => {
   const { t } = useTranslation("common");
 
-  if (type === "created" && !madeBy) {
+  if (type === "created") {
     return (
-      <Text mb={15} size="md">
-        <Text component="span" fw="bolder">
-          {t("timestampsLabels.createdAt")}:{" "}
+      <Group>
+        <Text mb={15} size="md">
+          <Text component="span" fw="bolder">
+            {t("timestampsLabels.createdAt")}:{" "}
+          </Text>
+          {date}
         </Text>
-        {date}
-      </Text>
+
+        {madeBy && (
+          <Text mb={15} size="md">
+            <Text component="span" fw="bolder">
+              {t("timestampsLabels.author")}:{"  "}
+            </Text>
+            {madeBy}
+          </Text>
+        )}
+      </Group>
     );
   }
 
-  if (type === "published" && madeBy) {
+  if (type === "published") {
     return (
       <Group>
         <Text mb={15} size="md">
@@ -33,17 +44,19 @@ export const TimestampItem = ({
           {date}
         </Text>
 
-        <Text mb={15} size="md">
-          <Text component="span" fw="bolder">
-            {t("timestampsLabels.moderatedBy")}:{"  "}
+        {madeBy && (
+          <Text mb={15} size="md">
+            <Text component="span" fw="bolder">
+              {t("timestampsLabels.moderatedBy")}:{"  "}
+            </Text>
+            {madeBy}
           </Text>
-          {madeBy}
-        </Text>
+        )}
       </Group>
     );
   }
 
-  if (type === "updated" && madeBy) {
+  if (type === "updated") {
     return (
       <Group>
         <Text mb={15} size="md">
@@ -53,17 +66,19 @@ export const TimestampItem = ({
           {date}
         </Text>
 
-        <Text mb={15} size="md">
-          <Text component="span" fw="bolder">
-            {t("timestampsLabels.updatedBy")}:{" "}
+        {madeBy && (
+          <Text mb={15} size="md">
+            <Text component="span" fw="bolder">
+              {t("timestampsLabels.updatedBy")}:{" "}
+            </Text>
+            {madeBy}
           </Text>
-          {madeBy}
-        </Text>
+        )}
       </Group>
     );
   }
 
-  if (type === "deleted" && madeBy) {
+  if (type === "deleted") {
     return (
       <Group>
         <Text mb={15} size="md">
@@ -73,17 +88,19 @@ export const TimestampItem = ({
           {date}
         </Text>
 
-        <Text mb={15} size="md">
-          <Text component="span" fw="bolder">
-            {t("timestampsLabels.deletedBy")}:{" "}
+        {madeBy && (
+          <Text mb={15} size="md">
+            <Text component="span" fw="bolder">
+              {t("timestampsLabels.deletedBy")}:{" "}
+            </Text>
+            {madeBy}
           </Text>
-          {madeBy}
-        </Text>
+        )}
       </Group>
     );
   }
 
-  if (type === "blocked" && madeBy) {
+  if (type === "blocked") {
     return (
       <Group>
         <Text mb={15} size="md">
@@ -93,12 +110,14 @@ export const TimestampItem = ({
           {date}
         </Text>
 
-        <Text mb={15} size="md">
-          <Text component="span" fw="bolder">
-            {t("timestampsLabels.blockedBy")}:{" "}
+        {madeBy && (
+          <Text mb={15} size="md">
+            <Text component="span" fw="bolder">
+              {t("timestampsLabels.blockedBy")}:{" "}
+            </Text>
+            {madeBy}
           </Text>
-          {madeBy}
-        </Text>
+        )}
       </Group>
     );
   }

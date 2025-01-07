@@ -1,6 +1,5 @@
 import {
   type RouteConfig,
-  index,
   layout,
   prefix,
   route,
@@ -8,7 +7,10 @@ import {
 import { NavigationLink } from "./shared/constants/navigation";
 
 export default [
-  index("./routes/home/route.tsx"),
+  layout("./routes/home.layout/route.tsx", [
+    route(NavigationLink.HOME, "./routes/home/route.tsx"),
+    route(NavigationLink.HOME_SINGLE_POST, `./routes/home.$slug/route.tsx`),
+  ]),
 
   layout("./routes/_auth/route.tsx", [
     route(NavigationLink.LOGIN, "./routes/_auth.login/route.tsx"),
@@ -18,6 +20,14 @@ export default [
 
   layout("routes/dashboard/route.tsx", [
     route(NavigationLink.DASHBOARD, "./routes/dashboard.home/route.tsx"),
+    route(
+      NavigationLink.DASHBOARD_SINGLE_POST,
+      `./routes/dashboard.home.$slug/route.tsx`
+    ),
+    // route(
+    //   NavigationLink.DASHBOARD_SINGLE_POST_COMPLAIN,
+    //   `./routes/dashboard.home.$slug.complain/route.tsx`
+    // ),
 
     route(
       NavigationLink.DASHBOARD_MY_POSTS,

@@ -36,6 +36,7 @@
 
   "timestampsLabels": {
     "createdAt": "Creation date",
+    "author": "Author",
     "updatedAt": "Update date",
     "updatedBy": "Updated by",
     "publishedAt": "Publication date",

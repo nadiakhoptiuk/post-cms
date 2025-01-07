@@ -6,12 +6,12 @@ import { PostsList } from "~/shared/components/modules/PostsList";
 export { loader } from "./loader";
 
 export default function DashBoardHomePage() {
-  const { posts } = useLoaderData();
+  const { posts, user } = useLoaderData();
 
   return (
     <Box component="section">
       <Container>
-        <PostsList cardType="all" posts={posts} />
+        <PostsList cardType="all" posts={posts} userId={user.id} />
       </Container>
     </Box>
   );

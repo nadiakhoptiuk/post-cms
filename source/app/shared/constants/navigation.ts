@@ -12,12 +12,15 @@ import {
 
 export const enum NavigationLink {
   HOME = "/",
+  HOME_SINGLE_POST = "/:slug",
 
   DASHBOARD = "/dashboard",
+  DASHBOARD_SINGLE_POST = "/dashboard/:slug",
+  DASHBOARD_SINGLE_POST_COMPLAIN = "/dashboard/:slug/complain",
   DASHBOARD_MY_POSTS = "/dashboard/my-posts",
   DASHBOARD_MY_CURRENT_POST = "/dashboard/my-posts/:postId",
-  // DASHBOARD_MY_CURRENT_POST_EDIT = "/dashboard/my-posts/:postId/edit",
   DASHBOARD_MY_POSTS_NEW = "/dashboard/my-posts/new",
+
   DASHBOARD_ALL_POSTS = "/dashboard/posts/all",
   DASHBOARD_POSTS_ON_MODERATION = "/dashboard/posts/on-moderation",
   DASHBOARD_POSTS_COMPLAINTS = "/dashboard/posts/complaints",

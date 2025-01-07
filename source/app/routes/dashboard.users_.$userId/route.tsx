@@ -1,6 +1,6 @@
 import { useLoaderData } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Box, Container, Group, Text } from "@mantine/core";
+import { Box, Container } from "@mantine/core";
 import { IconArrowNarrowLeft } from "@tabler/icons-react";
 
 import { StyledLink } from "~/shared/components/ui/StyledLink";

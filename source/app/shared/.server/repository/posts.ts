@@ -26,6 +26,16 @@ export async function createNewPost(userId: number, postData: TPost) {
 }
 
 export async function getAllPosts() {
+  const crt = db
+    .select({
+      author: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
+        "author"
+      ),
+      id: users.id,
+    })
+    .from(users)
+    .as("crt");
+
   const allPosts = await db
     .select({
       id: posts.id,
@@ -34,8 +44,11 @@ export async function getAllPosts() {
       content: posts.content,
       createdAt: posts.createdAt,
       deletedAt: posts.deletedAt,
+      ownerId: posts.ownerId,
+      author: crt.author,
     })
     .from(posts)
+    .leftJoin(crt, eq(posts.ownerId, crt.id))
     // .where(not(eq(users.deletedAt, null)))
     .orderBy(desc(posts.createdAt));
 
@@ -67,6 +80,52 @@ export async function getUserPostById(userId: number, postId: number) {
   }
 
   console.log("existedPost >>>>>>>", existedPost);
+
+  return existedPost[0];
+}
+
+export async function getPostBySlug(slug: string) {
+  const crt = db
+    .select({
+      author: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
+        "author"
+      ),
+      id: users.id,
+    })
+    .from(users)
+    .as("crt");
+
+  const upd = db
+    .select({
+      updatedBy: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
+        "updatedBy"
+      ),
+      id: users.id,
+    })
+    .from(users)
+    .as("upd");
+
+  const existedPost = await db
+    .select({
+      id: posts.id,
+      title: posts.title,
+      slug: posts.slug,
+      content: posts.content,
+      createdAt: posts.createdAt,
+      updatedAt: posts.updatedAt,
+      updatedById: posts.updatedById,
+      updatedBy: upd.updatedBy,
+      ownerId: posts.ownerId,
+      author: crt.author,
+    })
+    .from(posts)
+    .where(eq(posts.slug, slug))
+    .leftJoin(crt, eq(posts.ownerId, crt.id))
+    .leftJoin(upd, eq(posts.updatedById, upd.id));
+
+  if (!existedPost) {
+    throw new Error("Post with such id does not exist");
+  }
 
   return existedPost[0];
 }
