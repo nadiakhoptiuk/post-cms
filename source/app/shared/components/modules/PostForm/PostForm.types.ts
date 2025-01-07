@@ -5,5 +5,4 @@ export type TPostForm = {
     content: string;
     // tags: string[];
   };
-  action: string;
 };

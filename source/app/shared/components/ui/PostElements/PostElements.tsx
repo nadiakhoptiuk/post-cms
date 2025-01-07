@@ -4,7 +4,7 @@ import { Box, Paper, Title } from "@mantine/core";
 import { TimestampItem } from "../TimestampItem";
 
 import type { TDBPostRecord, TPost } from "~/shared/types/react";
-import { formatDateWithTime } from "~/shared/utils/dateFormat";
+import { formatDateWithMonthName } from "~/shared/utils/dateFormat";
 
 export const PostContent = ({
   content,
@@ -14,7 +14,7 @@ export const PostContent = ({
   title: string;
 }) => {
   return (
-    <Paper shadow="xs" p="xl">
+    <Paper shadow="sm" p="xl">
       <Title order={2} mb={30}>
         {title}
       </Title>
@@ -25,19 +25,21 @@ export const PostContent = ({
 };
 
 export const PostHeading = ({ post }: { post: TPost & TDBPostRecord }) => {
-  const createdDate = formatDateWithTime(post.createdAt);
-  const updatedDate = formatDateWithTime(post.updatedAt);
+  const createdDate = formatDateWithMonthName(post.createdAt);
+  const updatedDate = formatDateWithMonthName(post.updatedAt);
 
   return (
     <Box>
       <TimestampItem type="created" date={createdDate} madeBy={post.author} />
       {/* //TODO change to published */}
 
-      <TimestampItem
-        type="updated"
-        date={updatedDate}
-        // madeBy={post.updatedBy}
-      />
+      {updatedDate && (
+        <TimestampItem
+          type="updated"
+          date={updatedDate}
+          // madeBy={post.updatedBy} //TODO change if admin can update posts
+        />
+      )}
     </Box>
   );
 };

@@ -8,18 +8,20 @@ import {
   IconLogin,
   IconUserScan,
   IconUserPlus,
+  IconShieldLock,
 } from "@tabler/icons-react";
 
 export const enum NavigationLink {
   HOME = "/",
   HOME_SINGLE_POST = "/:slug",
+  MY_POSTS = "/my-posts",
+  MY_POSTS_NEW = "/my-posts/new",
+  MY_CURRENT_POST = "/my-posts/:postId",
+  PROFILE = "/profile",
 
   DASHBOARD = "/dashboard",
   DASHBOARD_SINGLE_POST = "/dashboard/:slug",
   DASHBOARD_SINGLE_POST_COMPLAIN = "/dashboard/:slug/complain",
-  DASHBOARD_MY_POSTS = "/dashboard/my-posts",
-  DASHBOARD_MY_CURRENT_POST = "/dashboard/my-posts/:postId",
-  DASHBOARD_MY_POSTS_NEW = "/dashboard/my-posts/new",
 
   DASHBOARD_ALL_POSTS = "/dashboard/posts/all",
   DASHBOARD_POSTS_ON_MODERATION = "/dashboard/posts/on-moderation",
@@ -33,10 +35,6 @@ export const enum NavigationLink {
   LOGOUT = "/logout",
   DELETE_ACCOUNT = "/delete-account",
 
-  MY_POSTS = "/my-posts",
-  MY_CURRENT_POST = "/my-posts/:postId",
-  MY_CURRENT_POST_EDIT = "/my-posts/:postId/edit",
-  PROFILE = "/profile",
   SIGNUP = "/signup",
 
   CHANGE_LANGUAGE = "change-language",
@@ -49,18 +47,13 @@ export const enum NavigationLink {
 
 export const DashboardNavLinks = [
   {
-    id: "dashboard.myPosts",
-    link: NavigationLink.DASHBOARD_MY_POSTS,
-    icon: IconPencilMinus,
-  },
-  {
     id: "dashboard.posts",
     icon: IconNotebook,
     links: [
       {
         id: "dashboard.allPosts",
         link: NavigationLink.DASHBOARD_ALL_POSTS,
-        icon: IconNotebook,
+        icon: IconPencilMinus,
       },
       {
         id: "dashboard.onModeration",
@@ -94,4 +87,5 @@ export const AuthNavLinks = [
 export const UserBarNavLinks = [
   { id: "profile", link: NavigationLink.PROFILE, icon: IconUserScan },
   { id: "myPosts", link: NavigationLink.MY_POSTS, icon: IconPencilMinus },
+  { id: "dashboard", link: NavigationLink.DASHBOARD, icon: IconShieldLock },
 ];

@@ -6,11 +6,17 @@ import { IconChevronRight, type TablerIcon } from "@tabler/icons-react";
 
 import { StyledNavLink } from "../../ui/StyledNavLink";
 
-import type { TDashboardNavLink } from "./NavBarLinksGroup.types";
-
+import { NavigationLink } from "~/shared/constants/navigation";
+import type { TLinksGroup } from "./NavBarLinksGroup.types";
 import s from "./NavBarLinksGroup.module.css";
 
-export function LinksGroup({ links, link, icon, id }: TDashboardNavLink) {
+export function LinksGroup({
+  item,
+  postsOnModeration,
+  postsWithComplaints,
+}: TLinksGroup) {
+  const { links, link, icon, id } = item;
+
   const hasLinks = Array.isArray(links);
   const location = useLocation();
   const Icon = icon || undefined;
@@ -29,9 +35,16 @@ export function LinksGroup({ links, link, icon, id }: TDashboardNavLink) {
 
   const items = (hasLinks ? links : []).map(({ id, link, icon }) => {
     const Icon: TablerIcon = icon || undefined;
+    const count =
+      link === NavigationLink.DASHBOARD_POSTS_ON_MODERATION
+        ? postsOnModeration
+        : link === NavigationLink.DASHBOARD_POSTS_COMPLAINTS
+        ? postsWithComplaints
+        : 0;
 
     return (
       <List.Item
+        component="div"
         key={id}
         w="100%"
         styles={{
@@ -39,7 +52,7 @@ export function LinksGroup({ links, link, icon, id }: TDashboardNavLink) {
           itemLabel: { width: "100%" },
         }}
       >
-        <StyledNavLink fullWidth to={link}>
+        <StyledNavLink fullWidth to={link} withCount count={count}>
           <Icon />
           <span>{t(`dashboardLinks.${id}`)}</span>
         </StyledNavLink>
@@ -82,6 +95,7 @@ export function LinksGroup({ links, link, icon, id }: TDashboardNavLink) {
 
       {!hasLinks && link && (
         <List.Item
+          component="div"
           w="100%"
           styles={{
             itemWrapper: { width: "100%" },

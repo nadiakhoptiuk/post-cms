@@ -10,6 +10,7 @@ import { LanguageSelector } from "../LanguageSelector";
 import { Modal } from "../Modal";
 
 import { NavigationLink, UserBarNavLinks } from "~/shared/constants/navigation";
+import { ROLE_ADMIN } from "~/shared/constants/common";
 import type { TUserBar } from "./UserBar.types";
 
 export const UserBar = ({ user, locale }: TUserBar) => {
@@ -20,16 +21,17 @@ export const UserBar = ({ user, locale }: TUserBar) => {
     <>
       <Menu
         width={200}
-        position='bottom-end'
+        position="bottom-end"
         transitionProps={{ transition: "pop-top-right" }}
         withinPortal
+        shadow="md"
       >
         <Menu.Target>
           <UnstyledButton>
             <Group gap={7}>
-              <Avatar alt='user' color='cyan' radius='xl' size={30} />
+              <Avatar alt="user" color="cyan" radius="xl" size={30} />
 
-              <Text fw={500} size='sm' visibleFrom='xs' lh={1} mr={3}>
+              <Text fw={500} size="sm" visibleFrom="xs" lh={1} mr={3}>
                 {user.firstName} {user.lastName}
               </Text>
 
@@ -38,10 +40,14 @@ export const UserBar = ({ user, locale }: TUserBar) => {
           </UnstyledButton>
         </Menu.Target>
 
-        <Menu.Dropdown component='div' p='xs'>
+        <Menu.Dropdown component="div" p="xs">
           {UserBarNavLinks.map(({ id, link, icon: Icon }) => {
+            if (link === NavigationLink.DASHBOARD && user.role !== ROLE_ADMIN) {
+              return null;
+            }
+
             return (
-              <Menu.Item key={id} component='div' p='0'>
+              <Menu.Item key={id} component="div" p="0">
                 <StyledNavLink to={link} fullWidth>
                   {Icon && <Icon size={22} />}
 
@@ -60,17 +66,17 @@ export const UserBar = ({ user, locale }: TUserBar) => {
           />
 
           <Menu.Divider styles={{ divider: { margin: "8px" } }} />
-          <Menu.Item component='div' p='0'>
-            <Form action={NavigationLink.LOGOUT} method='post'>
+          <Menu.Item component="div" p="0">
+            <Form action={NavigationLink.LOGOUT} method="post">
               <Button
-                type='submit'
-                c='gray'
+                type="submit"
+                c="gray"
                 styles={{
                   root: { width: "100%", padding: "8px 12px" },
                   inner: { justifyContent: "flex-start" },
                 }}
-                variant='transparent'
-                fw='normal'
+                variant="transparent"
+                fw="normal"
               >
                 <IconLogout
                   size={22}
@@ -84,9 +90,9 @@ export const UserBar = ({ user, locale }: TUserBar) => {
 
           <Menu.Divider styles={{ divider: { margin: "8px" } }} />
           <Menu.Item
-            component='div'
+            component="div"
             onClick={open}
-            color='red'
+            color="red"
             styles={{
               itemLabel: {
                 display: "flex",
@@ -96,7 +102,7 @@ export const UserBar = ({ user, locale }: TUserBar) => {
             }}
           >
             <IconTrash size={22} stroke={1.5} />
-            <Text component='span' size='md' fw='normal'>
+            <Text component="span" size="md" fw="normal">
               {t("auth.deleteAccount")}
             </Text>
           </Menu.Item>
@@ -109,27 +115,27 @@ export const UserBar = ({ user, locale }: TUserBar) => {
         title={t("modal.title", {
           ns: "common",
         })}
-        p='lg'
+        p="lg"
         centered
       >
         {
           <Grid columns={2}>
             <Grid.Col span={1}>
-              <Button variant='light' onClick={close} w='100%'>
+              <Button variant="light" onClick={close} w="100%">
                 Cancel
               </Button>
             </Grid.Col>
 
             <Grid.Col span={1}>
-              <Form action={NavigationLink.DELETE_ACCOUNT} method='post'>
+              <Form action={NavigationLink.DELETE_ACCOUNT} method="post">
                 <Button
-                  type='submit'
-                  c='red'
+                  type="submit"
+                  c="red"
                   styles={{
                     root: { width: "100%", padding: "8px 12px" },
                     inner: { justifyContent: "flex-start" },
                   }}
-                  variant='light'
+                  variant="light"
                 >
                   <IconTrash
                     size={22}

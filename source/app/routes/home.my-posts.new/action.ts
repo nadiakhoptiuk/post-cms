@@ -38,12 +38,12 @@ export async function action({ request }: Route.ActionArgs) {
       content,
     });
 
-    return redirect(
-      sessionUser.role === "admin"
-        ? NavigationLink.DASHBOARD_MY_POSTS
-        : NavigationLink.HOME
-    );
-  } catch (error) {
+    return redirect(NavigationLink.MY_POSTS);
+  } catch (error: any) {
+    if (error?.name === "PostgresError") {
+      console.log(error?.constraint_name);
+    }
+
     return Response.json(
       {
         error: "An unexpected error occurred",

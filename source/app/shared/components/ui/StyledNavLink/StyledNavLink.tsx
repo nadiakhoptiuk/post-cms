@@ -2,12 +2,15 @@ import { NavLink } from "react-router";
 
 import type { TStyledNavLink } from "./StyledNavLink.types";
 import classes from "./StyledNavLink.module.css";
+import { Box } from "@mantine/core";
 
 export const StyledNavLink = ({
   to,
   children,
   variant = "unstyled",
   fullWidth = false,
+  withCount = false,
+  count = 0,
 }: TStyledNavLink) => {
   return (
     <NavLink
@@ -40,6 +43,24 @@ export const StyledNavLink = ({
       }
     >
       {children}
+
+      {withCount && count > 0 && (
+        <Box
+          component="span"
+          bg="cyan"
+          c="white"
+          style={{
+            marginLeft: "auto",
+            borderRadius: "100%",
+            padding: 4,
+            minHeight: 24,
+            minWidth: 24,
+            textAlign: "center",
+          }}
+        >
+          {count}
+        </Box>
+      )}
     </NavLink>
   );
 };

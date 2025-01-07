@@ -21,12 +21,12 @@ export default function DashBoardMyPostsPage() {
           fill="filled"
           variant="accent"
           style={{ marginBottom: 30 }}
-          to={NavigationLink.DASHBOARD_MY_POSTS_NEW}
+          to={NavigationLink.MY_POSTS_NEW}
         >
           {t("link.addNewPost")}
         </StyledLink>
 
-        <PostsList cardType="own" posts={posts} />
+        <PostsList posts={posts} />
       </Container>
     </Box>
   );

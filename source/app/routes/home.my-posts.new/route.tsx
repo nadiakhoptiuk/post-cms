@@ -2,11 +2,12 @@ import { Box, Container, Title } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 
 import { PostForm } from "~/shared/components/modules/PostForm";
-import { NavigationLink } from "~/shared/constants/navigation";
+
+export { action } from "./action";
 
 export const handle = { i18n: ["posts", "common"] };
 
-export default function DashBoardMyPostsPage() {
+export default function HomeNewPostPage() {
   const { t } = useTranslation();
 
   return (
@@ -23,7 +24,6 @@ export default function DashBoardMyPostsPage() {
         <PostForm
           postData={{ title: "", content: "", slug: "" }}
           formType="create"
-          action={NavigationLink.CREATE_NEW_POST}
         />
       </Container>
     </Box>

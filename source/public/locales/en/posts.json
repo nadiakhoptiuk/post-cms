@@ -11,12 +11,14 @@
     "deletedBy": "Deleted by"
   },
 
-  "link.back": "Back to All Posts",
-  "link.backToMyPosts": "Back to my posts",
+  "link.back": "To All Posts",
+  "link.backToMyPosts": "To my posts",
   "link.addNewPost": "Create a post",
-  "link.viewPost": "View a post",
 
   "button.generateSlug": "Generate a slug",
+
+  "noPosts": "You haven't created any post yet...",
+  "noPostsForModeration": "There are no posts for moderation...",
 
   "richEditorLabels": {
     "highlightControlLabel": "Highlight text",

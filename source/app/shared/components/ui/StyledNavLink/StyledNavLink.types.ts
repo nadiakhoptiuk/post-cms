@@ -5,4 +5,6 @@ export type TStyledNavLink = {
   variant?: "accent" | "unstyled" | "gray" | "dangerous";
   insideBox?: boolean;
   fullWidth?: boolean;
+  withCount?: boolean;
+  count?: number;
 } & NavLinkProps;

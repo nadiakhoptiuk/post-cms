@@ -12,6 +12,7 @@ import { formatDateWithTime } from "~/shared/utils/dateFormat";
 export const handle = { i18n: ["posts", "common"] };
 
 export { loader } from "./loader";
+export { action } from "./action";
 
 export default function DashBoardMyCurrentPostPage() {
   const { t } = useTranslation("posts");
@@ -36,7 +37,7 @@ export default function DashBoardMyCurrentPostPage() {
     <Box component="section">
       <Container>
         <StyledLink
-          to={NavigationLink.DASHBOARD_MY_POSTS}
+          to={NavigationLink.MY_POSTS}
           variant="unstyled"
           fill="filled"
           style={{ marginBottom: "20px" }}
@@ -73,11 +74,7 @@ export default function DashBoardMyCurrentPostPage() {
           )}
         </Box>
 
-        <PostForm
-          postData={post}
-          formType="update"
-          action={NavigationLink.UPDATE_POST}
-        />
+        <PostForm postData={post} formType="update" />
       </Container>
     </Box>
   );

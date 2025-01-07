@@ -11,10 +11,6 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
     {
       isPublicRoute: true,
       allowedRoles: [],
-      allowedRoutes: {
-        admin: NavigationLink.DASHBOARD,
-        user: NavigationLink.HOME,
-      },
       isAuthRoute: true,
     },
     {

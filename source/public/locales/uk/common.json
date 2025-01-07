@@ -8,7 +8,8 @@
 
   "userBarNavLinks": {
     "profile": "Профіль",
-    "myPosts": "Мої пости"
+    "myPosts": "Мої пости",
+    "dashboard": "Адміністратор"
   },
 
   "aria.toggleMenu": "Відкрити мобільне меню",

@@ -8,13 +8,13 @@ import type { TLogo } from "./Logo.types";
 
 import s from "./Logo.module.css";
 
-export const Logo = ({ accent = true, link }: TLogo) => {
+export const Logo = ({ accent = true }: TLogo) => {
   return (
-    <Link to={link || NavigationLink.HOME} className={s.logoLink}>
+    <Link to={NavigationLink.HOME} className={s.logoLink}>
       <ThemeIcon
-        variant='gradient'
-        size='lg'
-        aria-label='Gradient action icon'
+        variant="gradient"
+        size="lg"
+        aria-label="Gradient action icon"
         gradient={
           accent
             ? { from: "blue", to: "cyan", deg: 245 }
@@ -27,7 +27,7 @@ export const Logo = ({ accent = true, link }: TLogo) => {
         />
       </ThemeIcon>
 
-      <Text component='span' size='xl' fw={900} c='blue'>
+      <Text component="span" size="xl" fw={900} c="blue">
         POST CMS
       </Text>
     </Link>

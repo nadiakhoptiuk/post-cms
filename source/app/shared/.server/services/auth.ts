@@ -12,11 +12,7 @@ import { commitSession, getSession } from "./session";
 import type { TSerializedUser } from "~/shared/types/react";
 import type { GetCurrentUserOptions, GetRouteOptions } from "../types/common";
 import { NavigationLink } from "~/shared/constants/navigation";
-import {
-  ROLE_ADMIN,
-  SESSION_ERROR_KEY,
-  SESSION_USER_KEY,
-} from "~/shared/constants/common";
+import { SESSION_ERROR_KEY, SESSION_USER_KEY } from "~/shared/constants/common";
 // import { errorHandler } from "../utils/errorHandler";
 
 export const loginUser = async (request: Request) => {
@@ -34,12 +30,8 @@ export const loginUser = async (request: Request) => {
     const serializedUser = await verifyUserAndSerialize(email, password);
 
     session.set(SESSION_USER_KEY, serializedUser);
-    const userRole = serializedUser.role;
 
-    const successRedirect =
-      userRole === ROLE_ADMIN ? NavigationLink.DASHBOARD : NavigationLink.HOME;
-
-    return redirect(successRedirect, {
+    return redirect(NavigationLink.HOME, {
       headers: { "Set-Cookie": await commitSession(session) },
     });
   } catch (error) {
@@ -164,12 +156,7 @@ export const getAuthUser = async (
   options?: GetCurrentUserOptions
 ) => {
   const { failureRedirect } = options || {};
-  const {
-    isPublicRoute,
-    allowedRoles,
-    allowedRoutes,
-    isAuthRoute = false,
-  } = routeOptions;
+  const { isPublicRoute, allowedRoles, isAuthRoute = false } = routeOptions;
 
   // try {
   const session = await getSession(request.headers.get("Cookie"));
@@ -203,7 +190,7 @@ export const getAuthUser = async (
   }
 
   if (existedUser && isAuthRoute) {
-    throw redirect(allowedRoutes[sessionUser.role] || NavigationLink.HOME, {
+    throw redirect(NavigationLink.HOME, {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
@@ -220,7 +207,7 @@ export const getAuthUser = async (
   }
 
   if (existedUser && !allowedRoles.includes(sessionUser.role)) {
-    throw redirect(allowedRoutes[sessionUser.role] || NavigationLink.HOME, {
+    throw redirect(NavigationLink.HOME, {
       headers: {
         "Set-Cookie": await commitSession(session),
       },

@@ -9,7 +9,13 @@ import { NavigationLink } from "./shared/constants/navigation";
 export default [
   layout("./routes/home.layout/route.tsx", [
     route(NavigationLink.HOME, "./routes/home/route.tsx"),
-    route(NavigationLink.HOME_SINGLE_POST, `./routes/home.$slug/route.tsx`),
+    route(NavigationLink.HOME_SINGLE_POST, "./routes/home.$slug/route.tsx"),
+    route(NavigationLink.MY_POSTS, "./routes/home.my-posts/route.tsx"),
+    route(
+      NavigationLink.MY_CURRENT_POST,
+      "./routes/home.my-posts.$postId/route.tsx"
+    ),
+    route(NavigationLink.MY_POSTS_NEW, "./routes/home.my-posts.new/route.tsx"),
   ]),
 
   layout("./routes/_auth/route.tsx", [
@@ -20,39 +26,12 @@ export default [
 
   layout("routes/dashboard/route.tsx", [
     route(NavigationLink.DASHBOARD, "./routes/dashboard.home/route.tsx"),
-    route(
-      NavigationLink.DASHBOARD_SINGLE_POST,
-      `./routes/dashboard.home.$slug/route.tsx`
-    ),
-    // route(
-    //   NavigationLink.DASHBOARD_SINGLE_POST_COMPLAIN,
-    //   `./routes/dashboard.home.$slug.complain/route.tsx`
-    // ),
-
-    route(
-      NavigationLink.DASHBOARD_MY_POSTS,
-      "./routes/dashboard.my-posts/route.tsx"
-    ),
-
-    route(
-      NavigationLink.DASHBOARD_MY_CURRENT_POST,
-      "./routes/dashboard.my-posts.$postId/route.tsx",
-      [route(NavigationLink.UPDATE_POST, "./routes/api/updatePost.ts")]
-    ),
-
-    route(
-      NavigationLink.DASHBOARD_MY_POSTS_NEW,
-      "./routes/dashboard.my-posts.new/route.tsx",
-      [route(NavigationLink.CREATE_NEW_POST, "./routes/api/createNewPost.ts")]
-    ),
 
     route(NavigationLink.DASHBOARD_USERS, "./routes/dashboard.users/route.tsx"),
-
     route(
       NavigationLink.DASHBOARD_USERS_NEW,
       "./routes/dashboard.users.new/route.tsx"
     ),
-
     route(
       NavigationLink.DASHBOARD_CURRENT_USER,
       "./routes/dashboard.users_.$userId/route.tsx",
@@ -60,6 +39,11 @@ export default [
         route(NavigationLink.DELETE_USER, "./routes/api/deleteUser.ts"),
         route(NavigationLink.RESTORE_USER, "./routes/api/restoreUser.ts"),
       ]
+    ),
+
+    route(
+      NavigationLink.DASHBOARD_POSTS_ON_MODERATION,
+      "./routes/dashboard.posts.on-moderation/route.tsx"
     ),
 
     ...prefix("posts", [

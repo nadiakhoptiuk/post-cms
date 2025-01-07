@@ -18,3 +18,9 @@ export type TDashboardNavLink =
         icon: TablerIcon;
       }[];
     };
+
+export type TLinksGroup = {
+  item: TDashboardNavLink;
+  postsOnModeration: number;
+  postsWithComplaints: number;
+};

@@ -1,13 +1,19 @@
 import { redirect } from "react-router";
 
-import { createNewPost } from "~/shared/.server/repository/posts";
 import { getSession } from "~/shared/.server/services/session";
+import { updatePostById } from "~/shared/.server/repository/posts";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import { SESSION_USER_KEY } from "~/shared/constants/common";
 import type { Route } from "../../+types/root";
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request, params }: Route.ActionArgs) {
+  const postId = params.postId;
+
+  if (!postId) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
   const formData = await request.formData();
 
   const title = formData.get("title");
@@ -32,17 +38,13 @@ export async function action({ request }: Route.ActionArgs) {
   }
 
   try {
-    await createNewPost(sessionUser.id, {
+    await updatePostById(sessionUser.id, Number(postId), {
       title,
       slug,
       content,
     });
 
-    return redirect(
-      sessionUser.role === "admin"
-        ? NavigationLink.DASHBOARD_MY_POSTS
-        : NavigationLink.HOME
-    );
+    return redirect(NavigationLink.DASHBOARD_MY_POSTS);
   } catch (error) {
     return Response.json(
       {

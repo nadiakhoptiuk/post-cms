@@ -11,12 +11,14 @@
     "deletedBy": "Видалив"
   },
 
-  "link.back": "Назад до всіх дописів",
-  "link.backToMyPosts": "Назад до моїх дописів",
+  "link.back": "До всіх дописів",
+  "link.backToMyPosts": "До моїх дописів",
   "link.addNewPost": "Новий допис",
-  "link.viewPost": "Переглянути допис",
 
   "button.generateSlug": "Згенерувати слаг",
+
+  "noPosts": "Ви ще не створили жодного допису...",
+  "noPostsForModeration": "Наразі немає дописів для модерації...",
 
   "richEditorLabels": {
     "highlightControlLabel": "Підсвітити текст",

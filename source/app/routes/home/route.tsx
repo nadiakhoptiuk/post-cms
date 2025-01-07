@@ -11,7 +11,7 @@ export default function DashBoardHomePage() {
   return (
     <Box component="section">
       <Container>
-        <PostsList cardType="all" posts={posts} userId={user?.id} />
+        <PostsList posts={posts} userId={user?.id} />
       </Container>
     </Box>
   );

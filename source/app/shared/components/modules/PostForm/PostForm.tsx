@@ -16,11 +16,7 @@ import type { TErrorsMessages, TFormType, TLocale } from "~/shared/types/react";
 import type { TPostForm } from "./PostForm.types";
 import s from "./PostForm.module.css";
 
-export const PostForm = ({
-  postData,
-  formType,
-  action,
-}: TPostForm & TFormType) => {
+export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
   const [opened, { open, close }] = useDisclosure(false);
   const { i18n, t } = useTranslation(["common", "posts"]);
   const errorMessages = t("formErrorsMessages", {
@@ -32,7 +28,6 @@ export const PostForm = ({
     validator: postValidator(errorMessages),
     defaultValues: postData,
     method: "POST",
-    action: action,
   });
 
   return (
