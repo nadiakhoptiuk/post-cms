@@ -8,7 +8,9 @@
     "updatedAt": "Дата оновлення",
     "updatedBy": "Оновив",
     "deletedAt": "Дата видалення",
-    "deletedBy": "Видалив"
+    "deletedBy": "Видалив",
+
+    "rejectReason": "Причина"
   },
 
   "link.toAll": "До всіх дописів",

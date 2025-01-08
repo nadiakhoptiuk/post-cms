@@ -20,6 +20,7 @@ export const postTimestamps = {
   deletedById: t.integer().references((): t.AnyPgColumn => users.id),
   publishedAt: timestamp(),
   moderatedById: t.integer().references((): t.AnyPgColumn => users.id),
+  rejectedAt: timestamp(),
   complainedAt: timestamp(),
   complainedById: t.integer().references((): t.AnyPgColumn => users.id),
   blockedAt: timestamp(),

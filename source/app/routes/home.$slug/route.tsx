@@ -12,7 +12,7 @@ export { loader } from "./loader";
 
 export const handle = { i18n: ["posts", "common"] };
 
-export default function DashBoardSinglePostPage() {
+export default function HomeSinglePostPage() {
   const { post, user } = useLoaderData();
   const { t } = useTranslation("posts");
   const navigate = useNavigate();

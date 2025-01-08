@@ -4,11 +4,12 @@ import { Grid, Group, Text } from "@mantine/core";
 import { PostCard } from "../../ui/PostCard";
 
 import type { TPostList } from "./PostList.types";
+import { useLocation } from "react-router";
+import { NavigationLink } from "~/shared/constants/navigation";
 
 export const PostsList = ({ posts, userId }: TPostList) => {
   const { t } = useTranslation("posts");
-
-  console.log(userId);
+  const location = useLocation();
 
   return (
     <>
@@ -22,13 +23,22 @@ export const PostsList = ({ posts, userId }: TPostList) => {
             },
           }}
         >
-          <Grid component="ul" columns={2}>
+          <Grid component="ul" columns={2} styles={{ root: { width: "100%" } }}>
             {posts.map((itemData) => {
               return (
-                <Grid.Col span={{ base: 2, md: 1, lg: 1 }} key={itemData.id}>
+                <Grid.Col
+                  w="100%"
+                  span={{ base: 2, md: 1, lg: 1 }}
+                  key={itemData.id}
+                >
                   <PostCard
                     item={itemData}
                     isUserOwner={userId ? userId === itemData.ownerId : false}
+                    location={
+                      location.pathname.includes(NavigationLink.MY_POSTS)
+                        ? "own"
+                        : "all"
+                    }
                   />
                 </Grid.Col>
               );

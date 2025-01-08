@@ -13,7 +13,12 @@ export default [
     route(NavigationLink.MY_POSTS, "./routes/home.my-posts/route.tsx"),
     route(
       NavigationLink.MY_CURRENT_POST,
-      "./routes/home.my-posts.$postId/route.tsx"
+      "./routes/home.my-posts.$postId/route.tsx",
+      [
+        route(NavigationLink.DELETE_POST, "./routes/api/deletePost.ts", {
+          id: "home/delete-post",
+        }),
+      ]
     ),
     route(NavigationLink.MY_POSTS_NEW, "./routes/home.my-posts.new/route.tsx"),
   ]),
@@ -41,9 +46,32 @@ export default [
       ]
     ),
 
+    // route(
+    //   NavigationLink.DASHBOARD_ALL_POSTS,
+    //   "./routes/dashboard.posts.index/route.tsx"
+    // ),
+
     route(
       NavigationLink.DASHBOARD_POSTS_ON_MODERATION,
-      "./routes/dashboard.posts.on-moderation/route.tsx"
+      "./routes/dashboard.posts.on-moderation/route.tsx",
+      [
+        route(
+          NavigationLink.REJECT_PUBLISHING_POST,
+          "./routes/api/rejectPublicationPost.ts",
+          { id: "reject-from-common" }
+        ),
+      ]
+    ),
+    route(
+      NavigationLink.DASHBOARD_SINGLE_POST_ON_MODERATION,
+      "./routes/dashboard.posts.on-moderation.$postId/route.tsx",
+      [
+        route(
+          NavigationLink.REJECT_PUBLISHING_POST,
+          "./routes/api/rejectPublicationPost.ts",
+          { id: "reject-from-id" }
+        ),
+      ]
     ),
 
     ...prefix("posts", [

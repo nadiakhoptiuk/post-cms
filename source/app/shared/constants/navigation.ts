@@ -23,9 +23,11 @@ export const enum NavigationLink {
   DASHBOARD_SINGLE_POST = "/dashboard/:slug",
   DASHBOARD_SINGLE_POST_COMPLAIN = "/dashboard/:slug/complain",
 
-  DASHBOARD_ALL_POSTS = "/dashboard/posts/all",
+  DASHBOARD_ALL_POSTS = "/dashboard/posts",
   DASHBOARD_POSTS_ON_MODERATION = "/dashboard/posts/on-moderation",
+  DASHBOARD_SINGLE_POST_ON_MODERATION = "/dashboard/posts/on-moderation/:postId",
   DASHBOARD_POSTS_COMPLAINTS = "/dashboard/posts/complaints",
+
   DASHBOARD_USERS = "/dashboard/users",
   DASHBOARD_USERS_NEW = "/dashboard/users/new",
   DASHBOARD_CURRENT_USER = "/dashboard/users/:userId",
@@ -42,7 +44,8 @@ export const enum NavigationLink {
   RESTORE_USER = "restore-user",
 
   CREATE_NEW_POST = "create-new-post",
-  UPDATE_POST = "update-post",
+  DELETE_POST = "delete-post",
+  REJECT_PUBLISHING_POST = "reject-publishing",
 }
 
 export const DashboardNavLinks = [

@@ -8,7 +8,9 @@
     "updatedAt": "Update date",
     "updatedBy": "Updated by",
     "deletedAt": "Deletion date",
-    "deletedBy": "Deleted by"
+    "deletedBy": "Deleted by",
+
+    "rejectReason": "Reason"
   },
 
   "link.toAll": "To All Posts",

@@ -1,4 +1,3 @@
-import { redirect } from "react-router";
 import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
 
@@ -17,6 +16,10 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   const sessionUser = session.get(SESSION_USER_KEY);
 
   const post = await getPostBySlug(params.slug);
+
+  if (!post) {
+    throw new Response("Not Found", { status: 404 });
+  }
 
   const { window: serverWindow } = new JSDOM("");
   const purify = DOMPurify(serverWindow);

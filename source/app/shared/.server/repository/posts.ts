@@ -2,7 +2,8 @@ import { db } from "server/app";
 import { and, desc, eq, isNotNull, isNull, sql } from "drizzle-orm";
 import { posts, users } from "~/database/schema";
 
-import type { TPost } from "~/shared/types/react";
+import type { TDBPostRecord, TPost } from "~/shared/types/react";
+import { isTherePostIdInSlug } from "../utils/postUtils";
 
 export async function createNewPost(userId: number, postData: TPost) {
   const existedUser = await db.select().from(users).where(eq(users.id, userId));
@@ -122,6 +123,38 @@ export async function getAllPostsWithComplaints() {
   return allPosts;
 }
 
+export async function getPostById(postId: number) {
+  const crt = db
+    .select({
+      author: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
+        "author"
+      ),
+      id: users.id,
+    })
+    .from(users)
+    .as("crt");
+
+  const existedPost = await db
+    .select({
+      id: posts.id,
+      title: posts.title,
+      slug: posts.slug,
+      content: posts.content,
+      createdAt: posts.createdAt,
+      updatedAt: posts.updatedAt,
+      author: crt.author,
+    })
+    .from(posts)
+    .leftJoin(crt, eq(posts.ownerId, crt.id))
+    .where(eq(posts.id, postId));
+
+  if (!existedPost) {
+    throw new Error("Post with such id does not exist");
+  }
+
+  return existedPost[0];
+}
+
 export async function getUserPostById(userId: number, postId: number) {
   const existedUser = await db.select().from(users).where(eq(users.id, userId));
 
@@ -212,8 +245,8 @@ export async function getAllUserPostsById(userId: number) {
 }
 
 export async function updatePostById(
-  userId: number,
   postId: number,
+  userId: number,
   postData: TPost
 ) {
   const existedUser = await db.select().from(users).where(eq(users.id, userId));
@@ -223,19 +256,23 @@ export async function updatePostById(
   }
 
   const existedPost = await db
-    .select()
+    .select({ slug: posts.slug })
     .from(posts)
     .where(and(eq(posts.id, postId), eq(posts.ownerId, userId)));
 
-  if (!existedPost) {
+  if (!existedPost[0]) {
     throw new Error("Post with such id does not exist");
   }
+
+  const hasSlugId = isTherePostIdInSlug(existedPost[0].slug, postId);
 
   const updatedPost = await db
     .update(posts)
     .set({
       ...postData,
-      slug: `${existedPost[0].slug}-${existedPost[0].id}`,
+      slug: hasSlugId
+        ? existedPost[0].slug
+        : `${existedPost[0].slug}-${postId}`,
       updatedAt: sql`NOW()`,
       updatedById: userId,
     })
@@ -250,4 +287,49 @@ export async function updatePostById(
     });
 
   return updatedPost;
+}
+
+export async function moderatePostById(
+  postId: number,
+  postData: Partial<TPost & TDBPostRecord>,
+  { confirmed }: { confirmed: boolean }
+) {
+  const existedPost = await db
+    .select()
+    .from(posts)
+    .where(and(eq(posts.id, postId)));
+
+  if (!existedPost[0]) {
+    throw new Error("Post with such id does not exist");
+  }
+
+  const updatedPost = await db
+    .update(posts)
+    .set({
+      ...postData,
+      publishedAt: confirmed ? sql`NOW()` : null,
+      rejectedAt: confirmed ? null : sql`NOW()`,
+    })
+    .where(eq(posts.id, postId))
+    .returning();
+
+  return updatedPost;
+}
+
+export async function deletePostById(postId: number, userId: number) {
+  const existingUser = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, userId));
+
+  if (!existingUser) {
+    throw new Error("User with such id does not exist");
+  }
+
+  const deletedPost = await db
+    .delete(posts)
+    .where(eq(posts.id, postId))
+    .returning({ deletedId: posts.id });
+
+  return deletedPost[0];
 }

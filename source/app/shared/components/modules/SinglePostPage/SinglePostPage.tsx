@@ -20,7 +20,6 @@ export const SinglePostPage = ({
       <PostHeading post={post} />
       <PostContent content={post.content} title={post.title} />
 
-      {/* TODO check if admin is able to complain */}
       {userId && userId !== post.ownerId && (
         <StyledLink
           to="complain"

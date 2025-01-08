@@ -32,6 +32,8 @@
     "button.delete": "Видалити",
     "button.restore": "Відновити",
     "button.complain": "Поскаржитись",
+    "button.publish": "Опублікувати",
+    "button.reject": "Відхилити допис",
     "button.back": "Назад"
   },
 

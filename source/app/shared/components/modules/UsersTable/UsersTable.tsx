@@ -15,7 +15,6 @@ export const UsersTable = ({ users }: TUsersTable) => {
 
   const rows = users.map((user) => {
     const createdRelDate = formatDateToRelative(user.createdAt);
-    // const updatedRelDate = formatDateToRelative(user.updatedAt);
 
     return (
       <MTable.Tr key={user.id}>
@@ -31,31 +30,26 @@ export const UsersTable = ({ users }: TUsersTable) => {
         </TableTd>
         <TableTd>{user.role}</TableTd>
         <TableTd>{createdRelDate}</TableTd>
-        {/* <TableTd>{updatedRelDate ? updatedRelDate : ""}</TableTd> */}
 
         <TableTd>
           <Flex columnGap={4}>
-            <Tooltip label={t("buttons.button.edit", { ns: "common" })}>
-              <StyledNavLink
-                variant="unstyled"
-                aria-label={t("buttons.button.edit", { ns: "common" })}
-                to={`${NavigationLink.DASHBOARD_USERS}/${user.id}`}
-                style={{ padding: 8 }}
-              >
-                <IconPencil size={18} stroke={1.5} />
-              </StyledNavLink>
-            </Tooltip>
+            <StyledNavLink
+              variant="unstyled"
+              aria-label={t("buttons.button.edit", { ns: "common" })}
+              to={`${NavigationLink.DASHBOARD_USERS}/${user.id}`}
+              style={{ padding: 8 }}
+            >
+              <IconPencil size={18} stroke={1.5} />
+            </StyledNavLink>
 
-            <Tooltip label={t("buttons.button.edit", { ns: "common" })}>
-              <StyledNavLink
-                variant="unstyled"
-                aria-label={t("buttons.button.edit", { ns: "common" })}
-                to={`${NavigationLink.DASHBOARD_USERS}/${user.id}`}
-                style={{ padding: 8 }}
-              >
-                <IconTrash size={18} stroke={1.5} />
-              </StyledNavLink>
-            </Tooltip>
+            <StyledNavLink
+              variant="unstyled"
+              aria-label={t("buttons.button.edit", { ns: "common" })}
+              to={`${NavigationLink.DASHBOARD_USERS}/${user.id}`}
+              style={{ padding: 8 }}
+            >
+              <IconTrash size={18} stroke={1.5} />
+            </StyledNavLink>
           </Flex>
         </TableTd>
       </MTable.Tr>
@@ -67,9 +61,6 @@ export const UsersTable = ({ users }: TUsersTable) => {
       <MTable.ScrollContainer
         type="scrollarea"
         minWidth={500}
-        // styles={{
-        //   scrollContainer: { width: "fit-content" },
-        // }}
         w="fit-content"
         mx="auto"
         mih={345}
@@ -92,9 +83,6 @@ export const UsersTable = ({ users }: TUsersTable) => {
               <TableTh>
                 {t("timestampsLabels.createdAt", { ns: "common" })}
               </TableTh>
-              {/* <TableTh>
-                {t("timestampsLabels.updatedAt", { ns: "common" })}
-              </TableTh> */}
 
               <TableTh> </TableTh>
             </MTable.Tr>

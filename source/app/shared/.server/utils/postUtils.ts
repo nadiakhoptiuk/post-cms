@@ -2,9 +2,20 @@ import { NavigationLink } from "~/shared/constants/navigation";
 import { redirect } from "react-router";
 
 import { getSession } from "../services/session";
-import { updatePostById } from "../repository/posts";
+import { moderatePostById, updatePostById } from "../repository/posts";
 
 import { SESSION_USER_KEY } from "~/shared/constants/common";
+
+export const isTherePostIdInSlug = (slug: string, postId: number) => {
+  const existedPostSlugAr = slug.split("-");
+  const postIdInSlug = Number(existedPostSlugAr[existedPostSlugAr.length - 1]);
+
+  const isTherePostIdInSlug = !isNaN(postIdInSlug);
+
+  if (!isTherePostIdInSlug) return false;
+
+  return postIdInSlug === postId;
+};
 
 export const updatePostAction = async (
   request: Request,
@@ -35,7 +46,7 @@ export const updatePostAction = async (
   }
 
   try {
-    await updatePostById(sessionUser.id, Number(postId), {
+    await updatePostById(Number(postId), sessionUser.id, {
       title,
       slug,
       content,
@@ -52,42 +63,49 @@ export const updatePostAction = async (
   }
 };
 
-//  const formData = await request.formData();
+export const confirmPublishPost = async (postId: number, userId: number) => {
+  try {
+    await moderatePostById(
+      Number(postId),
+      {
+        moderatedById: userId,
+      },
+      { confirmed: true }
+    );
 
-//  const title = formData.get("title");
-//  const slug = formData.get("slug");
-//  const content = formData.get("content");
+    return redirect(NavigationLink.DASHBOARD_POSTS_ON_MODERATION);
+  } catch (error) {
+    return Response.json(
+      {
+        error: "An unexpected error occurred",
+      },
+      { status: 400 }
+    );
+  }
+};
 
-//  if (
-//    typeof title !== "string" ||
-//    typeof slug !== "string" ||
-//    typeof content !== "string"
-//  ) {
-//    return Response.json({
-//      error: "Some field is not a string",
-//    });
-//  }
+export const rejectPublishPost = async (
+  reason: string,
+  postId: number,
+  userId: number
+) => {
+  try {
+    await moderatePostById(
+      Number(postId),
+      {
+        reason: reason,
+        moderatedById: userId,
+      },
+      { confirmed: false }
+    );
 
-//  const session = await getSession(request.headers.get("cookie"));
-//  const sessionUser = session.get(SESSION_USER_KEY);
-
-//  if (!sessionUser || !sessionUser.id) {
-//    throw redirect(NavigationLink.LOGIN);
-//  }
-
-//  try {
-//    await updatePostById(sessionUser.id, Number(postId), {
-//      title,
-//      slug,
-//      content,
-//    });
-
-//    return redirect(NavigationLink.DASHBOARD_MY_POSTS);
-//  } catch (error) {
-//    return Response.json(
-//      {
-//        error: "An unexpected error occurred",
-//      },
-//      { status: 400 }
-//    );
-//  }
+    return redirect(NavigationLink.DASHBOARD_POSTS_ON_MODERATION);
+  } catch (error) {
+    return Response.json(
+      {
+        error: "An unexpected error occurred",
+      },
+      { status: 400 }
+    );
+  }
+};

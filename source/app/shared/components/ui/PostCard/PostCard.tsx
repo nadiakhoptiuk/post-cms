@@ -1,6 +1,7 @@
-import { Box, Card, Flex, Text, Title } from "@mantine/core";
+import { Card, Flex, Text, Title } from "@mantine/core";
 import parse from "html-react-parser";
 import { useTranslation } from "react-i18next";
+import { IconAlertSquareRounded, IconPencil } from "@tabler/icons-react";
 
 import { formatDateWithMonthName } from "~/shared/utils/dateFormat";
 
@@ -9,9 +10,8 @@ import { StyledLink } from "../StyledLink";
 import { NavigationLink } from "~/shared/constants/navigation";
 import type { TPostCard } from "./PostCard.types";
 import s from "./PostCard.module.css";
-import { IconAlertSquareRounded } from "@tabler/icons-react";
 
-export const PostCard = ({ item, isUserOwner }: TPostCard) => {
+export const PostCard = ({ item, isUserOwner, location }: TPostCard) => {
   const { t } = useTranslation();
   const { id, title, slug, author, createdAt } = item;
 
@@ -22,7 +22,10 @@ export const PostCard = ({ item, isUserOwner }: TPostCard) => {
       shadow="sm"
       padding="xl"
       component="li"
-      styles={{ section: { padding: 20 } }}
+      styles={{
+        section: { padding: 20, width: "fit-content" },
+        root: { width: "fit-content" },
+      }}
     >
       <Card.Section>
         <Flex justify="space-between" align="center">
@@ -33,16 +36,16 @@ export const PostCard = ({ item, isUserOwner }: TPostCard) => {
           <Text size="md">{author}</Text>
         </Flex>
 
-        <Box my="xs" c="dimmed" size="sm" className={s.content} mih={75}>
+        <Text my="xs" c="dimmed" size="md" className={s.content} mih={75}>
           {parse(item.content)}
-        </Box>
+        </Text>
 
         <Text component="span" size="sm">
           {createdDate}
         </Text>
         {/* //TODO change to published */}
 
-        <Flex gap={10} mt={10}>
+        <Flex gap={10} mt={10} w="fit-content">
           <StyledLink to={`/${slug}`} variant="accent" fill="filled">
             {t("buttons.button.view", { ns: "common" })}
           </StyledLink>
@@ -53,17 +56,22 @@ export const PostCard = ({ item, isUserOwner }: TPostCard) => {
               variant="unstyled"
               fill="outline"
             >
-              <IconAlertSquareRounded />
+              <IconAlertSquareRounded size={18} color="pink" />
               {t("buttons.button.complain", { ns: "common" })}
             </StyledLink>
           )}
 
           {isUserOwner && (
             <StyledLink
-              to={`${id?.toString()}`}
+              to={
+                location === "own"
+                  ? id?.toString()
+                  : `${NavigationLink.MY_POSTS}/${id?.toString()}`
+              }
               variant="unstyled"
               fill="outline"
             >
+              <IconPencil size={18} color="gray" />
               {t("buttons.button.edit", { ns: "common" })}
             </StyledLink>
           )}

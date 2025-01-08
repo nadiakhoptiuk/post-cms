@@ -15,6 +15,7 @@ import { postValidator } from "~/shared/utils/validators/postValidator";
 import type { TErrorsMessages, TFormType, TLocale } from "~/shared/types/react";
 import type { TPostForm } from "./PostForm.types";
 import s from "./PostForm.module.css";
+import { NavigationLink } from "~/shared/constants/navigation";
 
 export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -104,11 +105,7 @@ export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
             </Grid.Col>
 
             <Grid.Col span={1}>
-              <Form
-                style={{}}
-                method="post"
-                // action={NavigationLink.DELETE_POST}
-              >
+              <Form method="POST" action={NavigationLink.DELETE_POST}>
                 <Button
                   type="submit"
                   loading={form.formState.isSubmitting}

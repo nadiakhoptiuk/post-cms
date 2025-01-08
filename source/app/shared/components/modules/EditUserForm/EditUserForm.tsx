@@ -124,7 +124,9 @@ export const EditUserForm = ({
           <Grid columns={2}>
             <Grid.Col span={1}>
               <Button variant="light" onClick={close} w="100%">
-                Cancel
+                {t("buttons.button.cancel", {
+                  ns: "common",
+                })}
               </Button>
             </Grid.Col>
 

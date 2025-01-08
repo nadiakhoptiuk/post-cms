@@ -84,6 +84,8 @@ export type TDBPostRecord = {
   deletedBy?: string | null;
   deletedById?: number | null;
   publishedAt?: Date | null;
+  rejectedAt?: Date | null;
+  reason?: string | null;
   moderatedById?: number | null;
   moderatedBy?: string | null;
   complainedAt?: Date;

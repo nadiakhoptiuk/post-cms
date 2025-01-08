@@ -32,6 +32,8 @@
     "button.delete": "Delete",
     "button.restore": "Restore",
     "button.complain": "Complain",
+    "button.publish": "Publish",
+    "button.reject": "Reject post",
     "button.back": "Back"
   },
 
