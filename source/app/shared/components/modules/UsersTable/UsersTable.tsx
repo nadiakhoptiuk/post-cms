@@ -1,10 +1,11 @@
 import { useTranslation } from "react-i18next";
-import { Table as MTable } from "@mantine/core";
+import { Flex, Table as MTable, Text, Tooltip } from "@mantine/core";
+import { IconPencil, IconTrash } from "@tabler/icons-react";
 
 import { TableTd, TableTh } from "../../ui/TableElements";
 import { StyledNavLink } from "../../ui/StyledNavLink";
 
-import { formatDateWithTime } from "~/shared/utils/dateFormat";
+import { formatDateToRelative } from "~/shared/utils/dateRelativeFormat";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import type { TUsersTable } from "./UsersTable.types";
@@ -13,71 +14,95 @@ export const UsersTable = ({ users }: TUsersTable) => {
   const { t } = useTranslation("user");
 
   const rows = users.map((user) => {
-    const createdDate = formatDateWithTime(user.createdAt);
-    const updatedDate = formatDateWithTime(user.updatedAt);
-    const deletedDate = formatDateWithTime(user.deletedAt);
+    const createdRelDate = formatDateToRelative(user.createdAt);
+    // const updatedRelDate = formatDateToRelative(user.updatedAt);
 
     return (
       <MTable.Tr key={user.id}>
         <TableTd>
-          <StyledNavLink
-            variant="accent"
-            to={`${NavigationLink.DASHBOARD_USERS}/${user.id}`}
-          >
-            {t("buttons.button.edit", { ns: "common" })}
-          </StyledNavLink>
+          <div>
+            <Text fz="sm" fw={500}>
+              {user.lastName} {user.firstName}
+            </Text>
+            <Text fz="xs" c="dimmed">
+              {user.email}
+            </Text>
+          </div>
         </TableTd>
-        <TableTd>{user.lastName}</TableTd>
-        <TableTd>{user.firstName}</TableTd>
-        <TableTd>{user.email}</TableTd>
         <TableTd>{user.role}</TableTd>
-        <TableTd>{createdDate}</TableTd>
-        <TableTd>{updatedDate ? updatedDate : ""}</TableTd>
-        <TableTd>{user.updatedBy ?? ""}</TableTd>
-        <TableTd>{deletedDate ? deletedDate : ""}</TableTd>
-        <TableTd>{user.deletedBy ?? ""}</TableTd>
+        <TableTd>{createdRelDate}</TableTd>
+        {/* <TableTd>{updatedRelDate ? updatedRelDate : ""}</TableTd> */}
+
+        <TableTd>
+          <Flex columnGap={4}>
+            <Tooltip label={t("buttons.button.edit", { ns: "common" })}>
+              <StyledNavLink
+                variant="unstyled"
+                aria-label={t("buttons.button.edit", { ns: "common" })}
+                to={`${NavigationLink.DASHBOARD_USERS}/${user.id}`}
+                style={{ padding: 8 }}
+              >
+                <IconPencil size={18} stroke={1.5} />
+              </StyledNavLink>
+            </Tooltip>
+
+            <Tooltip label={t("buttons.button.edit", { ns: "common" })}>
+              <StyledNavLink
+                variant="unstyled"
+                aria-label={t("buttons.button.edit", { ns: "common" })}
+                to={`${NavigationLink.DASHBOARD_USERS}/${user.id}`}
+                style={{ padding: 8 }}
+              >
+                <IconTrash size={18} stroke={1.5} />
+              </StyledNavLink>
+            </Tooltip>
+          </Flex>
+        </TableTd>
       </MTable.Tr>
     );
   });
 
   return (
-    <MTable.ScrollContainer type="scrollarea" minWidth={500}>
-      <MTable highlightOnHover withColumnBorders>
-        <MTable.Thead>
-          <MTable.Tr>
-            <TableTh>
-              <StyledNavLink
-                variant="accent"
-                to={`${NavigationLink.DASHBOARD_USERS}/new`}
-                style={{ textWrap: "wrap" }}
-              >
-                {t("link.addNewUser", { ns: "user" })}
-              </StyledNavLink>
-            </TableTh>
-            <TableTh>{t("userData.lastName")}</TableTh>
-            <TableTh>{t("userData.firstName")}</TableTh>
-            <TableTh>{t("userData.email")}</TableTh>
-            <TableTh>{t("userData.role")}</TableTh>
-            <TableTh>
-              {t("timestampsLabels.createdAt", { ns: "common" })}
-            </TableTh>
-            <TableTh>
-              {t("timestampsLabels.updatedAt", { ns: "common" })}
-            </TableTh>
-            <TableTh>
-              {t("timestampsLabels.updatedBy", { ns: "common" })}
-            </TableTh>
-            <TableTh>
-              {t("timestampsLabels.deletedAt", { ns: "common" })}
-            </TableTh>
-            <TableTh>
-              {t("timestampsLabels.deletedBy", { ns: "common" })}
-            </TableTh>
-          </MTable.Tr>
-        </MTable.Thead>
+    <>
+      <MTable.ScrollContainer
+        type="scrollarea"
+        minWidth={500}
+        // styles={{
+        //   scrollContainer: { width: "fit-content" },
+        // }}
+        w="fit-content"
+        mx="auto"
+        mih={345}
+      >
+        <MTable withColumnBorders>
+          <MTable.Thead>
+            <MTable.Tr>
+              <TableTh>
+                <div>
+                  <Text fz="sm" fw={500}>
+                    {`${t("userData.lastName")}, ${t("userData.firstName")}`}
+                  </Text>
+                  <Text fz="xs" c="dimmed">
+                    {t("userData.email")}
+                  </Text>
+                </div>
+              </TableTh>
 
-        <MTable.Tbody>{rows}</MTable.Tbody>
-      </MTable>
-    </MTable.ScrollContainer>
+              <TableTh>{t("userData.role")}</TableTh>
+              <TableTh>
+                {t("timestampsLabels.createdAt", { ns: "common" })}
+              </TableTh>
+              {/* <TableTh>
+                {t("timestampsLabels.updatedAt", { ns: "common" })}
+              </TableTh> */}
+
+              <TableTh> </TableTh>
+            </MTable.Tr>
+          </MTable.Thead>
+
+          <MTable.Tbody>{rows}</MTable.Tbody>
+        </MTable>
+      </MTable.ScrollContainer>
+    </>
   );
 };

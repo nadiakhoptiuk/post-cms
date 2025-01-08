@@ -11,6 +11,7 @@ export const StyledNavLink = ({
   fullWidth = false,
   withCount = false,
   count = 0,
+  style,
 }: TStyledNavLink) => {
   return (
     <NavLink
@@ -35,10 +36,12 @@ export const StyledNavLink = ({
           ? {
               width: "100%",
               textWrap: "nowrap",
+              ...style,
             }
           : {
               width: "max-content",
               textWrap: "nowrap",
+              ...style,
             }
       }
     >

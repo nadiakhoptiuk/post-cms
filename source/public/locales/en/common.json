@@ -13,6 +13,7 @@
   },
 
   "aria.toggleMenu": "Open Mobile Menu",
+  "aria.searchForm": "Search records",
 
   "formErrorsMessages": {
     "emailError": "Must be a valid email",
@@ -30,7 +31,8 @@
     "button.cancel": "Cancel",
     "button.delete": "Delete",
     "button.restore": "Restore",
-    "button.complain": "Complain"
+    "button.complain": "Complain",
+    "button.back": "Back"
   },
 
   "modal.title": "Are you sure?",
@@ -46,5 +48,7 @@
     "deletedBy": "Deleted by",
     "blockedAt": "Block date",
     "blockedBy": "Blocked by"
-  }
+  },
+
+  "search.placeholder": "Search..."
 }

@@ -41,7 +41,7 @@ export async function action({ request }: Route.ActionArgs) {
     return redirect(NavigationLink.MY_POSTS);
   } catch (error: any) {
     if (error?.name === "PostgresError") {
-      console.log(error?.constraint_name);
+      console.log(error.constraint_name);
     }
 
     return Response.json(

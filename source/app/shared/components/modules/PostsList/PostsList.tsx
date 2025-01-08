@@ -8,6 +8,8 @@ import type { TPostList } from "./PostList.types";
 export const PostsList = ({ posts, userId }: TPostList) => {
   const { t } = useTranslation("posts");
 
+  console.log(userId);
+
   return (
     <>
       {posts.length > 0 && (

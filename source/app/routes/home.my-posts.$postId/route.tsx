@@ -14,7 +14,7 @@ export const handle = { i18n: ["posts", "common"] };
 export { loader } from "./loader";
 export { action } from "./action";
 
-export default function DashBoardMyCurrentPostPage() {
+export default function HomeMyCurrentPostPage() {
   const { t } = useTranslation("posts");
   const { post } = useLoaderData();
 
@@ -43,7 +43,7 @@ export default function DashBoardMyCurrentPostPage() {
           style={{ marginBottom: "20px" }}
         >
           <IconArrowNarrowLeft size={18} />
-          {t("link.backToMyPosts")}
+          {t("link.toMyPosts")}
         </StyledLink>
 
         <Box mb={25}>

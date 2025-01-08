@@ -12,8 +12,8 @@ import {
 } from "@tabler/icons-react";
 
 export const enum NavigationLink {
-  HOME = "/",
   HOME_SINGLE_POST = "/:slug",
+  HOME = "/",
   MY_POSTS = "/my-posts",
   MY_POSTS_NEW = "/my-posts/new",
   MY_CURRENT_POST = "/my-posts/:postId",

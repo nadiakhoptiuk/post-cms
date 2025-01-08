@@ -11,8 +11,8 @@
     "deletedBy": "Deleted by"
   },
 
-  "link.back": "To All Posts",
-  "link.backToMyPosts": "To my posts",
+  "link.toAll": "To All Posts",
+  "link.toMyPosts": "To my posts",
   "link.addNewPost": "Create a post",
 
   "button.generateSlug": "Generate a slug",

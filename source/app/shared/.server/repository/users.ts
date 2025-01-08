@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm";
+import { eq, ilike, or, sql } from "drizzle-orm";
 
 import { db } from "server/app";
 import { passwordHash, verifyPasswordAndSerialize } from "../utils/usersUtils";
@@ -11,6 +11,7 @@ import type {
   TUserPassword,
 } from "~/shared/types/react";
 import { users } from "~/database/schema";
+import { PAGINATION_LIMIT } from "~/shared/constants/common";
 
 export async function createNewUser(userData: TSignupData & TUserPassword) {
   const { password, ...userDataWithOutPassword } = userData;
@@ -65,7 +66,27 @@ export async function verifyUserAndSerialize(email: string, password: string) {
   return serializedUser;
 }
 
-export async function getAllUsers() {
+export async function getAllUsers(query: string, page: number) {
+  const totalUsers = await db
+    .select()
+    .from(users)
+    .where(
+      or(
+        ilike(users.firstName, `%${query}%`),
+        ilike(users.lastName, `%${query}%`),
+        ilike(users.email, `%${query}%`)
+      )
+    );
+
+  const totalCount = totalUsers.length;
+  if (totalCount === 0) {
+    return { allUsers: [], actualPage: 1, pagesCount: 1 };
+  }
+
+  const pagesCount = Math.ceil(totalCount / PAGINATION_LIMIT);
+  const actualPage = page > pagesCount ? pagesCount : page;
+  const offset = (actualPage - 1) * PAGINATION_LIMIT;
+
   const upd = db
     .select({
       updatedBy: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
@@ -100,10 +121,20 @@ export async function getAllUsers() {
       deletedBy: del.deletedBy,
     })
     .from(users)
+    .where(
+      or(
+        ilike(users.firstName, `%${query}%`),
+        ilike(users.lastName, `%${query}%`),
+        ilike(users.email, `%${query}%`)
+      )
+    )
     .leftJoin(upd, eq(users.updatedById, upd.id))
     .leftJoin(del, eq(users.deletedById, del.id))
+    .limit(PAGINATION_LIMIT)
+    .offset(offset)
     .orderBy(users.lastName, users.firstName);
-  return allUsers;
+
+  return { allUsers, actualPage, pagesCount };
 }
 
 export async function getUserById(id: number) {

@@ -197,6 +197,7 @@ export async function getAllUserPostsById(userId: number) {
   const allUserPosts = await db
     .select({
       id: posts.id,
+      ownerId: posts.ownerId,
       title: posts.title,
       slug: posts.slug,
       content: posts.content,

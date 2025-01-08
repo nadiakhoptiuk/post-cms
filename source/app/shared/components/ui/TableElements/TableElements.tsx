@@ -10,6 +10,11 @@ export const TableTd = ({ children }: WithChildren) => {
 
 export const TableTh = ({ children }: WithChildren) => {
   return (
-    <MTable.Th styles={{ th: { textWrap: "nowrap" } }}>{children}</MTable.Th>
+    <MTable.Th
+      c="blue"
+      styles={{ th: { textWrap: "nowrap", fontWeight: 500 } }}
+    >
+      {children}
+    </MTable.Th>
   );
 };

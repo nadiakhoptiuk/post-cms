@@ -60,7 +60,7 @@ export const PostCard = ({ item, isUserOwner }: TPostCard) => {
 
           {isUserOwner && (
             <StyledLink
-              to={`/${NavigationLink.MY_POSTS}/${id?.toString()}`}
+              to={`${id?.toString()}`}
               variant="unstyled"
               fill="outline"
             >

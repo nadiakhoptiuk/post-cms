@@ -13,6 +13,7 @@
   },
 
   "aria.toggleMenu": "Відкрити мобільне меню",
+  "aria.searchForm": "Шукати записи",
 
   "formErrorsMessages": {
     "emailError": "Введіть валідний email",
@@ -30,7 +31,8 @@
     "button.cancel": "Відміна",
     "button.delete": "Видалити",
     "button.restore": "Відновити",
-    "button.complain": "Поскаржитись"
+    "button.complain": "Поскаржитись",
+    "button.back": "Назад"
   },
 
   "modal.title": "Ви впевнені?",
@@ -46,5 +48,7 @@
     "deletedBy": "Ким видалено",
     "blockedAt": "Дата блокування",
     "blockedBy": "Ким заблоковано"
-  }
+  },
+
+  "search.placeholder": "Шукати..."
 }

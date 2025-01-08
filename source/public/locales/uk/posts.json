@@ -11,8 +11,8 @@
     "deletedBy": "Видалив"
   },
 
-  "link.back": "До всіх дописів",
-  "link.backToMyPosts": "До моїх дописів",
+  "link.toAll": "До всіх дописів",
+  "link.toMyPosts": "До моїх дописів",
   "link.addNewPost": "Новий допис",
 
   "button.generateSlug": "Згенерувати слаг",

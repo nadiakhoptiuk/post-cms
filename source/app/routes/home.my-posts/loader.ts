@@ -18,5 +18,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   const allUserPosts = await getAllUserPostsById(sessionUser.id);
 
-  return { posts: getPostsWithSlicedString(allUserPosts) };
+  return {
+    posts: getPostsWithSlicedString(allUserPosts),
+    userId: sessionUser.id,
+  };
 }

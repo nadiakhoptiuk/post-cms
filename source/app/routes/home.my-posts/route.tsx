@@ -10,8 +10,8 @@ export { loader } from "./loader";
 
 export const handle = { i18n: ["posts", "common"] };
 
-export default function DashBoardMyPostsPage() {
-  const { posts } = useLoaderData();
+export default function HomeMyPostsPage() {
+  const { posts, userId } = useLoaderData();
   const { t } = useTranslation("posts");
 
   return (
@@ -26,7 +26,7 @@ export default function DashBoardMyPostsPage() {
           {t("link.addNewPost")}
         </StyledLink>
 
-        <PostsList posts={posts} />
+        <PostsList posts={posts} userId={userId} />
       </Container>
     </Box>
   );
