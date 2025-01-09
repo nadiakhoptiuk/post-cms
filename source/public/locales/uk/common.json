@@ -40,15 +40,15 @@
   "modal.title": "Ви впевнені?",
 
   "timestampsLabels": {
-    "createdAt": "Дата створення",
+    "createdAt": "Створено",
     "author": "Автор",
-    "updatedAt": "Дата оновлення",
+    "updatedAt": "Оновлено",
     "updatedBy": "Ким оновлено",
-    "publishedAt": "Дата публікації",
+    "publishedAt": "Опубліковано",
     "moderatedBy": "Ким модеровано",
-    "deletedAt": "Дата видалення",
+    "deletedAt": "Видалено",
     "deletedBy": "Ким видалено",
-    "blockedAt": "Дата блокування",
+    "blockedAt": "Заблоковано",
     "blockedBy": "Ким заблоковано"
   },
 

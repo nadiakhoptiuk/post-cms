@@ -58,7 +58,8 @@ export default [
     ),
     route(
       NavigationLink.DASHBOARD_POSTS_SINGLE_POST,
-      "./routes/dashboard.posts.all.$postId/route.tsx"
+      "./routes/dashboard.posts.all.$postId/route.tsx",
+      [route(NavigationLink.DELETE_POST, "./routes/api/deletePost.ts")]
     ),
     route(
       NavigationLink.DASHBOARD_POSTS_ON_MODERATION,

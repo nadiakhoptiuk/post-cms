@@ -53,9 +53,11 @@ export const PostsTable = ({ posts }: TPostTable) => {
         </TableTd>
         <TableTd>{author}</TableTd>
         <TableTd>{createdRelDate}</TableTd>
-        <TableTd>
-          <StatusBadge status={status} />
-        </TableTd>
+        {!isModerationPage && (
+          <TableTd>
+            <StatusBadge status={status} />
+          </TableTd>
+        )}
 
         <TableTd>
           <Flex columnGap={4}>
@@ -153,7 +155,7 @@ export const PostsTable = ({ posts }: TPostTable) => {
                 {t("timestampsLabels.createdAt", { ns: "common" })}
               </TableTh>
 
-              <TableTh>{t("postData.status")}</TableTh>
+              {!isModerationPage && <TableTh>{t("postData.status")}</TableTh>}
 
               <TableTh> </TableTh>
             </MTable.Tr>

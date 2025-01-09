@@ -1,14 +1,22 @@
-import { Box, Container } from "@mantine/core";
-// import { useLoaderData } from "react-router";
+import { Box, Container, Text } from "@mantine/core";
+import { useTranslation } from "react-i18next";
 
-// export { loader } from "./loader";
+export const handle = { i18n: ["dashboard"] };
 
 export default function DashBoardHomePage() {
-  // const { posts, user } = useLoaderData();
+  const { t } = useTranslation("dashboard");
 
   return (
     <Box component="section">
-      <Container></Container>
+      <Container>
+        <Text mx="auto" w="fit-content" mt={30} size="xl" fw={700}>
+          {t("adminGreeting")}
+        </Text>
+
+        <Text mx="auto" w="fit-content" mt={30} size="md">
+          {t("adminChoose")}
+        </Text>
+      </Container>
     </Box>
   );
 }

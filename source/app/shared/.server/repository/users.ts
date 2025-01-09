@@ -12,6 +12,7 @@ import type {
 } from "~/shared/types/react";
 import { users } from "~/database/schema";
 import { PAGINATION_LIMIT } from "~/shared/constants/common";
+import { getCountForPagination } from "../utils/commonUtils";
 
 export async function createNewUser(userData: TSignupData & TUserPassword) {
   const { password, ...userDataWithOutPassword } = userData;
@@ -67,25 +68,23 @@ export async function verifyUserAndSerialize(email: string, password: string) {
 }
 
 export async function getAllUsers(query: string, page: number) {
-  const totalUsers = await db
-    .select()
-    .from(users)
-    .where(
-      or(
-        ilike(users.firstName, `%${query}%`),
-        ilike(users.lastName, `%${query}%`),
-        ilike(users.email, `%${query}%`)
-      )
-    );
+  const totalCount = await db.$count(
+    users,
+    or(
+      ilike(users.firstName, `%${query}%`),
+      ilike(users.lastName, `%${query}%`),
+      ilike(users.email, `%${query}%`)
+    )
+  );
 
-  const totalCount = totalUsers.length;
   if (totalCount === 0) {
     return { allUsers: [], actualPage: 1, pagesCount: 1 };
   }
 
-  const pagesCount = Math.ceil(totalCount / PAGINATION_LIMIT);
-  const actualPage = page > pagesCount ? pagesCount : page;
-  const offset = (actualPage - 1) * PAGINATION_LIMIT;
+  const { offset, actualPage, pagesCount } = getCountForPagination(
+    totalCount,
+    page
+  );
 
   const upd = db
     .select({

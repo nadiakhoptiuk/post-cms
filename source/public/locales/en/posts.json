@@ -3,12 +3,10 @@
     "title": "Title",
     "slug": "Slug",
     "content": "Content",
-    "createdAt": "Creation date",
+    "createdAt": "Created",
     "author": "Author",
-    "updatedAt": "Update date",
+    "updatedAt": "Updated",
     "updatedBy": "Updated by",
-    "deletedAt": "Deletion date",
-    "deletedBy": "Deleted by",
     "status": "Status",
 
     "rejectReason": "Reason"

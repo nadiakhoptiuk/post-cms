@@ -1,10 +1,15 @@
 import { db } from "server/app";
-import { and, desc, eq, isNotNull, sql } from "drizzle-orm";
+import { and, desc, eq, ilike, isNotNull, or, sql } from "drizzle-orm";
 import { posts, users } from "~/database/schema";
 
 import type { TDBPostRecord, TPost } from "~/shared/types/react";
 import { isTherePostIdInSlug } from "../utils/postUtils";
-import { POST_STATUS, ROLE_ADMIN } from "~/shared/constants/common";
+import {
+  PAGINATION_LIMIT,
+  POST_STATUS,
+  ROLE_ADMIN,
+} from "~/shared/constants/common";
+import { getCountForPagination } from "../utils/commonUtils";
 
 export async function createNewPost(userId: number, postData: TPost) {
   const existedUser = await db.select().from(users).where(eq(users.id, userId));
@@ -32,7 +37,7 @@ export async function createNewPost(userId: number, postData: TPost) {
   return newPost;
 }
 
-export async function getAllPosts() {
+export async function getAllPublishedPosts() {
   const crt = db
     .select({
       author: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
@@ -48,21 +53,35 @@ export async function getAllPosts() {
       id: posts.id,
       title: posts.title,
       slug: posts.slug,
+      status: posts.postStatus,
       content: posts.content,
-      createdAt: posts.createdAt,
-      deletedAt: posts.deletedAt,
+      publishedAt: posts.publishedAt,
       ownerId: posts.ownerId,
       author: crt.author,
     })
     .from(posts)
     .leftJoin(crt, eq(posts.ownerId, crt.id))
-    // .where(not(eq(users.deletedAt, null))) //TODO
-    .orderBy(desc(posts.createdAt));
+    .where(eq(posts.postStatus, POST_STATUS.PUBLISHED))
+    .orderBy(desc(posts.publishedAt));
 
   return allPosts;
 }
 
-export async function getAllPostsForAdmin() {
+export async function getAllPostsForAdmin(query: string, page: number) {
+  const totalCount = await db.$count(
+    posts,
+    or(ilike(posts.title, `%${query}%`), ilike(posts.content, `%${query}%`))
+  );
+
+  if (totalCount === 0) {
+    return { allPosts: [], actualPage: 1, pagesCount: 1 };
+  }
+
+  const { offset, actualPage, pagesCount } = getCountForPagination(
+    totalCount,
+    page
+  );
+
   const crt = db
     .select({
       author: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
@@ -81,18 +100,50 @@ export async function getAllPostsForAdmin() {
       status: posts.postStatus,
       createdAt: posts.createdAt,
       updatedAt: posts.updatedAt,
-      deletedAt: posts.deletedAt,
       ownerId: posts.ownerId,
       author: crt.author,
     })
     .from(posts)
+    .where(
+      or(ilike(posts.title, `%${query}%`), ilike(posts.content, `%${query}%`))
+    )
+    .limit(PAGINATION_LIMIT)
+    .offset(offset)
     .leftJoin(crt, eq(posts.ownerId, crt.id))
     .orderBy(desc(posts.updatedAt));
 
-  return allPosts;
+  return { allPosts, actualPage, pagesCount };
 }
 
-export async function getAllPostsForModeration() {
+export async function getCountOfPostsForModeration() {
+  return await db.$count(
+    posts,
+    eq(posts.postStatus, POST_STATUS.ON_MODERATION)
+  );
+}
+
+export async function getCountOfPostsWithComplaints() {
+  return await db.$count(posts, isNotNull(posts.complainedAt));
+}
+
+export async function getAllPostsForModeration(query: string, page: number) {
+  const totalCount = await db.$count(
+    posts,
+    and(
+      eq(posts.postStatus, POST_STATUS.ON_MODERATION),
+      or(ilike(posts.title, `%${query}%`), ilike(posts.content, `%${query}%`))
+    )
+  );
+
+  if (totalCount === 0) {
+    return { allPosts: [], actualPage: 1, pagesCount: 1 };
+  }
+
+  const { offset, actualPage, pagesCount } = getCountForPagination(
+    totalCount,
+    page
+  );
+
   const crt = db
     .select({
       author: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
@@ -111,16 +162,17 @@ export async function getAllPostsForModeration() {
       content: posts.content,
       status: posts.postStatus,
       createdAt: posts.createdAt,
-      deletedAt: posts.deletedAt,
       ownerId: posts.ownerId,
       author: crt.author,
     })
     .from(posts)
     .leftJoin(crt, eq(posts.ownerId, crt.id))
     .where(eq(posts.postStatus, POST_STATUS.ON_MODERATION))
+    .limit(PAGINATION_LIMIT)
+    .offset(offset)
     .orderBy(desc(posts.createdAt));
 
-  return allPosts;
+  return { allPosts, actualPage, pagesCount };
 }
 
 export async function getAllPostsWithComplaints() {
@@ -142,7 +194,6 @@ export async function getAllPostsWithComplaints() {
       content: posts.content,
       createdAt: posts.createdAt,
       complainedAt: posts.complainedAt,
-      deletedAt: posts.deletedAt,
       ownerId: posts.ownerId,
       author: crt.author,
     })
@@ -264,13 +315,15 @@ export async function getAllUserPostsById(userId: number) {
       ownerId: posts.ownerId,
       title: posts.title,
       slug: posts.slug,
+      status: posts.postStatus,
       content: posts.content,
       createdAt: posts.createdAt,
-      deletedAt: posts.deletedAt,
+      publishedAt: posts.publishedAt,
+      updatedAt: posts.updatedAt,
     })
     .from(posts)
     .where(eq(posts.ownerId, userId))
-    .orderBy(desc(posts.createdAt));
+    .orderBy(desc(posts.publishedAt), desc(posts.createdAt));
 
   return allUserPosts;
 }

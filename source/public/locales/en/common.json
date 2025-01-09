@@ -40,15 +40,15 @@
   "modal.title": "Are you sure?",
 
   "timestampsLabels": {
-    "createdAt": "Creation date",
+    "createdAt": "Created",
     "author": "Author",
-    "updatedAt": "Update date",
+    "updatedAt": "Updated",
     "updatedBy": "Updated by",
-    "publishedAt": "Publication date",
+    "publishedAt": "Published",
     "moderatedBy": "Moderated by",
-    "deletedAt": "Deletion date",
+    "deletedAt": "Deleted",
     "deletedBy": "Deleted by",
-    "blockedAt": "Block date",
+    "blockedAt": "Blocked",
     "blockedBy": "Blocked by"
   },
 

@@ -1,21 +1,27 @@
-import { Card, Flex, Text, Title } from "@mantine/core";
+import { Box, Card, Flex, Grid, Text, Title } from "@mantine/core";
 import parse from "html-react-parser";
 import { useTranslation } from "react-i18next";
-import { IconAlertSquareRounded, IconPencil } from "@tabler/icons-react";
+import {
+  IconAlertSquareRounded,
+  IconEye,
+  IconPencil,
+} from "@tabler/icons-react";
 
-import { formatDateWithMonthName } from "~/shared/utils/dateFormat";
+import { formatDateToRelative } from "~/shared/utils/dateRelativeFormat";
 
 import { StyledLink } from "../StyledLink";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import type { TPostCard } from "./PostCard.types";
 import s from "./PostCard.module.css";
+import { StatusBadge } from "../StatusBadge";
 
 export const PostCard = ({ item, isUserOwner, location }: TPostCard) => {
   const { t } = useTranslation();
-  const { id, title, slug, author, createdAt } = item;
+  const { id, title, slug, author, publishedAt, updatedAt, status } = item;
 
-  const createdDate = formatDateWithMonthName(createdAt);
+  const publishedDate = formatDateToRelative(publishedAt);
+  const updatedDate = formatDateToRelative(updatedAt);
 
   return (
     <Card
@@ -23,59 +29,94 @@ export const PostCard = ({ item, isUserOwner, location }: TPostCard) => {
       padding="xl"
       component="li"
       styles={{
-        section: { padding: 20, width: "fit-content" },
-        root: { width: "fit-content" },
+        section: {
+          width: "100%",
+          margin: 0,
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+        },
+        root: { width: "100%", height: "100%", padding: 20 },
       }}
     >
       <Card.Section>
+        {location === "own" && (
+          <StatusBadge status={status} mb={10} display="block" mx="auto" />
+        )}
+
         <Flex justify="space-between" align="center">
           <Title order={2} fw={500} size="lg">
             {title}
           </Title>
 
-          <Text size="md">{author}</Text>
+          <Text size="md" fw={500}>
+            {author}
+          </Text>
         </Flex>
 
-        <Text my="xs" c="dimmed" size="md" className={s.content} mih={75}>
+        <Text c="dark" size="md" my="md" className={s.content} mih={75}>
           {parse(item.content)}
         </Text>
 
-        <Text component="span" size="sm">
-          {createdDate}
-        </Text>
-        {/* //TODO change to published */}
+        <Flex gap={10} mb={10} direction="column">
+          {publishedDate && (
+            <Text component="span" size="sm" c="gray">
+              {publishedDate}
+            </Text>
+          )}
 
-        <Flex gap={10} mt={10} w="fit-content">
-          <StyledLink to={`/${slug}`} variant="accent" fill="filled">
-            {t("buttons.button.view", { ns: "common" })}
-          </StyledLink>
+          {updatedDate && (
+            <Text component="span" size="xs" c="gray">
+              {updatedDate}
+            </Text>
+          )}
+        </Flex>
+
+        <Grid columns={2} mt="auto">
+          <Grid.Col span={1}>
+            <StyledLink
+              to={`/${slug}`}
+              variant="accent"
+              fill="filled"
+              style={{ width: "100%" }}
+            >
+              <IconEye size={18} color="white" />
+              {t("buttons.button.view", { ns: "common" })}
+            </StyledLink>
+          </Grid.Col>
 
           {!isUserOwner && (
-            <StyledLink
-              to={`/${slug}/complain`}
-              variant="unstyled"
-              fill="outline"
-            >
-              <IconAlertSquareRounded size={18} color="pink" />
-              {t("buttons.button.complain", { ns: "common" })}
-            </StyledLink>
+            <Grid.Col span={1}>
+              <StyledLink
+                to={`/${slug}/complain`}
+                variant="unstyled"
+                fill="outline"
+                style={{ width: "100%" }}
+              >
+                <IconAlertSquareRounded size={18} color="pink" />
+                {t("buttons.button.complain", { ns: "common" })}
+              </StyledLink>
+            </Grid.Col>
           )}
 
           {isUserOwner && (
-            <StyledLink
-              to={
-                location === "own"
-                  ? id?.toString()
-                  : `${NavigationLink.MY_POSTS}/${id?.toString()}`
-              }
-              variant="unstyled"
-              fill="outline"
-            >
-              <IconPencil size={18} color="gray" />
-              {t("buttons.button.edit", { ns: "common" })}
-            </StyledLink>
+            <Grid.Col span={1}>
+              <StyledLink
+                to={
+                  location === "own"
+                    ? id?.toString()
+                    : `${NavigationLink.MY_POSTS}/${id?.toString()}`
+                }
+                variant="unstyled"
+                fill="outline"
+                style={{ width: "100%" }}
+              >
+                <IconPencil size={18} />
+                {t("buttons.button.edit", { ns: "common" })}
+              </StyledLink>
+            </Grid.Col>
           )}
-        </Flex>
+        </Grid>
       </Card.Section>
     </Card>
   );

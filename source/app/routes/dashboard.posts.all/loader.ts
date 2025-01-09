@@ -3,7 +3,11 @@ import { redirect } from "react-router";
 import { getAllPostsForAdmin } from "~/shared/.server/repository/posts";
 import { getSession } from "~/shared/.server/services/session";
 
-import { SESSION_USER_KEY } from "~/shared/constants/common";
+import {
+  PAGE_PARAMETER_NAME,
+  SEARCH_PARAMETER_NAME,
+  SESSION_USER_KEY,
+} from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
 import type { Route } from "./+types/route";
 
@@ -15,7 +19,14 @@ export async function loader({ request }: Route.LoaderArgs) {
     redirect(NavigationLink.HOME);
   }
 
-  const allPosts = await getAllPostsForAdmin();
+  const url = new URL(request.url);
+  const query = url.searchParams.get(SEARCH_PARAMETER_NAME) || "";
+  const page = Number(url.searchParams.get(PAGE_PARAMETER_NAME) || "1");
 
-  return { posts: allPosts, user: sessionUser };
+  const { allPosts, actualPage, pagesCount } = await getAllPostsForAdmin(
+    query,
+    page
+  );
+
+  return { posts: allPosts, user: sessionUser, actualPage, pagesCount };
 }

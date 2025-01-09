@@ -3,12 +3,10 @@
     "title": "Заголовок",
     "slug": "Слаг",
     "content": "Контент",
-    "createdAt": "Дата створення",
+    "createdAt": "Створено",
     "author": "Автор",
-    "updatedAt": "Дата оновлення",
+    "updatedAt": "Оновлено",
     "updatedBy": "Оновив",
-    "deletedAt": "Дата видалення",
-    "deletedBy": "Видалив",
     "status": "Статус",
 
     "rejectReason": "Причина"

@@ -1,4 +1,4 @@
-import { getAllPosts } from "~/shared/.server/repository/posts";
+import { getAllPublishedPosts } from "~/shared/.server/repository/posts";
 import { getSession } from "~/shared/.server/services/session";
 import { getPostsWithSlicedString } from "~/shared/utils/getPostsWithSlicedString";
 
@@ -9,7 +9,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("cookie"));
   const sessionUser = session.get(SESSION_USER_KEY);
 
-  const allPosts = await getAllPosts();
+  const allPosts = await getAllPublishedPosts();
 
   return { posts: getPostsWithSlicedString(allPosts), user: sessionUser };
 }

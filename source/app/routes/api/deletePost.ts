@@ -14,7 +14,14 @@ export async function action({ request, params }: Route.ActionArgs) {
   const session = await getSession(request.headers.get("cookie"));
   const sessionUser = session.get(SESSION_USER_KEY);
 
-  await deletePostById(Number(params.postId), sessionUser.id);
+  const deletedPost = await deletePostById(
+    Number(params.postId),
+    sessionUser.id
+  );
+
+  if (!deletedPost) {
+    throw new Error("something went wrong");
+  }
 
   const url = new URL(request.url);
   const isDashboardLayout = url.pathname.includes(NavigationLink.DASHBOARD);

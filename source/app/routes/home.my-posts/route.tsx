@@ -20,7 +20,7 @@ export default function HomeMyPostsPage() {
         <StyledLink
           fill="filled"
           variant="accent"
-          style={{ marginBottom: 30 }}
+          style={{ marginBottom: 30, marginLeft: "auto", marginRight: "auto" }}
           to={NavigationLink.MY_POSTS_NEW}
         >
           {t("link.addNewPost")}

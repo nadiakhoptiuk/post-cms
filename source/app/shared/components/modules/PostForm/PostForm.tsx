@@ -16,6 +16,8 @@ import type { TErrorsMessages, TFormType, TLocale } from "~/shared/types/react";
 import type { TPostForm } from "./PostForm.types";
 import s from "./PostForm.module.css";
 import { NavigationLink } from "~/shared/constants/navigation";
+import { ModalForDeletingPost } from "../ModalsForDeleting";
+import { useEffect } from "react";
 
 export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -89,7 +91,8 @@ export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
         </Button>
       )}
 
-      <Modal
+      {opened && <ModalForDeletingPost opened={opened} onClose={close} />}
+      {/* <Modal
         opened={opened}
         onClose={close}
         title={t("modal.title", { ns: "common" })}
@@ -122,7 +125,7 @@ export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
             </Grid.Col>
           </Grid>
         }
-      </Modal>
+      </Modal> */}
     </>
   );
 };

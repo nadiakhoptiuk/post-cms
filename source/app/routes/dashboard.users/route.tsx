@@ -35,7 +35,7 @@ export default function DashBoardUsersPage() {
   return (
     <Box component="section">
       <Container>
-        <Group style={{ marginBottom: 30, width: "100%" }}>
+        <Group mx="auto" style={{ marginBottom: 30, width: "fit-content" }}>
           <StyledNavLink
             variant="accent"
             to={NavigationLink.DASHBOARD_USERS_NEW}
@@ -49,7 +49,11 @@ export default function DashBoardUsersPage() {
           <SearchForm query={query} />
         </Group>
 
-        <UsersTable users={users} />
+        {users.length > 0 ? (
+          <UsersTable users={users} />
+        ) : (
+          <Text>{t("noUsers")}</Text>
+        )}
 
         <Pagination
           total={pagesCount}

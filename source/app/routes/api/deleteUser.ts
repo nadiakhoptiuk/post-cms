@@ -12,6 +12,7 @@ export async function action({ request, params }: Route.ActionArgs) {
 
   const session = await getSession(request.headers.get("cookie"));
   const sessionUser = session.get(SESSION_USER_KEY);
+
   const deletedUser = await deleteUserById(Number(userId), sessionUser.id);
 
   if (!deletedUser) {

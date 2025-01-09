@@ -7,5 +7,8 @@
     "dashboard.postsComplains": "Скарги",
     "dashboard.users": "Користувачі",
     "dashboard.tags": "Теги"
-  }
+  },
+
+  "adminGreeting": "Адмін панель",
+  "adminChoose": "Оберіть потрібний пункт із сайдбару"
 }

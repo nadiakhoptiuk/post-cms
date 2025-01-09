@@ -2,8 +2,8 @@ import { getAuthUser } from "~/shared/.server/services/auth";
 import { NavigationLink } from "~/shared/constants/navigation";
 
 import {
-  getAllPostsForModeration,
-  getAllPostsWithComplaints,
+  getCountOfPostsWithComplaints,
+  getCountOfPostsForModeration,
 } from "~/shared/.server/repository/posts";
 import { ROLE_ADMIN } from "~/shared/constants/common";
 import type { Route } from "./+types/route";
@@ -21,12 +21,12 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
     }
   );
 
-  const postsOnModeration = await getAllPostsForModeration();
-  const postsWithComplaints = await getAllPostsWithComplaints();
+  const postsOnModeration = await getCountOfPostsForModeration();
+  const postsWithComplaints = await getCountOfPostsWithComplaints();
 
   return Response.json({
     user: sessionUser,
-    postsOnModeration: postsOnModeration.length,
-    postsWithComplaints: postsWithComplaints.length,
+    postsOnModeration,
+    postsWithComplaints,
   });
 };

@@ -16,8 +16,6 @@ export const userTimestamps = {
 
 export const postTimestamps = {
   ...timestamps,
-  deletedAt: timestamp(),
-  deletedById: t.integer().references((): t.AnyPgColumn => users.id),
   publishedAt: timestamp(),
   moderatedById: t.integer().references((): t.AnyPgColumn => users.id),
   rejectedAt: timestamp(),

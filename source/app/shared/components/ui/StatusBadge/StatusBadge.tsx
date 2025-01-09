@@ -1,15 +1,11 @@
 import { Badge } from "@mantine/core";
 
 import { POST_STATUS } from "~/shared/constants/common";
+import type { TStatusBadge } from "./StatusBadge.types";
 
-export const StatusBadge = ({
-  status,
-}: {
-  status: (typeof POST_STATUS)[keyof typeof POST_STATUS];
-}) => {
+export const StatusBadge = ({ status, ...rest }: TStatusBadge) => {
   return (
     <Badge
-      fullWidth
       autoContrast
       variant={
         status === POST_STATUS.REJECTED || status === POST_STATUS.ON_MODERATION
@@ -26,6 +22,7 @@ export const StatusBadge = ({
           : "blue"
       }
       styles={{ label: { textTransform: "lowercase" } }}
+      {...rest}
     >
       {status}
     </Badge>
