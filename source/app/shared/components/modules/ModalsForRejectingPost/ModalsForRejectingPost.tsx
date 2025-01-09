@@ -81,10 +81,13 @@ export const ModalRejectPostWithoutRedirect = ({
     },
     method: "POST",
     handleSubmit: (data) => {
-      fetcher.submit(
-        { ...data, postId: postId },
-        { method: "post", action: NavigationLink.REJECT_PUBLISHING_POST }
-      );
+      {
+        fetcher.submit(
+          { ...data, postId: postId },
+          { method: "post", action: NavigationLink.REJECT_PUBLISHING_POST }
+        );
+        onClose();
+      }
     },
   });
 

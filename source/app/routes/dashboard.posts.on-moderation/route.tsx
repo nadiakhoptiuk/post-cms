@@ -1,4 +1,4 @@
-import { Text } from "@mantine/core";
+import { Box, Container, Text } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { useLoaderData } from "react-router";
 
@@ -14,14 +14,16 @@ export default function DashBoardModerationPage() {
   const { t } = useTranslation("posts");
 
   return (
-    <>
-      {posts.length > 0 && <PostsTable posts={posts} />}
+    <Box component="section">
+      <Container>
+        {posts.length > 0 && <PostsTable posts={posts} />}
 
-      {posts.length === 0 && (
-        <Text mx="auto" mt={30} w="fit-content">
-          {t("noPostsForModeration")}
-        </Text>
-      )}
-    </>
+        {posts.length === 0 && (
+          <Text mx="auto" mt={30} w="fit-content">
+            {t("noPostsForModeration")}
+          </Text>
+        )}
+      </Container>
+    </Box>
   );
 }

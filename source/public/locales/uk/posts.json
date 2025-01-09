@@ -9,6 +9,7 @@
     "updatedBy": "Оновив",
     "deletedAt": "Дата видалення",
     "deletedBy": "Видалив",
+    "status": "Статус",
 
     "rejectReason": "Причина"
   },
@@ -19,7 +20,7 @@
 
   "button.generateSlug": "Згенерувати слаг",
 
-  "noPosts": "Ви ще не створили жодного допису...",
+  "noPosts": "Наразі дописів немає...",
   "noPostsForModeration": "Наразі немає дописів для модерації...",
 
   "richEditorLabels": {

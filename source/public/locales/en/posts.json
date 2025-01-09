@@ -9,6 +9,7 @@
     "updatedBy": "Updated by",
     "deletedAt": "Deletion date",
     "deletedBy": "Deleted by",
+    "status": "Status",
 
     "rejectReason": "Reason"
   },
@@ -19,7 +20,7 @@
 
   "button.generateSlug": "Generate a slug",
 
-  "noPosts": "You haven't created any post yet...",
+  "noPosts": "There are no posts yet...",
   "noPostsForModeration": "There are no posts for moderation...",
 
   "richEditorLabels": {

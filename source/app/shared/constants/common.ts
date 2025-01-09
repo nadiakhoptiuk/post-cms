@@ -9,3 +9,15 @@ export const ROLE_SELECT_OPTIONS = [ROLE_USER, ROLE_ADMIN] as string[];
 export const SEARCH_PARAMETER_NAME = "search";
 export const PAGE_PARAMETER_NAME = "page";
 export const PAGINATION_LIMIT = 5;
+
+export const enum USER_ROLE {
+  ADMIN = "admin",
+  USER = "user",
+}
+
+export const enum POST_STATUS {
+  PUBLISHED = "published",
+  ON_MODERATION = "on moderation",
+  REJECTED = "rejected",
+  BLOCKED = "blocked",
+}

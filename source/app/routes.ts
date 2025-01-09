@@ -1,12 +1,8 @@
-import {
-  type RouteConfig,
-  layout,
-  prefix,
-  route,
-} from "@react-router/dev/routes";
+import { type RouteConfig, layout, route } from "@react-router/dev/routes";
 import { NavigationLink } from "./shared/constants/navigation";
 
 export default [
+  // ----------------------- HOME ----------------------------
   layout("./routes/home.layout/route.tsx", [
     route(NavigationLink.HOME, "./routes/home/route.tsx"),
     route(NavigationLink.HOME_SINGLE_POST, "./routes/home.$slug/route.tsx"),
@@ -23,15 +19,18 @@ export default [
     route(NavigationLink.MY_POSTS_NEW, "./routes/home.my-posts.new/route.tsx"),
   ]),
 
+  // ----------------------- AUTH ----------------------------
   layout("./routes/_auth/route.tsx", [
     route(NavigationLink.LOGIN, "./routes/_auth.login/route.tsx"),
     route(NavigationLink.SIGNUP, "./routes/_auth.signup/route.tsx"),
     route(NavigationLink.LOGOUT, "./routes/api/logout.ts"),
   ]),
 
+  // ----------------------- DASHBOARD ----------------------------
   layout("routes/dashboard/route.tsx", [
     route(NavigationLink.DASHBOARD, "./routes/dashboard.home/route.tsx"),
 
+    // ----------------------- USERS ----------------------------
     route(NavigationLink.DASHBOARD_USERS, "./routes/dashboard.users/route.tsx"),
     route(
       NavigationLink.DASHBOARD_USERS_NEW,
@@ -46,11 +45,21 @@ export default [
       ]
     ),
 
-    // route(
-    //   NavigationLink.DASHBOARD_ALL_POSTS,
-    //   "./routes/dashboard.posts.index/route.tsx"
-    // ),
-
+    // ----------------------- POSTS ----------------------------
+    route(
+      NavigationLink.DASHBOARD_ALL_POSTS,
+      "./routes/dashboard.posts.all/route.tsx",
+      [
+        route(
+          NavigationLink.DELETE_POST,
+          "./routes/api/deletePostWithoutRedirect.ts"
+        ),
+      ]
+    ),
+    route(
+      NavigationLink.DASHBOARD_POSTS_SINGLE_POST,
+      "./routes/dashboard.posts.all.$postId/route.tsx"
+    ),
     route(
       NavigationLink.DASHBOARD_POSTS_ON_MODERATION,
       "./routes/dashboard.posts.on-moderation/route.tsx",
@@ -71,10 +80,6 @@ export default [
         ),
       ]
     ),
-
-    ...prefix("posts", [
-      route("all", "./routes/dashboard.posts.all/route.tsx"),
-    ]),
   ]),
 
   route(NavigationLink.DELETE_ACCOUNT, "./routes/api/deleteAccount.ts"),

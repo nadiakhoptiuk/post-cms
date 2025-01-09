@@ -4,7 +4,7 @@ import { posts, users } from "~/database/schema";
 
 import type { TDBPostRecord, TPost } from "~/shared/types/react";
 import { isTherePostIdInSlug } from "../utils/postUtils";
-import { POST_STATUS } from "../types/common";
+import { POST_STATUS, ROLE_ADMIN } from "~/shared/constants/common";
 
 export async function createNewPost(userId: number, postData: TPost) {
   const existedUser = await db.select().from(users).where(eq(users.id, userId));
@@ -58,6 +58,36 @@ export async function getAllPosts() {
     .leftJoin(crt, eq(posts.ownerId, crt.id))
     // .where(not(eq(users.deletedAt, null))) //TODO
     .orderBy(desc(posts.createdAt));
+
+  return allPosts;
+}
+
+export async function getAllPostsForAdmin() {
+  const crt = db
+    .select({
+      author: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
+        "author"
+      ),
+      id: users.id,
+    })
+    .from(users)
+    .as("crt");
+
+  const allPosts = await db
+    .select({
+      id: posts.id,
+      title: posts.title,
+      slug: posts.slug,
+      status: posts.postStatus,
+      createdAt: posts.createdAt,
+      updatedAt: posts.updatedAt,
+      deletedAt: posts.deletedAt,
+      ownerId: posts.ownerId,
+      author: crt.author,
+    })
+    .from(posts)
+    .leftJoin(crt, eq(posts.ownerId, crt.id))
+    .orderBy(desc(posts.updatedAt));
 
   return allPosts;
 }
@@ -250,16 +280,27 @@ export async function updatePostById(
   userId: number,
   postData: TPost
 ) {
-  const existedUser = await db.select().from(users).where(eq(users.id, userId));
+  const existedUser = await db
+    .select({ role: users.role })
+    .from(users)
+    .where(eq(users.id, userId));
 
-  if (!existedUser) {
+  if (!existedUser[0]) {
     throw new Error("User with such id does not exist");
   }
+  let existedPost;
 
-  const existedPost = await db
-    .select({ slug: posts.slug })
-    .from(posts)
-    .where(and(eq(posts.id, postId), eq(posts.ownerId, userId)));
+  if (existedUser[0].role !== ROLE_ADMIN) {
+    existedPost = await db
+      .select({ slug: posts.slug })
+      .from(posts)
+      .where(and(eq(posts.id, postId), eq(posts.ownerId, userId)));
+  } else {
+    existedPost = await db
+      .select({ slug: posts.slug })
+      .from(posts)
+      .where(and(eq(posts.id, postId)));
+  }
 
   if (!existedPost[0]) {
     throw new Error("Post with such id does not exist");
@@ -327,11 +368,19 @@ export async function deletePostById(postId: number, userId: number) {
   if (!existingUser) {
     throw new Error("User with such id does not exist");
   }
+  let deletedPost;
 
-  const deletedPost = await db
-    .delete(posts)
-    .where(eq(posts.id, postId))
-    .returning({ deletedId: posts.id });
+  if (existingUser[0].role !== ROLE_ADMIN) {
+    deletedPost = await db
+      .delete(posts)
+      .where(and(eq(posts.id, postId), eq(posts.ownerId, userId)))
+      .returning({ deletedId: posts.id });
+  } else {
+    deletedPost = await db
+      .delete(posts)
+      .where(eq(posts.id, postId))
+      .returning({ deletedId: posts.id });
+  }
 
   return deletedPost[0];
 }

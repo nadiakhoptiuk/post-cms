@@ -8,16 +8,20 @@ import {
   IconTrash,
   IconX,
 } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
+
+import { formatDateToRelative } from "~/shared/utils/dateRelativeFormat";
 
 import { TableTd, TableTh } from "../../ui/TableElements";
 import { StyledNavLink } from "../../ui/StyledNavLink";
+import { ModalRejectPostWithoutRedirect } from "../ModalsForRejectingPost";
+import { Button } from "../../ui/Button";
+import { StatusBadge } from "../../ui/StatusBadge";
 
 import { NavigationLink } from "~/shared/constants/navigation";
-import { formatDateToRelative } from "~/shared/utils/dateRelativeFormat";
 import type { TPostTable } from "./PostTable.types";
-import { Button } from "../../ui/Button";
-import { ModalRejectPostWithoutRedirect } from "../ModalsForRejectingPost";
-import { useDisclosure } from "@mantine/hooks";
+import { ModalForDeletingPostWithoutRedirect } from "../ModalsForDeleting";
+import { useEffect, useState } from "react";
 
 export const PostsTable = ({ posts }: TPostTable) => {
   const { t } = useTranslation("posts");
@@ -26,9 +30,18 @@ export const PostsTable = ({ posts }: TPostTable) => {
     NavigationLink.DASHBOARD_POSTS_ON_MODERATION
   );
   const [opened, { open, close }] = useDisclosure(false);
+  const [postId, setPostId] = useState<null | number>(null);
   const fetcher = useFetcher();
 
-  const rows = posts.map(({ id, title, createdAt, author }) => {
+  useEffect(() => {
+    if (!postId) {
+      close();
+    } else {
+      open();
+    }
+  }, [postId]);
+
+  const rows = posts.map(({ id, title, createdAt, author, status }) => {
     const createdRelDate = formatDateToRelative(createdAt);
 
     return (
@@ -40,6 +53,9 @@ export const PostsTable = ({ posts }: TPostTable) => {
         </TableTd>
         <TableTd>{author}</TableTd>
         <TableTd>{createdRelDate}</TableTd>
+        <TableTd>
+          <StatusBadge status={status} />
+        </TableTd>
 
         <TableTd>
           <Flex columnGap={4}>
@@ -48,19 +64,24 @@ export const PostsTable = ({ posts }: TPostTable) => {
                 <StyledNavLink
                   variant="unstyled"
                   aria-label={t("buttons.button.edit", { ns: "common" })}
-                  to={`${NavigationLink.DASHBOARD_USERS}/${id}`}
+                  to={`${NavigationLink.DASHBOARD_ALL_POSTS}/${id}`}
                   style={{ padding: 8 }}
                 >
                   <IconPencil size={18} stroke={1.5} />
                 </StyledNavLink>
-                <StyledNavLink
-                  variant="unstyled"
-                  aria-label={t("buttons.button.edit", { ns: "common" })}
-                  to={`${NavigationLink.DASHBOARD_USERS}/${id}`}
-                  style={{ padding: 8 }}
-                >
-                  <IconTrash size={18} stroke={1.5} />
-                </StyledNavLink>
+
+                <Tooltip label={t("buttons.button.delete", { ns: "common" })}>
+                  <Button
+                    onClick={() => {
+                      setPostId(id);
+                    }}
+                    c="red"
+                    p={8}
+                    variant="subtle"
+                  >
+                    <IconTrash size={18} stroke={1.5} />
+                  </Button>
+                </Tooltip>
               </>
             )}
 
@@ -78,7 +99,7 @@ export const PostsTable = ({ posts }: TPostTable) => {
                 <Tooltip label={t("buttons.button.publish", { ns: "common" })}>
                   <Button
                     type="button"
-                    variant="light"
+                    variant="subtle"
                     p={8}
                     aria-label={t("buttons.button.publish", { ns: "common" })}
                     onClick={() =>
@@ -90,21 +111,20 @@ export const PostsTable = ({ posts }: TPostTable) => {
                 </Tooltip>
 
                 <Tooltip label={t("buttons.button.reject", { ns: "common" })}>
-                  <Button onClick={open} c="red" variant="default">
+                  <Button
+                    onClick={() => {
+                      setPostId(id);
+                    }}
+                    c="red"
+                    p={8}
+                    variant="subtle"
+                  >
                     <IconX size={18} stroke={1.5} />
                   </Button>
                 </Tooltip>
               </>
             )}
           </Flex>
-
-          {opened && (
-            <ModalRejectPostWithoutRedirect
-              postId={id}
-              opened={opened}
-              onClose={close}
-            />
-          )}
         </TableTd>
       </MTable.Tr>
     );
@@ -133,6 +153,8 @@ export const PostsTable = ({ posts }: TPostTable) => {
                 {t("timestampsLabels.createdAt", { ns: "common" })}
               </TableTh>
 
+              <TableTh>{t("postData.status")}</TableTh>
+
               <TableTh> </TableTh>
             </MTable.Tr>
           </MTable.Thead>
@@ -140,6 +162,22 @@ export const PostsTable = ({ posts }: TPostTable) => {
           <MTable.Tbody>{rows}</MTable.Tbody>
         </MTable>
       </MTable.ScrollContainer>
+
+      {!isModerationPage && opened && postId && (
+        <ModalForDeletingPostWithoutRedirect
+          postId={postId}
+          opened={opened}
+          onClose={() => setPostId(null)}
+        />
+      )}
+
+      {isModerationPage && opened && postId && (
+        <ModalRejectPostWithoutRedirect
+          postId={postId}
+          opened={opened}
+          onClose={() => setPostId(null)}
+        />
+      )}
     </>
   );
 };

@@ -16,6 +16,7 @@ export const StyledNavLink = ({
   return (
     <NavLink
       to={to}
+      end
       className={({ isActive }) => {
         if (variant === "gray") {
           return classes.grayLink;

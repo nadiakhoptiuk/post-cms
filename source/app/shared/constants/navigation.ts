@@ -20,10 +20,10 @@ export const enum NavigationLink {
   PROFILE = "/profile",
 
   DASHBOARD = "/dashboard",
-  DASHBOARD_SINGLE_POST = "/dashboard/:slug",
-  DASHBOARD_SINGLE_POST_COMPLAIN = "/dashboard/:slug/complain",
+  DASHBOARD_SINGLE_POST_TO_VIEW = "/dashboard/:slug",
 
   DASHBOARD_ALL_POSTS = "/dashboard/posts",
+  DASHBOARD_POSTS_SINGLE_POST = "/dashboard/posts/:postId",
   DASHBOARD_POSTS_ON_MODERATION = "/dashboard/posts/on-moderation",
   DASHBOARD_SINGLE_POST_ON_MODERATION = "/dashboard/posts/on-moderation/:postId",
   DASHBOARD_POSTS_COMPLAINTS = "/dashboard/posts/complaints",
@@ -39,6 +39,7 @@ export const enum NavigationLink {
 
   SIGNUP = "/signup",
 
+  // FOR ACTIONS
   CHANGE_LANGUAGE = "change-language",
   DELETE_USER = "delete-user",
   RESTORE_USER = "restore-user",

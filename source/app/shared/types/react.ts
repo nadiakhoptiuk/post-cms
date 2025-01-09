@@ -3,6 +3,7 @@ import type { TextInputProps as MTextInputProps } from "@mantine/core";
 import type { FormScope } from "@rvf/react-router";
 
 import type { LANG_EN, LANG_UK } from "../constants/locale";
+import type { POST_STATUS } from "../constants/common";
 
 export type NewSerializeFrom<T> = ReturnType<typeof useLoaderData<T>>;
 
@@ -13,11 +14,6 @@ export type WithChildren = {
 export type TLocale = typeof LANG_EN | typeof LANG_UK;
 
 export type TRolesEnum = "admin" | "user";
-export type TPostStatusEnum =
-  | "on moderation"
-  | "published"
-  | "rejected"
-  | "blocked";
 
 export type TErrorsMessages = {
   [key: string]: string;
@@ -81,7 +77,7 @@ export type TDBPostRecord = {
   id: number;
   ownerId: number;
   createdAt: Date;
-  status: TPostStatusEnum;
+  status: (typeof POST_STATUS)[keyof typeof POST_STATUS];
   author?: string;
   updatedAt?: Date | null;
   updatedBy?: string | null;

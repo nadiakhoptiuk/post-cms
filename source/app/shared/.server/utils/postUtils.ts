@@ -54,6 +54,7 @@ export const updatePostAction = async (
 
     return redirect(successRedirect);
   } catch (error) {
+    console.log(error);
     return Response.json(
       {
         error: "An unexpected error occurred",
