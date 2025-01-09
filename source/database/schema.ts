@@ -3,7 +3,12 @@ import * as t from "drizzle-orm/pg-core";
 import { postTimestamps, userTimestamps } from "./columns.helpers";
 
 export const rolesEnum = pgEnum("roles", ["admin", "user"]);
-export const postStatusEnum = pgEnum("postStatus", ["admin", "user"]);
+export const postStatusEnum = pgEnum("postStatus", [
+  "published",
+  "rejected",
+  "on moderation",
+  "blocked",
+]);
 
 export const users = pgTable("Users", {
   id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -24,6 +29,7 @@ export const posts = pgTable("Posts", {
     .integer()
     .references(() => users.id)
     .notNull(),
+  postStatus: postStatusEnum().notNull().default("on moderation"),
   reason: t.varchar({ length: 50 }),
   ...postTimestamps,
 });

@@ -3,16 +3,13 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconArrowNarrowLeft } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 import { Form, useLoaderData, useNavigate } from "react-router";
-import { ModalRejectPost } from "~/shared/components/modules/ModalRejectPost";
 
-import { SinglePostPage } from "~/shared/components/modules/SinglePostPage";
+import { ModalRejectPost } from "~/shared/components/modules/ModalsForRejectingPost";
 import { Button } from "~/shared/components/ui/Button";
 import { PostContent, PostHeading } from "~/shared/components/ui/PostElements";
 
-import { StyledLink } from "~/shared/components/ui/StyledLink";
-import { NavigationLink } from "~/shared/constants/navigation";
-
 export { loader } from "./loader";
+export { action } from "./action";
 
 export const handle = { i18n: ["posts", "common"] };
 
@@ -53,14 +50,6 @@ export default function DashBoardSinglePostPage() {
               ns: "common",
             })}
           </Button>
-
-          {/* <Form method="POST">
-            <Button type="submit" c="red" variant="default" fullWidth>
-              {t("buttons.button.reject", {
-                ns: "common",
-              })}
-            </Button>
-          </Form> */}
         </Flex>
 
         {opened && <ModalRejectPost opened={opened} onClose={close} />}

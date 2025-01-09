@@ -1,9 +1,10 @@
 import { db } from "server/app";
-import { and, desc, eq, isNotNull, isNull, sql } from "drizzle-orm";
+import { and, desc, eq, isNotNull, sql } from "drizzle-orm";
 import { posts, users } from "~/database/schema";
 
 import type { TDBPostRecord, TPost } from "~/shared/types/react";
 import { isTherePostIdInSlug } from "../utils/postUtils";
+import { POST_STATUS } from "../types/common";
 
 export async function createNewPost(userId: number, postData: TPost) {
   const existedUser = await db.select().from(users).where(eq(users.id, userId));
@@ -55,7 +56,7 @@ export async function getAllPosts() {
     })
     .from(posts)
     .leftJoin(crt, eq(posts.ownerId, crt.id))
-    // .where(not(eq(users.deletedAt, null)))
+    // .where(not(eq(users.deletedAt, null))) //TODO
     .orderBy(desc(posts.createdAt));
 
   return allPosts;
@@ -78,6 +79,7 @@ export async function getAllPostsForModeration() {
       title: posts.title,
       slug: posts.slug,
       content: posts.content,
+      status: posts.postStatus,
       createdAt: posts.createdAt,
       deletedAt: posts.deletedAt,
       ownerId: posts.ownerId,
@@ -85,8 +87,7 @@ export async function getAllPostsForModeration() {
     })
     .from(posts)
     .leftJoin(crt, eq(posts.ownerId, crt.id))
-    // .where(not(eq(users.deletedAt, null)))
-    .where(isNull(posts.publishedAt))
+    .where(eq(posts.postStatus, POST_STATUS.ON_MODERATION))
     .orderBy(desc(posts.createdAt));
 
   return allPosts;
@@ -307,6 +308,7 @@ export async function moderatePostById(
     .update(posts)
     .set({
       ...postData,
+      postStatus: confirmed ? "published" : "rejected",
       publishedAt: confirmed ? sql`NOW()` : null,
       rejectedAt: confirmed ? null : sql`NOW()`,
     })

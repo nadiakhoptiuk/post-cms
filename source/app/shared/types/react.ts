@@ -13,6 +13,11 @@ export type WithChildren = {
 export type TLocale = typeof LANG_EN | typeof LANG_UK;
 
 export type TRolesEnum = "admin" | "user";
+export type TPostStatusEnum =
+  | "on moderation"
+  | "published"
+  | "rejected"
+  | "blocked";
 
 export type TErrorsMessages = {
   [key: string]: string;
@@ -76,6 +81,7 @@ export type TDBPostRecord = {
   id: number;
   ownerId: number;
   createdAt: Date;
+  status: TPostStatusEnum;
   author?: string;
   updatedAt?: Date | null;
   updatedBy?: string | null;

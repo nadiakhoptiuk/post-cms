@@ -1,25 +1,17 @@
-import { redirect } from "react-router";
-
 import { getSession } from "~/shared/.server/services/session";
 import { rejectPublishPost } from "~/shared/.server/utils/postUtils";
 
 import type { Route } from "../../+types/root";
 import { SESSION_USER_KEY } from "~/shared/constants/common";
-import { NavigationLink } from "~/shared/constants/navigation";
 
-export async function action({ request, params }: Route.ActionArgs) {
-  const postId = params.postId;
-
-  if (!postId) {
-    return new Response("Post not Found", { status: 404 });
-  }
-
+export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
+  const postId = formData.get("postId");
   const reason = formData.get("reason");
 
-  if (typeof reason !== "string") {
+  if (typeof postId !== "string" || typeof reason !== "string") {
     return Response.json({
-      error: "Reason is not a string",
+      error: "Reason or Post Id is not a string",
     });
   }
 
@@ -27,6 +19,4 @@ export async function action({ request, params }: Route.ActionArgs) {
   const sessionUser = session.get(SESSION_USER_KEY);
 
   await rejectPublishPost(reason, Number(postId), sessionUser.id);
-
-  return redirect(NavigationLink.DASHBOARD_POSTS_ON_MODERATION);
 }

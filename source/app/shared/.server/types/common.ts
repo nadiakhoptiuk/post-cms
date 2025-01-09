@@ -11,3 +11,10 @@ export type GetRouteOptions = {
   allowedRoles: TRolesEnum[];
   isAuthRoute?: boolean;
 };
+
+export const enum POST_STATUS {
+  PUBLISHED = "published",
+  ON_MODERATION = "on moderation",
+  REJECTED = "rejected",
+  BLOCKED = "blocked",
+}

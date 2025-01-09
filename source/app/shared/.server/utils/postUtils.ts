@@ -65,15 +65,13 @@ export const updatePostAction = async (
 
 export const confirmPublishPost = async (postId: number, userId: number) => {
   try {
-    await moderatePostById(
+    return await moderatePostById(
       Number(postId),
       {
         moderatedById: userId,
       },
       { confirmed: true }
     );
-
-    return redirect(NavigationLink.DASHBOARD_POSTS_ON_MODERATION);
   } catch (error) {
     return Response.json(
       {
@@ -98,8 +96,6 @@ export const rejectPublishPost = async (
       },
       { confirmed: false }
     );
-
-    return redirect(NavigationLink.DASHBOARD_POSTS_ON_MODERATION);
   } catch (error) {
     return Response.json(
       {

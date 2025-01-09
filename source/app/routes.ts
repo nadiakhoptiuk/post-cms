@@ -57,8 +57,7 @@ export default [
       [
         route(
           NavigationLink.REJECT_PUBLISHING_POST,
-          "./routes/api/rejectPublicationPost.ts",
-          { id: "reject-from-common" }
+          "./routes/api/rejectPublicationPostWithoutRedirect.ts"
         ),
       ]
     ),
@@ -68,8 +67,7 @@ export default [
       [
         route(
           NavigationLink.REJECT_PUBLISHING_POST,
-          "./routes/api/rejectPublicationPost.ts",
-          { id: "reject-from-id" }
+          "./routes/api/rejectPublicationPost.ts"
         ),
       ]
     ),

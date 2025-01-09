@@ -1,5 +1,6 @@
+import { useFetcher, useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Flex, Table as MTable, Text } from "@mantine/core";
+import { Flex, Table as MTable, Text, Tooltip } from "@mantine/core";
 import {
   IconCheck,
   IconEye,
@@ -14,7 +15,9 @@ import { StyledNavLink } from "../../ui/StyledNavLink";
 import { NavigationLink } from "~/shared/constants/navigation";
 import { formatDateToRelative } from "~/shared/utils/dateRelativeFormat";
 import type { TPostTable } from "./PostTable.types";
-import { useLocation } from "react-router";
+import { Button } from "../../ui/Button";
+import { ModalRejectPostWithoutRedirect } from "../ModalsForRejectingPost";
+import { useDisclosure } from "@mantine/hooks";
 
 export const PostsTable = ({ posts }: TPostTable) => {
   const { t } = useTranslation("posts");
@@ -22,6 +25,8 @@ export const PostsTable = ({ posts }: TPostTable) => {
   const isModerationPage = location.pathname.includes(
     NavigationLink.DASHBOARD_POSTS_ON_MODERATION
   );
+  const [opened, { open, close }] = useDisclosure(false);
+  const fetcher = useFetcher();
 
   const rows = posts.map(({ id, title, createdAt, author }) => {
     const createdRelDate = formatDateToRelative(createdAt);
@@ -40,7 +45,6 @@ export const PostsTable = ({ posts }: TPostTable) => {
           <Flex columnGap={4}>
             {!isModerationPage && (
               <>
-                {" "}
                 <StyledNavLink
                   variant="unstyled"
                   aria-label={t("buttons.button.edit", { ns: "common" })}
@@ -69,29 +73,38 @@ export const PostsTable = ({ posts }: TPostTable) => {
                   style={{ padding: 8 }}
                 >
                   <IconEye size={18} stroke={1.5} />
-                  {/* {t("buttons.button.view", { ns: "common" })} */}
                 </StyledNavLink>
 
-                <StyledNavLink
-                  variant="unstyled"
-                  aria-label={t("buttons.button.publish", { ns: "common" })}
-                  // to={`${NavigationLink.Da}/${id}`}
-                  style={{ padding: 8 }}
-                >
-                  <IconCheck size={18} stroke={1.5} />
-                </StyledNavLink>
+                <Tooltip label={t("buttons.button.publish", { ns: "common" })}>
+                  <Button
+                    type="button"
+                    variant="light"
+                    p={8}
+                    aria-label={t("buttons.button.publish", { ns: "common" })}
+                    onClick={() =>
+                      fetcher.submit({ postId: id }, { method: "post" })
+                    }
+                  >
+                    <IconCheck size={18} stroke={1.5} />
+                  </Button>
+                </Tooltip>
 
-                <StyledNavLink
-                  variant="unstyled"
-                  aria-label={t("buttons.button.publish", { ns: "common" })}
-                  // to={`${NavigationLink.Da}/${id}`}
-                  style={{ padding: 8 }}
-                >
-                  <IconX size={18} stroke={1.5} />
-                </StyledNavLink>
+                <Tooltip label={t("buttons.button.reject", { ns: "common" })}>
+                  <Button onClick={open} c="red" variant="default">
+                    <IconX size={18} stroke={1.5} />
+                  </Button>
+                </Tooltip>
               </>
             )}
           </Flex>
+
+          {opened && (
+            <ModalRejectPostWithoutRedirect
+              postId={id}
+              opened={opened}
+              onClose={close}
+            />
+          )}
         </TableTd>
       </MTable.Tr>
     );
