@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useFetcher, useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Flex, Table as MTable, Text, Tooltip } from "@mantine/core";
@@ -20,8 +21,7 @@ import { StatusBadge } from "../../ui/StatusBadge";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import type { TPostTable } from "./PostTable.types";
-import { ModalForDeletingPostWithoutRedirect } from "../ModalsForDeleting";
-import { useEffect, useState } from "react";
+import { ModalForDeletingWithoutRedirect } from "../ModalsForDeleting";
 
 export const PostsTable = ({ posts }: TPostTable) => {
   const { t } = useTranslation("posts");
@@ -166,10 +166,11 @@ export const PostsTable = ({ posts }: TPostTable) => {
       </MTable.ScrollContainer>
 
       {!isModerationPage && opened && postId && (
-        <ModalForDeletingPostWithoutRedirect
-          postId={postId}
+        <ModalForDeletingWithoutRedirect
+          itemId={postId}
           opened={opened}
           onClose={() => setPostId(null)}
+          action={NavigationLink.DELETE_POST}
         />
       )}
 

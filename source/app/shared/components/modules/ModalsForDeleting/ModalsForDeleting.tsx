@@ -54,10 +54,11 @@ export const ModalForDeletingPost = ({
   );
 };
 
-export const ModalForDeletingPostWithoutRedirect = ({
-  postId,
+export const ModalForDeletingWithoutRedirect = ({
+  itemId,
   opened,
   onClose,
+  action,
 }: TModalForDeletingWithoutRedirect) => {
   const { t } = useTranslation();
   const fetcher = useFetcher();
@@ -88,10 +89,11 @@ export const ModalForDeletingPostWithoutRedirect = ({
               fullWidth
               onClick={() => {
                 fetcher.submit(
-                  { postId: postId },
+                  { id: itemId },
                   {
                     method: "post",
-                    action: NavigationLink.DELETE_POST,
+                    // action: NavigationLink.DELETE_POST,
+                    action: action,
                   }
                 );
                 onClose();

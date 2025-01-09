@@ -31,7 +31,16 @@ export default [
     route(NavigationLink.DASHBOARD, "./routes/dashboard.home/route.tsx"),
 
     // ----------------------- USERS ----------------------------
-    route(NavigationLink.DASHBOARD_USERS, "./routes/dashboard.users/route.tsx"),
+    route(
+      NavigationLink.DASHBOARD_USERS,
+      "./routes/dashboard.users/route.tsx",
+      [
+        route(
+          NavigationLink.DELETE_USER,
+          "./routes/api/deleteUserWithoutRedirect.ts"
+        ),
+      ]
+    ),
     route(
       NavigationLink.DASHBOARD_USERS_NEW,
       "./routes/dashboard.users.new/route.tsx"

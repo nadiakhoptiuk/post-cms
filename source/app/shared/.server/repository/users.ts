@@ -209,6 +209,8 @@ export async function deleteUserById(id: number, deletedById: number) {
 
   if (!existedUser) {
     throw new Error("User with such id does not exist");
+  } else if (existedUser.deletedAt !== null) {
+    throw new Error("Cannot delete User which is already deleted");
   }
 
   const updatedUser = await db

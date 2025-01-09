@@ -130,24 +130,21 @@ export const deleteUserAccount = async (
   const session = await getSession(request.headers.get("Cookie"));
   const userId = session.get(SESSION_USER_KEY).id;
 
-  const deletedUser = await deleteUserById(userId, userId);
+  await deleteUserById(userId, userId);
 
-  if (deletedUser.deletedAt !== null) {
-    session.unset(SESSION_USER_KEY);
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: successRedirect || NavigationLink.HOME,
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 
-    // return redirect(successRedirect || NavigationLink.HOME, {
-    //   headers: {
-    //     "Set-Cookie": await commitSession(session),
-    //   },
-    // });
-    return new Response(null, {
-      status: 302,
-      headers: {
-        Location: successRedirect || NavigationLink.HOME,
-        "Set-Cookie": await commitSession(session),
-      },
-    });
-  }
+  // return redirect(successRedirect || NavigationLink.HOME, {
+  //   headers: {
+  //     "Set-Cookie": await commitSession(session),
+  //   },
+  // });
 };
 
 export const getAuthUser = async (
