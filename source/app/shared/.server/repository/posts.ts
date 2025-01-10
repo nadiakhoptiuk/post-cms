@@ -175,7 +175,25 @@ export async function getAllPostsForModeration(query: string, page: number) {
   return { allPosts, actualPage, pagesCount };
 }
 
-export async function getAllPostsWithComplaints() {
+export async function getAllPostsWithComplaints(query: string, page: number) {
+  const totalCount = await db.$count(
+    posts,
+    and(
+      eq(posts.postStatus, POST_STATUS.PUBLISHED),
+      isNotNull(posts.complainedAt),
+      or(ilike(posts.title, `%${query}%`), ilike(posts.content, `%${query}%`))
+    )
+  );
+
+  if (totalCount === 0) {
+    return { allPosts: [], actualPage: 1, pagesCount: 1 };
+  }
+
+  const { offset, actualPage, pagesCount } = getCountForPagination(
+    totalCount,
+    page
+  );
+
   const crt = db
     .select({
       author: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
@@ -186,12 +204,27 @@ export async function getAllPostsWithComplaints() {
     .from(users)
     .as("crt");
 
+  const cmpl = db
+    .select({
+      complaintAuthor:
+        sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
+          "complaintAuthor"
+        ),
+      id: users.id,
+    })
+    .from(users)
+    .as("cmpl");
+
   const allPosts = await db
     .select({
       id: posts.id,
       title: posts.title,
       slug: posts.slug,
       content: posts.content,
+      status: posts.postStatus,
+      complaintReason: posts.complaintReason,
+      complaintById: posts.complainedById,
+      complaintBy: cmpl.complaintAuthor,
       createdAt: posts.createdAt,
       complainedAt: posts.complainedAt,
       ownerId: posts.ownerId,
@@ -199,10 +232,13 @@ export async function getAllPostsWithComplaints() {
     })
     .from(posts)
     .leftJoin(crt, eq(posts.ownerId, crt.id))
+    .leftJoin(cmpl, eq(posts.complainedById, cmpl.id))
     .where(and(isNotNull(posts.publishedAt), isNotNull(posts.complainedAt)))
-    .orderBy(desc(posts.createdAt));
+    .limit(PAGINATION_LIMIT)
+    .offset(offset)
+    .orderBy(desc(posts.complainedAt));
 
-  return allPosts;
+  return { allPosts, actualPage, pagesCount };
 }
 
 export async function getPostById(postId: number) {

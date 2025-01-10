@@ -82,6 +82,7 @@ export default [
       "./routes/dashboard.posts.all.$postId/route.tsx",
       [route(NavigationLink.DELETE_POST, "./routes/api/deletePost.ts")]
     ),
+
     route(
       NavigationLink.DASHBOARD_POSTS_ON_MODERATION,
       "./routes/dashboard.posts.on-moderation/route.tsx",
@@ -101,6 +102,11 @@ export default [
           "./routes/api/rejectPublicationPost.ts"
         ),
       ]
+    ),
+
+    route(
+      NavigationLink.DASHBOARD_POSTS_COMPLAINTS,
+      "./routes/dashboard.posts.complaints/route.tsx"
     ),
   ]),
 

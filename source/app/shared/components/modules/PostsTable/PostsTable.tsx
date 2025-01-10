@@ -29,6 +29,9 @@ export const PostsTable = ({ posts }: TPostTable) => {
   const isModerationPage = location.pathname.includes(
     NavigationLink.DASHBOARD_POSTS_ON_MODERATION
   );
+  const isComplaintsPage = location.pathname.includes(
+    NavigationLink.DASHBOARD_POSTS_COMPLAINTS
+  );
   const [opened, { open, close }] = useDisclosure(false);
   const [postId, setPostId] = useState<null | number>(null);
   const fetcher = useFetcher();
@@ -61,7 +64,7 @@ export const PostsTable = ({ posts }: TPostTable) => {
 
         <TableTd>
           <Flex columnGap={4}>
-            {!isModerationPage && (
+            {!isModerationPage && !isComplaintsPage && (
               <>
                 <StyledNavLink
                   variant="unstyled"
@@ -99,6 +102,48 @@ export const PostsTable = ({ posts }: TPostTable) => {
                 </StyledNavLink>
 
                 <Tooltip label={t("buttons.button.publish", { ns: "common" })}>
+                  <Button
+                    type="button"
+                    variant="subtle"
+                    p={8}
+                    aria-label={t("buttons.button.publish", { ns: "common" })}
+                    onClick={() => {
+                      fetcher.submit({ postId: id }, { method: "post" });
+                    }}
+                  >
+                    <IconCheck size={18} stroke={1.5} />
+                  </Button>
+                </Tooltip>
+
+                <Tooltip label={t("buttons.button.reject", { ns: "common" })}>
+                  <Button
+                    onClick={() => {
+                      setPostId(id);
+                    }}
+                    c="red"
+                    p={8}
+                    variant="subtle"
+                  >
+                    <IconX size={18} stroke={1.5} />
+                  </Button>
+                </Tooltip>
+              </>
+            )}
+
+            {isComplaintsPage && (
+              <>
+                <StyledNavLink
+                  variant="unstyled"
+                  aria-label={t("buttons.button.view", { ns: "common" })}
+                  to={`${id.toString()}`}
+                  style={{ padding: 8 }}
+                >
+                  <IconEye size={18} stroke={1.5} />
+                </StyledNavLink>
+
+                <Tooltip label={t("buttons.button.publish", { ns: "common" })}>
+                  {" "}
+                  //TODO
                   <Button
                     type="button"
                     variant="subtle"

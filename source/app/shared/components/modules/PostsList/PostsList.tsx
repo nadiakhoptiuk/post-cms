@@ -38,7 +38,7 @@ export const PostsList = ({ posts, userId }: TPostList) => {
               >
                 <PostCard
                   item={itemData}
-                  isUserOwner={userId ? userId === itemData.ownerId : false}
+                  userId={userId}
                   location={isOwnList ? "own" : "all"}
                   setPostId={setPostId}
                 />

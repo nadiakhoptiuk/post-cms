@@ -10,21 +10,17 @@ import {
 import { formatDateToRelative } from "~/shared/utils/dateRelativeFormat";
 
 import { StyledLink } from "../StyledLink";
+import { StatusBadge } from "../StatusBadge";
+import { Button } from "../Button";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import type { TPostCard } from "./PostCard.types";
 import s from "./PostCard.module.css";
-import { StatusBadge } from "../StatusBadge";
-import { Button } from "../Button";
 
-export const PostCard = ({
-  item,
-  isUserOwner,
-  location,
-  setPostId,
-}: TPostCard) => {
+export const PostCard = ({ item, userId, location, setPostId }: TPostCard) => {
   const { t } = useTranslation();
   const { id, title, slug, author, publishedAt, updatedAt, status } = item;
+  const isUserOwner = userId === item.ownerId;
 
   const publishedDate = formatDateToRelative(publishedAt);
   const updatedDate = formatDateToRelative(updatedAt);
@@ -86,12 +82,12 @@ export const PostCard = ({
               fill="filled"
               style={{ width: "100%", height: "100%" }}
             >
-              <IconEye size={18} color="white" />
+              <IconEye size={18} color="white" style={{ flexShrink: 0 }} />
               {t("buttons.button.view", { ns: "common" })}
             </StyledLink>
           </Grid.Col>
 
-          {!isUserOwner && (
+          {userId && !isUserOwner && (
             <Grid.Col span={1}>
               <Button
                 variant="subtle"
@@ -101,7 +97,11 @@ export const PostCard = ({
                 aria-label={t("buttons.button.complain", { ns: "common" })}
                 onClick={() => setPostId(id)}
               >
-                <IconAlertSquareRounded size={18} color="pink" />
+                <IconAlertSquareRounded
+                  size={18}
+                  color="pink"
+                  style={{ flexShrink: 0 }}
+                />
                 {t("buttons.button.complain", { ns: "common" })}
               </Button>
             </Grid.Col>
