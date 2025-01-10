@@ -20,28 +20,32 @@ export default function DashBoardComplaintsPage() {
   return (
     <Box component="section">
       <Container>
-        <Box mb={30} w="100%" maw={500} mx="auto" mt={20}>
-          <SearchForm query={query} />
-        </Box>
+        {posts.length > 0 && (
+          <>
+            <Box mb={30} w="100%" maw={500} mx="auto" mt={20}>
+              <SearchForm query={query} />
+            </Box>
+
+            <PostsTable posts={posts} />
+
+            <Pagination
+              total={pagesCount}
+              value={actualPage}
+              onChange={(page) =>
+                navigate({ search: `?${PAGE_PARAMETER_NAME}=${page}` })
+              }
+              mt="md"
+              mx="auto"
+              w="fit-content"
+            />
+          </>
+        )}
 
         {posts.length === 0 && (
           <Text mx="auto" mt={30} w="fit-content">
             {t("noPostsForModeration")}
           </Text>
         )}
-
-        {posts.length > 0 && <PostsTable posts={posts} />}
-
-        <Pagination
-          total={pagesCount}
-          value={actualPage}
-          onChange={(page) =>
-            navigate({ search: `?${PAGE_PARAMETER_NAME}=${page}` })
-          }
-          mt="md"
-          mx="auto"
-          w="fit-content"
-        />
       </Container>
     </Box>
   );

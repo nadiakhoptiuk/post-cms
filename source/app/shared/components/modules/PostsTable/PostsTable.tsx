@@ -3,6 +3,7 @@ import { useFetcher, useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Flex, Table as MTable, Text, Tooltip } from "@mantine/core";
 import {
+  IconBan,
   IconCheck,
   IconEye,
   IconPencil,
@@ -141,25 +142,30 @@ export const PostsTable = ({ posts }: TPostTable) => {
                   <IconEye size={18} stroke={1.5} />
                 </StyledNavLink>
 
-                <Tooltip label={t("buttons.button.publish", { ns: "common" })}>
+                <Tooltip label={t("buttons.button.block", { ns: "common" })}>
                   <Button
                     type="button"
                     variant="subtle"
                     p={8}
-                    aria-label={t("buttons.button.publish", { ns: "common" })}
+                    aria-label={t("buttons.button.block", { ns: "common" })}
                     onClick={() => {
                       fetcher.submit({ postId: id }, { method: "post" });
                     }}
                   >
-                    <IconCheck size={18} stroke={1.5} />
+                    <IconBan size={18} stroke={1.5} color="gray" />
                   </Button>
                 </Tooltip>
 
-                <Tooltip label={t("buttons.button.reject", { ns: "common" })}>
+                <Tooltip
+                  label={t("buttons.button.reject.complaint", { ns: "common" })}
+                >
                   <Button
                     onClick={() => {
                       setPostId(id);
                     }}
+                    aria-label={t("buttons.button.reject.complaint", {
+                      ns: "common",
+                    })}
                     c="red"
                     p={8}
                     variant="subtle"

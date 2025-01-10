@@ -1,8 +1,8 @@
 import { NavLink } from "react-router";
+import { Badge } from "@mantine/core";
 
 import type { TStyledNavLink } from "./StyledNavLink.types";
 import classes from "./StyledNavLink.module.css";
-import { Box } from "@mantine/core";
 
 export const StyledNavLink = ({
   to,
@@ -49,21 +49,9 @@ export const StyledNavLink = ({
       {children}
 
       {withCount && count > 0 && (
-        <Box
-          component="span"
-          bg="cyan"
-          c="white"
-          style={{
-            marginLeft: "auto",
-            borderRadius: "100%",
-            padding: 4,
-            minHeight: 24,
-            minWidth: 24,
-            textAlign: "center",
-          }}
-        >
+        <Badge size="md" circle ml="auto">
           {count}
-        </Box>
+        </Badge>
       )}
     </NavLink>
   );

@@ -37,7 +37,24 @@ export async function createNewPost(userId: number, postData: TPost) {
   return newPost;
 }
 
-export async function getAllPublishedPosts() {
+export async function getAllPublishedPosts(query: string, page: number) {
+  const totalCount = await db.$count(
+    posts,
+    and(
+      or(ilike(posts.title, `%${query}%`), ilike(posts.content, `%${query}%`)),
+      eq(posts.postStatus, POST_STATUS.PUBLISHED)
+    )
+  );
+
+  if (totalCount === 0) {
+    return { allPosts: [], actualPage: 1, pagesCount: 1 };
+  }
+
+  const { offset, actualPage, pagesCount } = getCountForPagination(
+    totalCount,
+    page
+  );
+
   const crt = db
     .select({
       author: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as(
@@ -61,10 +78,24 @@ export async function getAllPublishedPosts() {
     })
     .from(posts)
     .leftJoin(crt, eq(posts.ownerId, crt.id))
-    .where(eq(posts.postStatus, POST_STATUS.PUBLISHED))
+    .where(
+      and(
+        // or(
+        //   ilike(posts.title, `%${query}%`),
+        //   ilike(posts.content, `%${query}%`)
+        // ),
+        or(
+          ilike(posts.title, `%${query}%`),
+          ilike(posts.content, `%${query}%`)
+        ),
+        eq(posts.postStatus, POST_STATUS.PUBLISHED)
+      )
+    )
+    .limit(PAGINATION_LIMIT)
+    .offset(offset)
     .orderBy(desc(posts.publishedAt));
 
-  return allPosts;
+  return { allPosts, actualPage, pagesCount };
 }
 
 export async function getAllPostsForAdmin(query: string, page: number) {

@@ -28,5 +28,5 @@ export async function loader({ request }: Route.LoaderArgs) {
     page
   );
 
-  return { posts: allPosts, user: sessionUser, actualPage, pagesCount };
+  return { posts: allPosts, user: sessionUser, actualPage, pagesCount, query };
 }

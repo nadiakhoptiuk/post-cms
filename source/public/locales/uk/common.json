@@ -32,6 +32,8 @@
     "button.delete": "Видалити",
     "button.restore": "Відновити",
     "button.complain": "Поскаржитись",
+    "button.block": "Забанити допис",
+    "button.reject.complaint": "Відхилити скаргу",
     "button.publish": "Опублікувати",
     "button.reject": "Відхилити допис",
     "button.back": "Назад"
