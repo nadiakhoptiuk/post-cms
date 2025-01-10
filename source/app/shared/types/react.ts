@@ -1,5 +1,8 @@
 import { useLoaderData } from "react-router";
-import type { TextInputProps as MTextInputProps } from "@mantine/core";
+import type {
+  ModalProps,
+  TextInputProps as MTextInputProps,
+} from "@mantine/core";
 import type { FormScope } from "@rvf/react-router";
 
 import type { LANG_EN, LANG_UK } from "../constants/locale";
@@ -18,6 +21,11 @@ export type TRolesEnum = "admin" | "user";
 export type TErrorsMessages = {
   [key: string]: string;
 };
+
+export interface TModal extends ModalProps {}
+export interface TItemId {
+  itemId: number | null;
+}
 
 export type TFormType = { formType: "create" | "update" };
 
@@ -84,11 +92,12 @@ export type TDBPostRecord = {
   updatedById?: number | null;
   publishedAt?: Date | null;
   rejectedAt?: Date | null;
-  reason?: string | null;
+  rejectReason?: string | null;
   moderatedById?: number | null;
   moderatedBy?: string | null;
   complainedAt?: Date;
   complainedById?: number | null;
+  complaintReason: string | null;
   complainedBy?: string | null;
   blockedAt?: Date | null;
   blockedById?: number | null;

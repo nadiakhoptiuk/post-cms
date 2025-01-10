@@ -51,6 +51,7 @@ export const AuthForm = ({ formType }: { formType: "signup" | "login" }) => {
             label={t("userData.firstName", { ns: "user" })}
             scope={form.scope("firstName") as FormScope<string>}
           />
+
           <TextInput
             label={t("userData.lastName", { ns: "user" })}
             scope={form.scope("lastName") as FormScope<string>}
@@ -67,10 +68,10 @@ export const AuthForm = ({ formType }: { formType: "signup" | "login" }) => {
       />
 
       <Button
-        type='submit'
+        type="submit"
         loading={form.formState.isSubmitting}
         mt={15}
-        w='100%'
+        w="100%"
       >
         {formType === "signup"
           ? t("authForm.button.signup", { ns: "auth" })

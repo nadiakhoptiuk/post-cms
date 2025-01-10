@@ -4,7 +4,9 @@ import type { WithChildren } from "~/shared/types/react";
 
 export const TableTd = ({ children }: WithChildren) => {
   return (
-    <MTable.Td styles={{ td: { textWrap: "nowrap" } }}>{children}</MTable.Td>
+    <MTable.Td styles={{ td: { textWrap: "nowrap", minHeight: 57 } }}>
+      {children}
+    </MTable.Td>
   );
 };
 

@@ -1,6 +1,7 @@
 // import { PostgresError } from "postgres";
 
 export const errorHandler = (error: any) => {
+  console.log(error);
   if (error.name === "PostgresError") {
     console.log(error.constraint_name || "Database error");
 
@@ -10,7 +11,6 @@ export const errorHandler = (error: any) => {
   }
 
   // if (error instanceof DrizzleError) {
-
   // }
 
   if (error instanceof Error) {

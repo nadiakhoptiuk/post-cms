@@ -131,6 +131,7 @@ export const deleteUserAccount = async (
   const userId = session.get(SESSION_USER_KEY).id;
 
   await deleteUserById(userId, userId);
+  session.unset(SESSION_USER_KEY);
 
   return new Response(null, {
     status: 302,

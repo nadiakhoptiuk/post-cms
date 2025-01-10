@@ -16,6 +16,8 @@ export const SingleSelectField = <
   const inputId = useId();
   const errorId = useId();
 
+  console.log(field.error());
+  console.log("field.value()", field.value());
   return (
     <NativeSelect
       label={label}
@@ -27,7 +29,7 @@ export const SingleSelectField = <
       })}
       error={field.error()}
       styles={{ root: { flexGrow: 1 }, label: { fontWeight: "bold" } }}
-      size='md'
+      size="md"
       {...rest}
     />
   );

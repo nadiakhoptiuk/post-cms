@@ -5,16 +5,11 @@ import { Grid } from "@mantine/core";
 import { Modal } from "../../ui/Modal";
 import { Button } from "../../ui/Button";
 
-import type {
-  TModalForDeleting,
-  TModalForDeletingWithoutRedirect,
-} from "./ModalsForDeleting.types";
 import { NavigationLink } from "~/shared/constants/navigation";
+import type { TItemId, TModal } from "~/shared/types/react";
+import type { TModalWithAction } from "./ModalsForDeleting.types";
 
-export const ModalForDeletingPost = ({
-  opened,
-  onClose,
-}: TModalForDeleting) => {
+export const ModalForDeletingPost = ({ opened, onClose }: TModal) => {
   const { t } = useTranslation("common");
 
   return (
@@ -59,7 +54,7 @@ export const ModalForDeletingWithoutRedirect = ({
   opened,
   onClose,
   action,
-}: TModalForDeletingWithoutRedirect) => {
+}: TModalWithAction & TItemId) => {
   const { t } = useTranslation();
   const fetcher = useFetcher();
 

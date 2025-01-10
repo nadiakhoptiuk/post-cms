@@ -1,9 +1,6 @@
 import type { NavigationLink } from "~/shared/constants/navigation";
-import type { TModal } from "../../ui/Modal/Modal.types";
+import type { TModal } from "~/shared/types/react";
 
-export interface TModalForDeleting extends TModal {}
-
-export interface TModalForDeletingWithoutRedirect extends TModal {
-  itemId: number;
+export interface TModalWithAction extends TModal {
   action: (typeof NavigationLink)[keyof typeof NavigationLink];
 }

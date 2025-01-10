@@ -3,17 +3,17 @@ import { getSession } from "~/shared/.server/services/session";
 import type { Route } from "../../+types/root";
 import { SESSION_USER_KEY } from "~/shared/constants/common";
 
-import { deleteUserById } from "~/shared/.server/repository/users";
+import { complaintAboutPost } from "~/shared/.server/repository/posts";
 import { errorHandler } from "~/shared/.server/utils/errorHandler";
-import { deleteUserAccount } from "~/shared/.server/services/auth";
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
-  const userId = formData.get("id");
+  const postId = formData.get("postId");
+  const complaintReason = formData.get("complaintReason");
 
-  if (typeof userId !== "string") {
+  if (typeof postId !== "string" || typeof complaintReason !== "string") {
     return Response.json({
-      error: "PostId is not a string",
+      error: "Reason or postId is not a string",
     });
   }
 
@@ -21,11 +21,11 @@ export async function action({ request }: Route.ActionArgs) {
   const sessionUser = session.get(SESSION_USER_KEY);
 
   try {
-    if (Number(userId) === sessionUser.id) {
-      await deleteUserAccount(request, sessionUser.id);
-    } else {
-      await deleteUserById(Number(userId), sessionUser.id);
-    }
+    await complaintAboutPost(
+      Number(postId),
+      { complaintReason: complaintReason },
+      sessionUser.id
+    );
   } catch (error) {
     errorHandler(error);
   }

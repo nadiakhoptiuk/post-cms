@@ -29,10 +29,10 @@ export const TextInput = ({
       size="md"
       styles={{
         label: { fontWeight: "bold" },
-        wrapper: { marginBottom: 10 },
+        wrapper: { marginBottom: 20 },
         root: { position: "relative", flexGrow: 1 },
-        error: { position: "absolute", bottom: -10 },
-        ...styles,
+        error: { position: "absolute", bottom: -17 },
+        ...(styles !== undefined ? styles : {}),
       }}
     />
   );

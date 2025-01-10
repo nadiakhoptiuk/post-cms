@@ -1,0 +1,1 @@
+ALTER TABLE "Posts" RENAME COLUMN "reason" TO "rejectReason";

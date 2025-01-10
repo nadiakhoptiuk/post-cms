@@ -1,5 +1,5 @@
 import { db } from "server/app";
-import { and, desc, eq, ilike, isNotNull, or, sql } from "drizzle-orm";
+import { and, desc, eq, ilike, isNotNull, not, or, sql } from "drizzle-orm";
 import { posts, users } from "~/database/schema";
 
 import type { TDBPostRecord, TPost } from "~/shared/types/react";
@@ -389,10 +389,7 @@ export async function moderatePostById(
   postData: Partial<TPost & TDBPostRecord>,
   { confirmed }: { confirmed: boolean }
 ) {
-  const existedPost = await db
-    .select()
-    .from(posts)
-    .where(and(eq(posts.id, postId)));
+  const existedPost = await db.select().from(posts).where(eq(posts.id, postId));
 
   if (!existedPost[0]) {
     throw new Error("Post with such id does not exist");
@@ -409,7 +406,7 @@ export async function moderatePostById(
     .where(eq(posts.id, postId))
     .returning();
 
-  return updatedPost;
+  return updatedPost[0];
 }
 
 export async function deletePostById(postId: number, userId: number) {
@@ -436,4 +433,31 @@ export async function deletePostById(postId: number, userId: number) {
   }
 
   return deletedPost[0];
+}
+
+export async function complaintAboutPost(
+  postId: number,
+  postData: Partial<TPost & TDBPostRecord>,
+  userId: number
+) {
+  const existingPost = await db
+    .select()
+    .from(posts)
+    .where(and(eq(posts.id, postId), not(eq(posts.ownerId, userId))));
+
+  if (!existingPost[0]) {
+    throw new Error("Post with such id does not exist");
+  }
+
+  const updatedPost = await db
+    .update(posts)
+    .set({
+      ...postData,
+      complainedAt: sql`NOW()`,
+      complainedById: userId,
+    })
+    .where(and(eq(posts.id, postId), not(eq(posts.ownerId, userId))))
+    .returning();
+
+  return updatedPost[0];
 }

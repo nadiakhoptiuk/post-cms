@@ -104,9 +104,9 @@ export const PostsTable = ({ posts }: TPostTable) => {
                     variant="subtle"
                     p={8}
                     aria-label={t("buttons.button.publish", { ns: "common" })}
-                    onClick={() =>
-                      fetcher.submit({ postId: id }, { method: "post" })
-                    }
+                    onClick={() => {
+                      fetcher.submit({ postId: id }, { method: "post" });
+                    }}
                   >
                     <IconCheck size={18} stroke={1.5} />
                   </Button>
@@ -176,7 +176,7 @@ export const PostsTable = ({ posts }: TPostTable) => {
 
       {isModerationPage && opened && postId && (
         <ModalRejectPostWithoutRedirect
-          postId={postId}
+          itemId={postId}
           opened={opened}
           onClose={() => setPostId(null)}
         />

@@ -1,4 +1,4 @@
-import { Box, Card, Flex, Grid, Text, Title } from "@mantine/core";
+import { Card, Flex, Grid, Text, Title } from "@mantine/core";
 import parse from "html-react-parser";
 import { useTranslation } from "react-i18next";
 import {
@@ -15,8 +15,14 @@ import { NavigationLink } from "~/shared/constants/navigation";
 import type { TPostCard } from "./PostCard.types";
 import s from "./PostCard.module.css";
 import { StatusBadge } from "../StatusBadge";
+import { Button } from "../Button";
 
-export const PostCard = ({ item, isUserOwner, location }: TPostCard) => {
+export const PostCard = ({
+  item,
+  isUserOwner,
+  location,
+  setPostId,
+}: TPostCard) => {
   const { t } = useTranslation();
   const { id, title, slug, author, publishedAt, updatedAt, status } = item;
 
@@ -54,7 +60,7 @@ export const PostCard = ({ item, isUserOwner, location }: TPostCard) => {
           </Text>
         </Flex>
 
-        <Text c="dark" size="md" my="md" className={s.content} mih={75}>
+        <Text c="dark" size="md" my="md" className={s.content} mih={99}>
           {parse(item.content)}
         </Text>
 
@@ -78,7 +84,7 @@ export const PostCard = ({ item, isUserOwner, location }: TPostCard) => {
               to={`/${slug}`}
               variant="accent"
               fill="filled"
-              style={{ width: "100%" }}
+              style={{ width: "100%", height: "100%" }}
             >
               <IconEye size={18} color="white" />
               {t("buttons.button.view", { ns: "common" })}
@@ -87,15 +93,17 @@ export const PostCard = ({ item, isUserOwner, location }: TPostCard) => {
 
           {!isUserOwner && (
             <Grid.Col span={1}>
-              <StyledLink
-                to={`/${slug}/complain`}
-                variant="unstyled"
-                fill="outline"
-                style={{ width: "100%" }}
+              <Button
+                variant="subtle"
+                w="100%"
+                h="100%"
+                styles={{ label: { gap: 10 } }}
+                aria-label={t("buttons.button.complain", { ns: "common" })}
+                onClick={() => setPostId(id)}
               >
                 <IconAlertSquareRounded size={18} color="pink" />
                 {t("buttons.button.complain", { ns: "common" })}
-              </StyledLink>
+              </Button>
             </Grid.Col>
           )}
 

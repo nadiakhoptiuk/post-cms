@@ -30,6 +30,7 @@ export const posts = pgTable("Posts", {
     .references(() => users.id)
     .notNull(),
   postStatus: postStatusEnum().notNull().default("on moderation"),
-  reason: t.varchar({ length: 50 }),
+  rejectReason: t.varchar({ length: 50 }),
+  complaintReason: t.varchar({ length: 50 }),
   ...postTimestamps,
 });

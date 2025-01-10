@@ -65,22 +65,13 @@ export const updatePostAction = async (
 };
 
 export const confirmPublishPost = async (postId: number, userId: number) => {
-  try {
-    return await moderatePostById(
-      Number(postId),
-      {
-        moderatedById: userId,
-      },
-      { confirmed: true }
-    );
-  } catch (error) {
-    return Response.json(
-      {
-        error: "An unexpected error occurred",
-      },
-      { status: 400 }
-    );
-  }
+  return await moderatePostById(
+    Number(postId),
+    {
+      moderatedById: userId,
+    },
+    { confirmed: true }
+  );
 };
 
 export const rejectPublishPost = async (
@@ -88,21 +79,12 @@ export const rejectPublishPost = async (
   postId: number,
   userId: number
 ) => {
-  try {
-    await moderatePostById(
-      Number(postId),
-      {
-        reason: reason,
-        moderatedById: userId,
-      },
-      { confirmed: false }
-    );
-  } catch (error) {
-    return Response.json(
-      {
-        error: "An unexpected error occurred",
-      },
-      { status: 400 }
-    );
-  }
+  await moderatePostById(
+    Number(postId),
+    {
+      rejectReason: reason,
+      moderatedById: userId,
+    },
+    { confirmed: false }
+  );
 };

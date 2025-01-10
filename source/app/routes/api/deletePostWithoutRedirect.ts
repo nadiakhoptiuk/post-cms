@@ -8,6 +8,12 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const postId = formData.get("id");
 
+  if (typeof postId !== "string") {
+    return Response.json({
+      error: "PostId is not a string",
+    });
+  }
+
   const session = await getSession(request.headers.get("cookie"));
   const sessionUser = session.get(SESSION_USER_KEY);
 

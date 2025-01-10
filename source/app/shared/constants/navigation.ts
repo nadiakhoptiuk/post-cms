@@ -47,6 +47,7 @@ export const enum NavigationLink {
   CREATE_NEW_POST = "create-new-post",
   DELETE_POST = "delete-post",
   REJECT_PUBLISHING_POST = "reject-publishing",
+  COMPLAINT_ABOUT_POST = "complaint-about-post",
 }
 
 export const DashboardNavLinks = [

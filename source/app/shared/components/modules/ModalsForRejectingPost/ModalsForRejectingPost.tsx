@@ -8,8 +8,7 @@ import { TextInput } from "../../ui/TextInput";
 
 import { rejectPostValidator } from "~/shared/utils/validators/rejectPostValidator";
 
-import type { TModal, TRejectedModal } from "../../ui/Modal/Modal.types";
-import type { TErrorsMessages } from "~/shared/types/react";
+import type { TErrorsMessages, TItemId, TModal } from "~/shared/types/react";
 import { NavigationLink } from "~/shared/constants/navigation";
 
 export const ModalRejectPost = ({ opened, onClose }: TModal) => {
@@ -63,10 +62,10 @@ export const ModalRejectPost = ({ opened, onClose }: TModal) => {
 };
 
 export const ModalRejectPostWithoutRedirect = ({
-  postId,
+  itemId,
   opened,
   onClose,
-}: TRejectedModal) => {
+}: TModal & TItemId) => {
   const { t } = useTranslation("common");
   const errorMessages = t("formErrorsMessages", {
     ns: "common",
@@ -83,7 +82,7 @@ export const ModalRejectPostWithoutRedirect = ({
     handleSubmit: (data) => {
       {
         fetcher.submit(
-          { ...data, postId: postId },
+          { ...data, postId: itemId },
           { method: "post", action: NavigationLink.REJECT_PUBLISHING_POST }
         );
         onClose();

@@ -28,11 +28,11 @@ export const UsersTable = ({ users }: TUsersTable) => {
   }, [userId]);
 
   const rows = users.map(
-    ({ id, createdAt, lastName, firstName, email, role }) => {
+    ({ id, createdAt, deletedAt, lastName, firstName, email, role }) => {
       const createdRelDate = formatDateToRelative(createdAt);
 
       return (
-        <MTable.Tr key={id}>
+        <MTable.Tr key={id} mih={57}>
           <TableTd>
             <div>
               <Text fz="sm" fw={500}>
@@ -57,18 +57,20 @@ export const UsersTable = ({ users }: TUsersTable) => {
                 <IconPencil size={18} stroke={1.5} />
               </StyledNavLink>
 
-              <Tooltip label={t("buttons.button.delete", { ns: "common" })}>
-                <Button
-                  onClick={() => {
-                    setUserId(id);
-                  }}
-                  c="red"
-                  p={8}
-                  variant="subtle"
-                >
-                  <IconTrash size={18} stroke={1.5} />
-                </Button>
-              </Tooltip>
+              {deletedAt === null && (
+                <Tooltip label={t("buttons.button.delete", { ns: "common" })}>
+                  <Button
+                    onClick={() => {
+                      setUserId(id);
+                    }}
+                    c="red"
+                    p={8}
+                    variant="subtle"
+                  >
+                    <IconTrash size={18} stroke={1.5} />
+                  </Button>
+                </Tooltip>
+              )}
             </Flex>
           </TableTd>
         </MTable.Tr>

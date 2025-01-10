@@ -1,23 +1,19 @@
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@rvf/react-router";
 import { useTranslation } from "react-i18next";
-import { Grid } from "@mantine/core";
 import { Form } from "react-router";
 
 import { TextInput } from "../../ui/TextInput";
 import { SlugInput } from "../../ui/SlugInput";
 import { RichTextEditor } from "../../ui/RichTextEditor";
 import { Button } from "../../ui/Button";
-import { Modal } from "../../ui/Modal";
 
 import { postValidator } from "~/shared/utils/validators/postValidator";
 
 import type { TErrorsMessages, TFormType, TLocale } from "~/shared/types/react";
 import type { TPostForm } from "./PostForm.types";
-import s from "./PostForm.module.css";
-import { NavigationLink } from "~/shared/constants/navigation";
 import { ModalForDeletingPost } from "../ModalsForDeleting";
-import { useEffect } from "react";
+import s from "./PostForm.module.css";
 
 export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -92,40 +88,6 @@ export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
       )}
 
       {opened && <ModalForDeletingPost opened={opened} onClose={close} />}
-      {/* <Modal
-        opened={opened}
-        onClose={close}
-        title={t("modal.title", { ns: "common" })}
-        p="lg"
-        centered
-      >
-        {
-          <Grid columns={2}>
-            <Grid.Col span={1}>
-              <Button variant="light" onClick={close} w="100%">
-                Cancel
-              </Button>
-            </Grid.Col>
-
-            <Grid.Col span={1}>
-              <Form method="POST" action={NavigationLink.DELETE_POST}>
-                <Button
-                  type="submit"
-                  loading={form.formState.isSubmitting}
-                  c="white"
-                  variant="filled"
-                  bg="red"
-                  fullWidth
-                >
-                  {t("buttons.button.delete", {
-                    ns: "common",
-                  })}
-                </Button>
-              </Form>
-            </Grid.Col>
-          </Grid>
-        }
-      </Modal> */}
     </>
   );
 };

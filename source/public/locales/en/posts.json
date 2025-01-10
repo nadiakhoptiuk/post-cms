@@ -9,7 +9,8 @@
     "updatedBy": "Updated by",
     "status": "Status",
 
-    "rejectReason": "Reason"
+    "rejectReason": "Reason for refusal",
+    "complaintReason": "Why are you complaining about this post?"
   },
 
   "link.toAll": "To All Posts",
@@ -20,6 +21,17 @@
 
   "noPosts": "There are no posts yet...",
   "noPostsForModeration": "There are no posts for moderation...",
+
+  "complain.options": [
+    "I just don't like it",
+    "Bullying or unwanted content",
+    "Self-harm",
+    "Violence or hostility",
+    "Sale of goods of limited use",
+    "Naked body / sexual activity",
+    "Fraud or deception",
+    "Spam"
+  ],
 
   "richEditorLabels": {
     "highlightControlLabel": "Highlight text",
