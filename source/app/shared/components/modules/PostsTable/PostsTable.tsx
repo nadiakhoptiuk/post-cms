@@ -142,8 +142,6 @@ export const PostsTable = ({ posts }: TPostTable) => {
                 </StyledNavLink>
 
                 <Tooltip label={t("buttons.button.publish", { ns: "common" })}>
-                  {" "}
-                  //TODO
                   <Button
                     type="button"
                     variant="subtle"
