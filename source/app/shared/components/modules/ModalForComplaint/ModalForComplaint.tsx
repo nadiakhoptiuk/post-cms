@@ -16,7 +16,6 @@ export const ModalForComplaint = ({
   onClose,
   itemId,
 }: TModal & TItemId) => {
-  console.log(itemId);
   const { t } = useTranslation("common");
   const fetcher = useFetcher();
   const errorMessages = t("formErrorsMessages", {
@@ -39,7 +38,6 @@ export const ModalForComplaint = ({
     method: "POST",
     handleSubmit: (data) => {
       {
-        console.log("data", data);
         fetcher.submit(
           { ...data, postId: itemId },
           { method: "post", action: NavigationLink.COMPLAINT_ABOUT_POST }

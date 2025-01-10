@@ -17,8 +17,6 @@ export const PostsList = ({ posts, userId }: TPostList) => {
   const location = useLocation();
   const isOwnList = location.pathname.includes(NavigationLink.MY_POSTS);
 
-  console.log(postId);
-
   useEffect(() => {
     if (!postId) {
       close();

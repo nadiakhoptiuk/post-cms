@@ -16,8 +16,6 @@ export const SingleSelectField = <
   const inputId = useId();
   const errorId = useId();
 
-  console.log(field.error());
-  console.log("field.value()", field.value());
   return (
     <NativeSelect
       label={label}

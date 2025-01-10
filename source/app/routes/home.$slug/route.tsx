@@ -1,7 +1,14 @@
 import { Box, Container, Group } from "@mantine/core";
-import { IconArrowNarrowLeft } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
+import {
+  IconAlertSquareRounded,
+  IconArrowNarrowLeft,
+} from "@tabler/icons-react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useNavigate } from "react-router";
+
+import { ModalForComplaint } from "~/shared/components/modules/ModalForComplaint";
 import { SinglePostPage } from "~/shared/components/modules/SinglePostPage";
 import { Button } from "~/shared/components/ui/Button";
 
@@ -14,8 +21,19 @@ export const handle = { i18n: ["posts", "common"] };
 
 export default function HomeSinglePostPage() {
   const { post, user } = useLoaderData();
-  const { t } = useTranslation("posts");
   const navigate = useNavigate();
+  const { t } = useTranslation("posts");
+  const [opened, { open, close }] = useDisclosure(false);
+  const [postId, setPostId] = useState<number | null>(null);
+  const isOwnPost = user.id === post.ownerId;
+
+  useEffect(() => {
+    if (!postId) {
+      close();
+    } else {
+      open();
+    }
+  }, [postId]);
 
   return (
     <Box component="section">
@@ -36,7 +54,28 @@ export default function HomeSinglePostPage() {
           </StyledLink>
         </Group>
 
-        <SinglePostPage post={post} userId={user?.id} />
+        <SinglePostPage post={post} />
+
+        {user.id && !isOwnPost && (
+          <Button
+            variant="subtle"
+            mt={10}
+            styles={{ label: { gap: 10 } }}
+            aria-label={t("buttons.button.complain", { ns: "common" })}
+            onClick={() => setPostId(post.id)}
+          >
+            <IconAlertSquareRounded size={18} color="pink" />
+            {t("buttons.button.complain", { ns: "common" })}
+          </Button>
+        )}
+
+        {user.id && !isOwnPost && opened && (
+          <ModalForComplaint
+            opened={opened}
+            onClose={() => setPostId(null)}
+            itemId={postId}
+          />
+        )}
       </Container>
     </Box>
   );
