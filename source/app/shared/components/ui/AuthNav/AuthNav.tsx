@@ -26,7 +26,7 @@ export const AuthNav = ({ burgerMenu = false }: TAuthNav) => {
 
   return (
     <List
-      display='flex'
+      display="flex"
       styles={{
         root: {
           alignItems: burgerMenu ? "flex-start" : "center",

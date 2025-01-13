@@ -1,4 +1,4 @@
-import { TLocale } from "~/shared/types/remix";
+import type { TLocale } from "~/shared/types/react";
 
 export type TBurgerMenu = {
   opened: boolean;

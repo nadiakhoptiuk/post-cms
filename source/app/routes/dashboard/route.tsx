@@ -1,6 +1,6 @@
 import { Outlet, useLoaderData } from "react-router";
 
-import { DashboardLayout } from "~/shared/components/layout/Dashboard";
+import { DashboardLayout } from "~/routes/layouts/Dashboard";
 
 export const handle = { i18n: ["dashboard", "common"] };
 

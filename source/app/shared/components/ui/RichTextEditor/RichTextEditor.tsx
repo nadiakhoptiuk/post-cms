@@ -73,8 +73,8 @@ export const Editor = ({ label, scope }: TTextInput) => {
         editor={editor}
         labels={labels}
         variant="default"
-        className={!!field.error() ? s.errorEditor : s.efitor}
-        // styles={{ root: { borderColor: !!field.error() ? "red" : "" } }}
+        className={!!field.error() ? s.errorEditor : s.editor}
+        styles={{ root: { borderColor: !!field.error() ? "red" : "" } }}
       >
         <RichTextEditor.Toolbar sticky>
           <RichTextEditor.ControlsGroup>

@@ -15,7 +15,6 @@ import { Button } from "../Button";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import type { TPostCard } from "./PostCard.types";
-import s from "./PostCard.module.css";
 
 export const PostCard = ({ item, userId, location, setPostId }: TPostCard) => {
   const { t } = useTranslation();
@@ -56,7 +55,7 @@ export const PostCard = ({ item, userId, location, setPostId }: TPostCard) => {
           </Text>
         </Flex>
 
-        <Text c="dark" size="md" my="md" className={s.content} mih={99}>
+        <Text lineClamp={4} c="dark" size="md" my="md" mih={99}>
           {parse(item.content)}
         </Text>
 

@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { getSession } from "../services/session";
 import {
   getAllPostsSlugs,
+  getPostById,
   moderatePostById,
   updatePostById,
 } from "../repository/posts";
@@ -55,10 +56,18 @@ export const updatePostAction = async (
     throw redirect(NavigationLink.LOGIN);
   }
 
+  const existingPost = await getPostById(postId);
+
+  if (!existingPost || !existingPost.slug) {
+    throw new Error("Post with such id does not exist");
+  }
+
+  const existingSlugId = existingPost.slug.slice(-36);
+
   try {
     await updatePostById(Number(postId), sessionUser.id, {
       title,
-      slug,
+      slug: `${slug}-${existingSlugId}`,
       content,
     });
 

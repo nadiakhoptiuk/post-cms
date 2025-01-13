@@ -19,12 +19,12 @@ export const PasswordInput = ({ label, scope, placeholder }: TTextInput) => {
         "aria-describedby": errorId,
         "aria-invalid": !!field.error(),
       })}
-      size='md'
+      size="md"
       error={field.error()}
       styles={{
         label: { fontWeight: "bold" },
         wrapper: { marginBottom: 10 },
-        root: { position: "relative", flexGrow: 1, minWidth: "230px" },
+        root: { position: "relative", flexGrow: 1, width: "100%" },
         error: { position: "absolute", bottom: -10 },
       }}
     />

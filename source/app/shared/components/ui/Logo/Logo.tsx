@@ -1,35 +1,40 @@
 import { Link } from "react-router";
-import { Text, ThemeIcon } from "@mantine/core";
+import { NavLink, ThemeIcon } from "@mantine/core";
 import { IconFloatNone } from "@tabler/icons-react";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 
 import type { TLogo } from "./Logo.types";
 
-import s from "./Logo.module.css";
-
 export const Logo = ({ accent = true }: TLogo) => {
   return (
-    <Link to={NavigationLink.HOME} className={s.logoLink}>
-      <ThemeIcon
-        variant="gradient"
-        size="lg"
-        aria-label="Gradient action icon"
-        gradient={
-          accent
-            ? { from: "blue", to: "cyan", deg: 245 }
-            : { from: "gray", to: "white", deg: 90 }
-        }
-      >
-        <IconFloatNone
-          size={28}
-          style={{ color: accent ? "white" : "white" }}
-        />
-      </ThemeIcon>
-
-      <Text component="span" size="xl" fw={900} c="blue">
-        POST CMS
-      </Text>
-    </Link>
+    <NavLink
+      component={Link}
+      to={NavigationLink.HOME}
+      variant="subtle"
+      label="POST CMS"
+      leftSection={
+        <ThemeIcon
+          variant="gradient"
+          size="lg"
+          aria-label="Gradient action icon"
+          gradient={
+            accent
+              ? { from: "blue", to: "cyan", deg: 245 }
+              : { from: "gray", to: "white", deg: 90 }
+          }
+        >
+          <IconFloatNone
+            size={28}
+            style={{ color: accent ? "white" : "white" }}
+          />
+        </ThemeIcon>
+      }
+      fw={900}
+      fz="lg"
+      td="none"
+      w="fit-content"
+      c="blue"
+    />
   );
 };

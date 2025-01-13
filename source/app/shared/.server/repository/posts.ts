@@ -14,12 +14,7 @@ import {
 import { posts, users } from "~/database/schema";
 
 import type { TDBPostRecord, TPost } from "~/shared/types/react";
-import { generateUniqueIdForSlug } from "../utils/postUtils";
-import {
-  PAGINATION_LIMIT,
-  POST_STATUS,
-  ROLE_ADMIN,
-} from "~/shared/constants/common";
+import { PAGINATION_LIMIT, POST_STATUS } from "~/shared/constants/common";
 import { getCountForPagination } from "../utils/commonUtils";
 
 const concattedUserName = sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`;
@@ -49,13 +44,10 @@ const upd = db
   .as("upd");
 
 export async function createNewPost(userId: number, postData: TPost) {
-  const idForSlug = await generateUniqueIdForSlug();
-
   const createdPost = await db
     .insert(posts)
     .values({
       ...postData,
-      slug: `${postData.slug}-${idForSlug}`,
       ownerId: userId,
     })
     .returning({
@@ -272,10 +264,6 @@ export async function getPostById(postId: number) {
     .leftJoin(crt, eq(posts.ownerId, crt.id))
     .where(eq(posts.id, postId));
 
-  if (!existedPost) {
-    throw new Error("Post with such id does not exist");
-  }
-
   return existedPost[0];
 }
 
@@ -327,7 +315,9 @@ export async function getPostBySlug(slug: string) {
       author: crt.author,
     })
     .from(posts)
-    .where(eq(posts.slug, slug))
+    .where(
+      and(eq(posts.slug, slug), eq(posts.postStatus, POST_STATUS.PUBLISHED))
+    )
     .leftJoin(crt, eq(posts.ownerId, crt.id))
     .leftJoin(upd, eq(posts.updatedById, upd.id));
 
@@ -386,22 +376,10 @@ export async function updatePostById(
   //   throw new Error("Post with such id does not exist");
   // }
 
-  const existingPost = await db
-    .select({ slug: posts.slug })
-    .from(posts)
-    .where(eq(posts.id, postId));
-
-  if (!existingPost[0] || !existingPost[0].slug) {
-    throw new Error("Post with such id does not exist");
-  }
-
-  const existingSlugId = existingPost[0].slug.slice(-36);
-
   const updatedPost = await db
     .update(posts)
     .set({
       ...postData,
-      slug: `${postData.slug}-${existingSlugId}`,
       updatedAt: sql`NOW()`,
       updatedById: userId,
     })

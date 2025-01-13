@@ -34,8 +34,8 @@ export const ModalForDeletingPost = ({ opened, onClose }: TModal) => {
             <Form method="post" action={NavigationLink.DELETE_POST}>
               <Button
                 type="submit"
-                c="white"
                 variant="filled"
+                c="white"
                 bg="red"
                 fullWidth
               >
