@@ -1,4 +1,4 @@
-import { eq, ilike, or, sql } from "drizzle-orm";
+import { desc, eq, ilike, or, sql } from "drizzle-orm";
 
 import { db } from "server/app";
 import { passwordHash, verifyPasswordAndSerialize } from "../utils/usersUtils";
@@ -131,7 +131,7 @@ export async function getAllUsers(query: string, page: number) {
     .leftJoin(del, eq(users.deletedById, del.id))
     .limit(PAGINATION_LIMIT)
     .offset(offset)
-    .orderBy(users.lastName, users.firstName);
+    .orderBy(desc(users.lastName), desc(users.firstName));
 
   return { allUsers, actualPage, pagesCount };
 }
@@ -157,7 +157,7 @@ export async function getUserById(id: number) {
     .from(users)
     .as("del");
 
-  const existedUser = await db
+  const existingUser = await db
     .select({
       firstName: users.firstName,
       lastName: users.lastName,
@@ -175,7 +175,7 @@ export async function getUserById(id: number) {
     .leftJoin(upd, eq(users.updatedById, upd.id))
     .leftJoin(del, eq(users.deletedById, del.id));
 
-  return existedUser[0];
+  return existingUser[0];
 }
 
 export async function updateUserById(

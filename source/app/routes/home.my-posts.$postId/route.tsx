@@ -26,6 +26,9 @@ export default function HomeMyCurrentPostPage() {
     deletedBy,
     publishedAt,
     moderatedBy,
+    title,
+    content,
+    slug,
   } = post;
 
   const createdDate = formatDateWithTime(createdAt);
@@ -74,7 +77,10 @@ export default function HomeMyCurrentPostPage() {
           )}
         </Box>
 
-        <PostForm postData={post} formType="update" />
+        <PostForm
+          postData={{ title, content, slug: slug.slice(0, -37) }}
+          formType="update"
+        />
       </Container>
     </Box>
   );

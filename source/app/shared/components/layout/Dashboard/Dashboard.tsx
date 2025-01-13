@@ -38,66 +38,60 @@ export const DashboardLayout = ({
   ));
 
   return (
-    <div>
-      <AppShell
-        header={{ height: 60 }}
-        navbar={{
-          width: 250,
-          breakpoint: "xs",
-          collapsed: { mobile: !menuOpened },
-        }}
-        padding="md"
-      >
-        <AppShell.Header mih={61}>
-          <Group h="100%" px="md">
-            <Burger
-              opened={menuOpened}
-              onClick={toggleMenu}
-              hiddenFrom="xs"
-              aria-label={t("aria.toggleMenu")}
-            />
-            <Logo />
+    <AppShell
+      header={{ height: 60 }}
+      navbar={{
+        width: 250,
+        breakpoint: "xs",
+        collapsed: { mobile: !menuOpened },
+      }}
+      padding="md"
+    >
+      <AppShell.Header mih={61}>
+        <Group h="100%" px="md">
+          <Burger
+            opened={menuOpened}
+            onClick={toggleMenu}
+            hiddenFrom="xs"
+            aria-label={t("aria.toggleMenu")}
+          />
+          <Logo />
 
-            <LanguageSelector
-              locale={data?.locale || DEFAULT_LANG}
-              styles={{ root: { marginLeft: "auto" } }}
-            />
+          <LanguageSelector
+            locale={data?.locale || DEFAULT_LANG}
+            styles={{ root: { marginLeft: "auto" } }}
+          />
+        </Group>
+      </AppShell.Header>
+
+      <AppShell.Navbar p="md" mt={1}>
+        <ScrollArea>
+          <Group>
+            <List component="div" spacing="xs" w="100%">
+              {links}
+            </List>
           </Group>
-        </AppShell.Header>
+        </ScrollArea>
 
-        <AppShell.Navbar p="md" mt={1}>
-          <ScrollArea>
-            <Group>
-              <List component="div" spacing="xs" w="100%">
-                {links}
-              </List>
-            </Group>
-          </ScrollArea>
+        <div className={classes.footer}>
+          <Form action={NavigationLink.LOGOUT} method="post">
+            <Button
+              type="submit"
+              c="gray"
+              styles={{
+                root: { width: "100%", padding: "8px 12px" },
+                inner: { justifyContent: "flex-start" },
+              }}
+              variant="transparent"
+            >
+              <IconLogout size={22} stroke={1.5} style={{ marginRight: 10 }} />
+              {t("auth.logout")}
+            </Button>
+          </Form>
+        </div>
+      </AppShell.Navbar>
 
-          <div className={classes.footer}>
-            <Form action={NavigationLink.LOGOUT} method="post">
-              <Button
-                type="submit"
-                c="gray"
-                styles={{
-                  root: { width: "100%", padding: "8px 12px" },
-                  inner: { justifyContent: "flex-start" },
-                }}
-                variant="transparent"
-              >
-                <IconLogout
-                  size={22}
-                  stroke={1.5}
-                  style={{ marginRight: 10 }}
-                />
-                {t("auth.logout")}
-              </Button>
-            </Form>
-          </div>
-        </AppShell.Navbar>
-
-        <AppShell.Main className="content">{children}</AppShell.Main>
-      </AppShell>
-    </div>
+      <AppShell.Main className="content">{children}</AppShell.Main>
+    </AppShell>
   );
 };

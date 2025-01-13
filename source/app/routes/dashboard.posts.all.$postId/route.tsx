@@ -1,5 +1,6 @@
 import { useLoaderData } from "react-router";
 import { Box, Container } from "@mantine/core";
+
 import { PostForm } from "~/shared/components/modules/PostForm";
 
 export { loader } from "./loader";
@@ -15,7 +16,7 @@ export default function DashBoardHomePage() {
           postData={{
             title: post.title,
             content: post.content,
-            slug: post.slug,
+            slug: post.slug.slice(0, -37),
           }}
           formType="update"
         />

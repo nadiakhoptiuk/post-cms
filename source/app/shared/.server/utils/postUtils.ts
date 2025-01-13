@@ -1,20 +1,30 @@
-import { NavigationLink } from "~/shared/constants/navigation";
 import { redirect } from "react-router";
+import { v4 as uuidv4 } from "uuid";
 
 import { getSession } from "../services/session";
-import { moderatePostById, updatePostById } from "../repository/posts";
+import {
+  getAllPostsSlugs,
+  moderatePostById,
+  updatePostById,
+} from "../repository/posts";
 
+import { NavigationLink } from "~/shared/constants/navigation";
 import { SESSION_USER_KEY } from "~/shared/constants/common";
 
-export const isTherePostIdInSlug = (slug: string, postId: number) => {
-  const existedPostSlugAr = slug.split("-");
-  const postIdInSlug = Number(existedPostSlugAr[existedPostSlugAr.length - 1]);
+export const checkIfIdExists = async (id: string) => {
+  const allPostsSlugs = await getAllPostsSlugs();
 
-  const isTherePostIdInSlug = !isNaN(postIdInSlug);
+  return allPostsSlugs.some(({ slug }) => slug.includes(id));
+};
 
-  if (!isTherePostIdInSlug) return false;
+export const generateUniqueIdForSlug = async () => {
+  let id = uuidv4();
 
-  return postIdInSlug === postId;
+  while (await checkIfIdExists(id)) {
+    id = uuidv4();
+  }
+
+  return id;
 };
 
 export const updatePostAction = async (

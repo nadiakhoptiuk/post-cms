@@ -6,6 +6,8 @@ import { getSession } from "~/shared/.server/services/session";
 import { NavigationLink } from "~/shared/constants/navigation";
 import { SESSION_USER_KEY } from "~/shared/constants/common";
 import type { Route } from "../../+types/root";
+import { getUserById } from "~/shared/.server/repository/users";
+import { errorHandler } from "~/shared/.server/utils/errorHandler";
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
@@ -32,6 +34,14 @@ export async function action({ request }: Route.ActionArgs) {
   }
 
   try {
+    const existedUser = await getUserById(sessionUser.id);
+
+    if (!existedUser) {
+      throw new Error("User with such id does not exist");
+    }
+
+    // TODO add a functionality for generate unique id
+
     await createNewPost(sessionUser.id, {
       title,
       slug,
@@ -40,15 +50,6 @@ export async function action({ request }: Route.ActionArgs) {
 
     return redirect(NavigationLink.MY_POSTS);
   } catch (error: any) {
-    if (error?.name === "PostgresError") {
-      console.log(error.constraint_name);
-    }
-
-    return Response.json(
-      {
-        error: "An unexpected error occurred",
-      },
-      { status: 400 }
-    );
+    errorHandler(error);
   }
 }
