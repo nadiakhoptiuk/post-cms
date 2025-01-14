@@ -11,7 +11,7 @@ export default function HomeNewPostPage() {
   const { t } = useTranslation();
 
   return (
-    <Box component="section">
+    <Box component="section" my="lg">
       <Container>
         <Title
           order={2}

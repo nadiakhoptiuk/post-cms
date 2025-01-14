@@ -33,7 +33,7 @@ export const PostsList = ({
 
   return (
     <>
-      {posts.length > 0 && (
+      {posts && posts?.length > 0 && (
         <Grid styles={{ root: { width: "100%" } }}>
           {posts.map((itemData) => {
             return (
@@ -62,7 +62,7 @@ export const PostsList = ({
         />
       )}
 
-      {posts.length === 0 && (
+      {posts?.length === 0 && (
         <Text mx="auto" w="fit-content" size="lg">
           {t("noPosts")}
         </Text>

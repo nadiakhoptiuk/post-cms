@@ -1,4 +1,4 @@
-import { getAuthUser } from "~/shared/.server/services/auth";
+import { authGate } from "~/shared/.server/services/auth";
 import { NavigationLink } from "~/shared/constants/navigation";
 
 import {
@@ -9,24 +9,23 @@ import { ROLE_ADMIN } from "~/shared/constants/common";
 import type { Route } from "./+types/route";
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
-  const sessionUser = await getAuthUser(
+  return await authGate(
     request,
     {
       isPublicRoute: false,
-      isAuthRoute: false,
       allowedRoles: [ROLE_ADMIN],
+    },
+    async () => {
+      const postsOnModeration = await getCountOfPostsForModeration();
+      const postsWithComplaints = await getCountOfPostsWithComplaints();
+
+      return {
+        postsOnModeration,
+        postsWithComplaints,
+      };
     },
     {
       failureRedirect: NavigationLink.LOGIN,
     }
   );
-
-  const postsOnModeration = await getCountOfPostsForModeration();
-  const postsWithComplaints = await getCountOfPostsWithComplaints();
-
-  return Response.json({
-    user: sessionUser,
-    postsOnModeration,
-    postsWithComplaints,
-  });
 };

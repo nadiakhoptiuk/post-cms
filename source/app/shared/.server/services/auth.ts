@@ -158,15 +158,19 @@ export const getAuthUser = async (
 export const publicGate = async (
   request: Request,
   routeOptions: GetRouteOptions,
-  cb: () => Promise<any>,
+  cb: (sessionUser: TSerializedUser | null) => Promise<any>,
   options?: GetCurrentUserOptions
 ) => {
   try {
-    await getAuthUser(request, routeOptions, options);
+    const sessionUser = await getAuthUser(request, routeOptions, options);
 
-    return await cb();
+    return await cb(sessionUser);
   } catch (error) {
     const res = errorHandler(error);
+
+    if (res instanceof Response) {
+      return res;
+    }
 
     const session = await getSession(request.headers.get("cookie"));
     session.set(SESSION_ERROR_KEY, res.data);
@@ -193,6 +197,10 @@ export const authGate = async (
     return await cb(sessionUser);
   } catch (error) {
     const res = errorHandler(error);
+
+    if (res instanceof Response) {
+      return res;
+    }
 
     const session = await getSession(request.headers.get("cookie"));
     session.set(SESSION_ERROR_KEY, res.data);

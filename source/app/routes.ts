@@ -4,23 +4,10 @@ import { NavigationLink } from "./shared/constants/navigation";
 export default [
   // ----------------------- HOME ----------------------------
   layout("./routes/home/route.tsx", [
-    route(NavigationLink.HOME, "./routes/home/site/route.tsx", [
-      route(
-        NavigationLink.COMPLAINT_ABOUT_POST,
-        "./routes/api/complainAboutPost.ts",
-        { id: "complaint-from-the-list" }
-      ),
-    ]),
+    route(NavigationLink.HOME, "./routes/home/site/route.tsx"),
     route(
       NavigationLink.HOME_SINGLE_POST,
-      "./routes/home/site/singlePost/route.tsx",
-      [
-        route(
-          NavigationLink.COMPLAINT_ABOUT_POST,
-          "./routes/api/complainAboutPost.ts",
-          { id: "complaint-from-the-single-page" }
-        ),
-      ]
+      "./routes/home/site/singlePost/route.tsx"
     ),
     route(NavigationLink.MY_POSTS, "./routes/home/myPosts/route.tsx"),
     route(

@@ -1,25 +1,29 @@
-import { redirect } from "react-router";
-
 import { getAllUserPostsById } from "~/shared/.server/repository/posts";
-import { getSession } from "~/shared/.server/services/session";
 import { getPostsWithSlicedString } from "~/shared/utils/getPostsWithSlicedString";
 
-import { SESSION_USER_KEY } from "~/shared/constants/common";
+import { ROLE_ADMIN, ROLE_USER } from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
 import type { Route } from "../+types/route";
+import { authGate } from "~/shared/.server/services/auth";
+import type { TSerializedUser } from "~/shared/types/react";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const session = await getSession(request.headers.get("cookie"));
-  const sessionUser = session.get(SESSION_USER_KEY);
+  return await authGate(
+    request,
+    {
+      isPublicRoute: false,
+      allowedRoles: [ROLE_ADMIN, ROLE_USER],
+    },
+    async (sessionUser: TSerializedUser) => {
+      const allUserPosts = await getAllUserPostsById(sessionUser.id);
 
-  if (!sessionUser) {
-    redirect(NavigationLink.LOGIN);
-  }
-
-  const allUserPosts = await getAllUserPostsById(sessionUser.id);
-
-  return {
-    posts: getPostsWithSlicedString(allUserPosts),
-    userId: sessionUser.id,
-  };
+      return {
+        posts: getPostsWithSlicedString(allUserPosts),
+        userId: sessionUser.id,
+      };
+    },
+    {
+      failureRedirect: NavigationLink.LOGIN,
+    }
+  );
 }

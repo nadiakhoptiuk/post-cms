@@ -8,7 +8,6 @@ import { Modal } from "~/shared/components/ui/Modal";
 import { SingleSelectField } from "~/shared/components/ui/SingleSelectField";
 import { Button } from "~/shared/components/ui/Button";
 
-import { NavigationLink } from "~/shared/constants/navigation";
 import type { TErrorsMessages, TItemId, TModal } from "~/shared/types/react";
 
 export const ModalForComplaint = ({
@@ -38,10 +37,7 @@ export const ModalForComplaint = ({
     method: "POST",
     handleSubmit: (data) => {
       {
-        fetcher.submit(
-          { ...data, postId: itemId },
-          { method: "post", action: NavigationLink.COMPLAINT_ABOUT_POST }
-        );
+        fetcher.submit({ ...data, postId: itemId }, { method: "post" });
         onClose();
       }
     },

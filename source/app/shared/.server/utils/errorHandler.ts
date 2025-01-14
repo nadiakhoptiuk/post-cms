@@ -4,7 +4,11 @@ import { data } from "react-router";
 export const errorHandler = (error: any) => {
   console.log("errorHandler", error);
 
-  if (error instanceof Response) {
+  if (error instanceof Response && error.status === 302) {
+    return error;
+  }
+
+  if (error instanceof Response && error.status !== 302) {
     console.log("instanceof Response", error);
 
     return data(error || "ErrorResponse", {

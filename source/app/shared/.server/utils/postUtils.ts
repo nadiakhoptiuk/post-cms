@@ -1,7 +1,6 @@
-import { redirect } from "react-router";
+import { data } from "react-router";
 import { v4 as uuidv4 } from "uuid";
 
-import { getSession } from "../services/session";
 import {
   getAllPostsSlugs,
   getPostById,
@@ -9,8 +8,7 @@ import {
   updatePostById,
 } from "../repository/posts";
 
-import { NavigationLink } from "~/shared/constants/navigation";
-import { SESSION_USER_KEY } from "~/shared/constants/common";
+import type { TSerializedUser } from "~/shared/types/react";
 
 export const checkIfIdExists = async (id: string) => {
   const allPostsSlugs = await getAllPostsSlugs();
@@ -30,8 +28,8 @@ export const generateUniqueIdForSlug = async () => {
 
 export const updatePostAction = async (
   request: Request,
-  postId: number,
-  successRedirect: (typeof NavigationLink)[keyof typeof NavigationLink]
+  sessionUser: TSerializedUser,
+  postId: number
 ) => {
   const formData = await request.formData();
 
@@ -44,43 +42,22 @@ export const updatePostAction = async (
     typeof slug !== "string" ||
     typeof content !== "string"
   ) {
-    return Response.json({
-      error: "Some field is not a string",
-    });
-  }
-
-  const session = await getSession(request.headers.get("cookie"));
-  const sessionUser = session.get(SESSION_USER_KEY);
-
-  if (!sessionUser || !sessionUser.id) {
-    throw redirect(NavigationLink.LOGIN);
+    throw new Error("Some field is not a string");
   }
 
   const existingPost = await getPostById(postId);
 
   if (!existingPost || !existingPost.slug) {
-    throw new Error("Post with such id does not exist");
+    throw data("Post with such id does not exist", { status: 404 });
   }
 
   const existingSlugId = existingPost.slug.slice(-36);
 
-  try {
-    await updatePostById(Number(postId), sessionUser.id, {
-      title,
-      slug: `${slug}-${existingSlugId}`,
-      content,
-    });
-
-    return redirect(successRedirect);
-  } catch (error) {
-    console.log(error);
-    return Response.json(
-      {
-        error: "An unexpected error occurred",
-      },
-      { status: 400 }
-    );
-  }
+  return await updatePostById(Number(postId), sessionUser.id, {
+    title,
+    slug: `${slug}-${existingSlugId}`,
+    content,
+  });
 };
 
 export const confirmPublishPost = async (postId: number, userId: number) => {

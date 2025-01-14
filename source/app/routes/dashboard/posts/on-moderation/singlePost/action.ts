@@ -1,23 +1,32 @@
 import { redirect } from "react-router";
 
-import { getSession } from "~/shared/.server/services/session";
+import { authGate } from "~/shared/.server/services/auth";
 import { confirmPublishPost } from "~/shared/.server/utils/postUtils";
 
-import { SESSION_USER_KEY } from "~/shared/constants/common";
+import { ROLE_ADMIN } from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
+import type { TSerializedUser } from "~/shared/types/react";
 import type { Route } from "./+types/route";
 
 export async function action({ request, params }: Route.ActionArgs) {
-  const postId = params.postId;
+  return await authGate(
+    request,
+    {
+      isPublicRoute: false,
+      allowedRoles: [ROLE_ADMIN],
+    },
+    async (sessionUser: TSerializedUser) => {
+      const postId = params.postId;
+      if (!postId) {
+        throw new Error("Post Id not Found");
+      }
 
-  if (!postId) {
-    throw new Response("Not Found", { status: 404 });
-  }
+      await confirmPublishPost(Number(postId), sessionUser.id);
 
-  const session = await getSession(request.headers.get("cookie"));
-  const sessionUser = session.get(SESSION_USER_KEY);
-
-  await confirmPublishPost(Number(postId), sessionUser.id);
-
-  return redirect(NavigationLink.DASHBOARD_POSTS_ON_MODERATION);
+      return redirect(NavigationLink.DASHBOARD_POSTS_ON_MODERATION);
+    },
+    {
+      failureRedirect: NavigationLink.HOME,
+    }
+  );
 }

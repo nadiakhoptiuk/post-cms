@@ -16,6 +16,7 @@ import { NavigationLink } from "~/shared/constants/navigation";
 import { ModalForComplaint } from "../ModalForComplaint";
 
 export { loader } from "./loader";
+export { action } from "./action";
 
 export const handle = { i18n: ["posts", "common"] };
 
@@ -25,7 +26,7 @@ export default function HomeSinglePostPage() {
   const { t } = useTranslation("posts");
   const [opened, { open, close }] = useDisclosure(false);
   const [postId, setPostId] = useState<number | null>(null);
-  const isOwnPost = user.id === post.ownerId;
+  const isOwnPost = user?.id === post.ownerId;
 
   useEffect(() => {
     if (!postId) {
@@ -36,7 +37,7 @@ export default function HomeSinglePostPage() {
   }, [postId]);
 
   return (
-    <Box component="section">
+    <Box component="section" my="lg">
       <Container>
         <Group mb={30}>
           <Button
@@ -56,7 +57,7 @@ export default function HomeSinglePostPage() {
 
         <SinglePostPage post={post} />
 
-        {user.id && !isOwnPost && (
+        {user?.id && !isOwnPost && (
           <Button
             variant="subtle"
             mt={10}
@@ -69,7 +70,7 @@ export default function HomeSinglePostPage() {
           </Button>
         )}
 
-        {user.id && !isOwnPost && opened && (
+        {user?.id && !isOwnPost && opened && (
           <ModalForComplaint
             opened={opened}
             onClose={() => setPostId(null)}
