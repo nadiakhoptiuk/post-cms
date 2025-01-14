@@ -20,6 +20,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 
   const session = await getSession(request.headers.get("cookie"));
   const error = session.get(SESSION_ERROR_KEY);
+
   session.unset(SESSION_ERROR_KEY);
 
   return Response.json(

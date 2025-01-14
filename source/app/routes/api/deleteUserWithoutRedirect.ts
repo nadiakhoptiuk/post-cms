@@ -22,7 +22,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   try {
     if (Number(userId) === sessionUser.id) {
-      await deleteUserAccount(request, sessionUser.id);
+      await deleteUserAccount(request, sessionUser);
     } else {
       await deleteUserById(Number(userId), sessionUser.id);
     }

@@ -1,27 +1,40 @@
-// import { PostgresError } from "postgres";
+import { DrizzleError } from "drizzle-orm";
+import { data } from "react-router";
 
 export const errorHandler = (error: any) => {
-  console.log(error);
-  if (error.name === "PostgresError") {
-    console.log(error.constraint_name || "Database error");
+  console.log("errorHandler", error);
 
-    return new Response(error.constraint_name || "Database error", {
+  if (error instanceof Response) {
+    console.log("instanceof Response", error);
+
+    return data(error || "ErrorResponse", {
+      status: error.status,
+    });
+  }
+
+  if (error?.name === "PostgresError") {
+    console.log("instanceof PostgresError", error?.constraint_name);
+
+    return data(error?.constraint_name || error.message || "PostgresError", {
       status: 500,
     });
   }
 
-  // if (error instanceof DrizzleError) {
-  // }
+  if (error instanceof DrizzleError) {
+    console.log("instanceof DrizzleError", error.message);
+
+    return data(error.message || "DrizzleError", {
+      status: 500,
+    });
+  }
 
   if (error instanceof Error) {
-    console.log(error.message);
-    return error;
+    console.log("instanceof Error", error.message);
+
+    return data(error.message, {
+      status: 500,
+    });
   }
 
-  if (error instanceof Response) {
-    console.log(error);
-    return error;
-  }
-
-  return new Response("Internal Server Error", { status: 500 });
+  return data("Internal Server Error", { status: 500 });
 };

@@ -19,7 +19,6 @@ export async function action({ request }: Route.ActionArgs) {
 
     await confirmPublishPost(Number(postId), sessionUser.id);
   } catch (error) {
-    console.log(error);
     errorHandler(error);
   }
 }
