@@ -223,7 +223,6 @@ export const PostsTable = ({
           itemId={postId}
           opened={opened}
           onClose={() => setPostId(null)}
-          action={NavigationLink.DELETE_POST}
         />
       )}
 

@@ -1,7 +1,7 @@
 import { data } from "react-router";
 
 import { authGate } from "~/shared/.server/services/auth";
-import { getPostIdFromParams } from "~/shared/.server/utils/commonUtils";
+import { getPostIdFromParams } from "~/shared/.server/utils/postUtils";
 import { getUserPostById } from "~/shared/.server/repository/posts";
 
 import { ROLE_ADMIN, ROLE_USER } from "~/shared/constants/common";
@@ -32,7 +32,7 @@ export async function loader({ request, params }: Route.LoaderArgs): Promise<{
         throw data("Not found", { status: 404 });
       }
 
-      return { post };
+      return { post: { ...post, slug: post.slug.slice(0, -37) } };
     },
     {
       failureRedirect: NavigationLink.LOGIN,

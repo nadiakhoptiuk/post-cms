@@ -22,7 +22,7 @@ export default function HomePage() {
 
         <PostsList posts={posts} userId={user?.id} />
 
-        {posts.length > 0 && (
+        {posts?.length > 0 && (
           <Pagination
             total={pagesCount}
             value={actualPage}

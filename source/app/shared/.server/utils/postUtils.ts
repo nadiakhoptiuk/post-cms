@@ -20,8 +20,17 @@ export const getPostIdFromParams = (params: Params) => {
   return postId;
 };
 
-export const getPostDataFromRequest = async (request: Request) => {
-  const formData = await request.formData();
+export const getIdFromRequest = (formData: FormData) => {
+  const id = formData.get("id");
+
+  if (typeof id !== "string") {
+    throw new Error("Id not Found");
+  }
+
+  return id;
+};
+
+export const getPostDataFromRequest = (formData: FormData) => {
   const title = formData.get("title");
   const slug = formData.get("slug");
   const content = formData.get("content");
@@ -54,11 +63,11 @@ export const generateUniqueIdForSlug = async () => {
 };
 
 export const updatePostAction = async (
-  request: Request,
+  formData: FormData,
   sessionUser: TSerializedUser,
   postId: number
 ) => {
-  const { title, slug, content } = await getPostDataFromRequest(request);
+  const { title, slug, content } = await getPostDataFromRequest(formData);
 
   const existingPost = await getPostById(postId);
 

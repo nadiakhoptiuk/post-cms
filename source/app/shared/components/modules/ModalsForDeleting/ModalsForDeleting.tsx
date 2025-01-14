@@ -1,16 +1,16 @@
-import { Form, useFetcher } from "react-router";
+import { useFetcher, useSubmit } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Grid } from "@mantine/core";
 
 import { Modal } from "../../ui/Modal";
 import { Button } from "../../ui/Button";
 
-import { NavigationLink } from "~/shared/constants/navigation";
 import type { TItemId, TModal } from "~/shared/types/react";
-import type { TModalWithAction } from "./ModalsForDeleting.types";
+import { ACTION_DELETE } from "~/shared/constants/common";
 
 export const ModalForDeletingPost = ({ opened, onClose }: TModal) => {
   const { t } = useTranslation("common");
+  const submit = useSubmit();
 
   return (
     <Modal
@@ -31,17 +31,18 @@ export const ModalForDeletingPost = ({ opened, onClose }: TModal) => {
           </Grid.Col>
 
           <Grid.Col span={1}>
-            <Form method="post" action={NavigationLink.DELETE_POST}>
-              <Button
-                type="submit"
-                variant="filled"
-                c="white"
-                bg="red"
-                fullWidth
-              >
-                {t("buttons.button.delete")}
-              </Button>
-            </Form>
+            <Button
+              type="button"
+              onClick={() =>
+                submit({ actionId: ACTION_DELETE }, { method: "post" })
+              }
+              variant="filled"
+              c="white"
+              bg="red"
+              fullWidth
+            >
+              {t("buttons.button.delete")}
+            </Button>
           </Grid.Col>
         </Grid>
       }
@@ -53,8 +54,7 @@ export const ModalForDeletingWithoutRedirect = ({
   itemId,
   opened,
   onClose,
-  action,
-}: TModalWithAction & TItemId) => {
+}: TModal & TItemId) => {
   const { t } = useTranslation();
   const fetcher = useFetcher();
 
@@ -87,8 +87,6 @@ export const ModalForDeletingWithoutRedirect = ({
                   { id: itemId },
                   {
                     method: "post",
-                    // action: NavigationLink.DELETE_POST,
-                    action: action,
                   }
                 );
                 onClose();

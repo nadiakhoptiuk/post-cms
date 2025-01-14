@@ -1,7 +1,7 @@
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@rvf/react-router";
 import { useTranslation } from "react-i18next";
-import { Form } from "react-router";
+import { Form, useSubmit } from "react-router";
 import { Box, Stack } from "@mantine/core";
 
 import { TextInput } from "../../ui/TextInput";
@@ -14,8 +14,11 @@ import { postValidator } from "~/shared/utils/validators/postValidator";
 
 import type { TErrorsMessages, TFormType, TLocale } from "~/shared/types/react";
 import type { TPostForm } from "./PostForm.types";
+import { ACTION_UPDATE } from "~/shared/constants/common";
 
 export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
+  const submit = useSubmit();
+
   const [opened, { open, close }] = useDisclosure(false);
   const { i18n, t } = useTranslation(["common", "posts"]);
   const errorMessages = t("formErrorsMessages", {
@@ -26,7 +29,11 @@ export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
   const form = useForm({
     validator: postValidator(errorMessages),
     defaultValues: postData,
-    method: "POST",
+    handleSubmit: (data) => {
+      {
+        submit({ ...data, actionId: ACTION_UPDATE }, { method: "post" });
+      }
+    },
   });
 
   return (

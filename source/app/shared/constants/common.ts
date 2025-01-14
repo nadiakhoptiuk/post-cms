@@ -11,6 +11,11 @@ export const PAGE_PARAMETER_NAME = "page";
 export const PAGINATION_LIMIT = 5;
 export const PAGINATION_LIMIT_FOR_HOME = 10;
 
+export const ACTION_ID_KEY_NAME = "actionId";
+
+export const ACTION_DELETE = "delete";
+export const ACTION_UPDATE = "update";
+
 export const enum USER_ROLE {
   ADMIN = "admin",
   USER = "user",

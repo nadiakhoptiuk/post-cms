@@ -12,12 +12,7 @@ export default [
     route(NavigationLink.MY_POSTS, "./routes/home/myPosts/route.tsx"),
     route(
       NavigationLink.MY_CURRENT_POST,
-      "./routes/home/myPosts/singlePost/route.tsx",
-      [
-        route(NavigationLink.DELETE_POST, "./routes/api/deletePost.ts", {
-          id: "home/delete-post",
-        }),
-      ]
+      "./routes/home/myPosts/singlePost/route.tsx"
     ),
     route(NavigationLink.MY_POSTS_NEW, "./routes/home/myPosts/new/route.tsx"),
   ]),
@@ -60,18 +55,11 @@ export default [
     // ----------------------- POSTS ----------------------------
     route(
       NavigationLink.DASHBOARD_ALL_POSTS,
-      "./routes/dashboard/posts/all/route.tsx",
-      [
-        route(
-          NavigationLink.DELETE_POST,
-          "./routes/api/deletePostWithoutRedirect.ts"
-        ),
-      ]
+      "./routes/dashboard/posts/all/route.tsx"
     ),
     route(
       NavigationLink.DASHBOARD_POSTS_SINGLE_POST,
-      "./routes/dashboard/posts/all/singlePost/route.tsx",
-      [route(NavigationLink.DELETE_POST, "./routes/api/deletePost.ts")]
+      "./routes/dashboard/posts/all/singlePost/route.tsx"
     ),
 
     route(

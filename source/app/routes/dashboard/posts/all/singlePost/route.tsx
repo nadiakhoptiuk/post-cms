@@ -10,15 +10,16 @@ export { action } from "./action";
 
 export default function DashBoardHomePage() {
   const { post } = useLoaderData<TLoaderData>();
+  const { title, content, slug } = post;
 
   return (
     <Box component="section">
       <Container>
         <PostForm
           postData={{
-            title: post.title,
-            content: post.content,
-            slug: post.slug.slice(0, -37),
+            title,
+            content,
+            slug,
           }}
           formType="update"
         />

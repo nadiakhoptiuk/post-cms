@@ -2,7 +2,7 @@ import { data } from "react-router";
 
 import { getPostById } from "~/shared/.server/repository/posts";
 import { authGate } from "~/shared/.server/services/auth";
-import { getPostIdFromParams } from "~/shared/.server/utils/commonUtils";
+import { getPostIdFromParams } from "~/shared/.server/utils/postUtils";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import { ROLE_ADMIN } from "~/shared/constants/common";
@@ -32,7 +32,7 @@ export async function loader({
         throw data("Not found", { status: 404 });
       }
 
-      return { post };
+      return { post: { ...post, slug: post.slug.slice(0, -37) } };
     },
     {
       failureRedirect: NavigationLink.LOGIN,

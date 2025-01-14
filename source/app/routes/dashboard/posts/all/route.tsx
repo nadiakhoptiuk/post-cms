@@ -9,6 +9,7 @@ import { PAGE_PARAMETER_NAME } from "~/shared/constants/common";
 import type { TLoaderData } from "./loader";
 
 export { loader } from "./loader";
+export { action } from "./action";
 
 export const handle = { i18n: ["posts", "common"] };
 
@@ -20,10 +21,10 @@ export default function DashBoardModerationPage() {
   return (
     <Box component="section">
       <Container>
-        {posts.length > 0 && (
-          <>
-            <SearchForm query={query} />
+        <SearchForm query={query} />
 
+        {posts?.length > 0 && (
+          <>
             <PostsTable posts={posts} />
 
             <Pagination
@@ -39,7 +40,7 @@ export default function DashBoardModerationPage() {
           </>
         )}
 
-        {posts.length === 0 && (
+        {posts?.length === 0 && (
           <Text mx="auto" w="fit-content" mt={30} size="md">
             {t("noPosts")}
           </Text>

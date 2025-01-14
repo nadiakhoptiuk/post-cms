@@ -1,6 +1,7 @@
 import { getSession } from "../services/session";
 
 import {
+  ACTION_ID_KEY_NAME,
   PAGE_PARAMETER_NAME,
   PAGINATION_LIMIT,
   SEARCH_PARAMETER_NAME,
@@ -29,4 +30,14 @@ export const getPaginationDataFromRequest = (request: Request) => {
   const page = Number(url.searchParams.get(PAGE_PARAMETER_NAME) || "1");
 
   return { query, page };
+};
+
+export const getActionIdFromRequest = (formData: FormData) => {
+  const actionId = formData.get(ACTION_ID_KEY_NAME);
+
+  if (typeof actionId !== "string") {
+    throw new Error("Action id is not a string");
+  }
+
+  return actionId;
 };

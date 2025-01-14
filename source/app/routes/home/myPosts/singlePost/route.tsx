@@ -67,10 +67,7 @@ export default function HomeMyCurrentPostPage() {
           )}
         </Box>
 
-        <PostForm
-          postData={{ title, content, slug: slug.slice(0, -37) }}
-          formType="update"
-        />
+        <PostForm postData={{ title, content, slug }} formType="update" />
       </Container>
     </Box>
   );
