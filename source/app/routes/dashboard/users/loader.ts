@@ -1,15 +1,21 @@
 import { getAllUsers } from "~/shared/.server/repository/users";
+import { getPaginationDataFromRequest } from "~/shared/.server/utils/commonUtils";
 
-import {
-  PAGE_PARAMETER_NAME,
-  ROLE_ADMIN,
-  SEARCH_PARAMETER_NAME,
-} from "~/shared/constants/common";
+import { ROLE_ADMIN } from "~/shared/constants/common";
 import type { Route } from "./+types/route";
 import { authGate } from "~/shared/.server/services/auth";
 import { NavigationLink } from "~/shared/constants/navigation";
+import type { NewSerializeFrom, TDBUser } from "~/shared/types/react";
+import type {
+  WithPaginationData,
+  WithSearchData,
+} from "~/shared/.server/types/common";
 
-export const loader = async ({ request }: Route.LoaderArgs) => {
+export const loader = async ({
+  request,
+}: Route.LoaderArgs): Promise<
+  { users: Array<TDBUser> } & WithPaginationData & WithSearchData
+> => {
   return await authGate(
     request,
     {
@@ -17,9 +23,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
       allowedRoles: [ROLE_ADMIN],
     },
     async () => {
-      const url = new URL(request.url);
-      const query = url.searchParams.get(SEARCH_PARAMETER_NAME) || "";
-      const page = Number(url.searchParams.get(PAGE_PARAMETER_NAME) || "1");
+      const { query, page } = getPaginationDataFromRequest(request);
 
       const { allUsers, actualPage, pagesCount } = await getAllUsers(
         query,
@@ -33,3 +37,5 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
     }
   );
 };
+
+export type TLoaderData = NewSerializeFrom<typeof loader>;

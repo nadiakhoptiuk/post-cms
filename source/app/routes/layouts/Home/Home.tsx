@@ -1,7 +1,7 @@
 import { useRouteLoaderData } from "react-router";
 import { useDisclosure } from "@mantine/hooks";
 import { useTranslation } from "react-i18next";
-import { Box, Burger, Flex, Group } from "@mantine/core";
+import { Box, Burger, Flex } from "@mantine/core";
 
 import type { TRootLoader } from "~/shared/.server/root/loader";
 

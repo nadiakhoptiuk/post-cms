@@ -1,8 +1,7 @@
 import { Outlet, useLoaderData } from "react-router";
 
 import { Home } from "~/routes/layouts/Home";
-
-import type { THomeLoader } from "~/shared/types/react";
+import type { THomeLoaderData } from "./loader";
 
 export { loader } from "./loader";
 
@@ -11,7 +10,7 @@ export const handle = {
 };
 
 export default function HomeLayout() {
-  const data = useLoaderData<THomeLoader>();
+  const data = useLoaderData<THomeLoaderData>();
 
   return (
     <Home user={data?.user}>

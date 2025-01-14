@@ -349,33 +349,6 @@ export async function updatePostById(
   userId: number,
   postData: TPost
 ) {
-  // const existedUser = await db
-  //   .select({ role: users.role })
-  //   .from(users)
-  //   .where(eq(users.id, userId));
-
-  // if (!existedUser[0]) {
-  //   throw new Error("User with such id does not exist");
-  // }
-
-  // let existedPost;
-
-  // if (existedUser[0].role !== ROLE_ADMIN) {
-  //   existedPost = await db
-  //     .select({ slug: posts.slug })
-  //     .from(posts)
-  //     .where(and(eq(posts.id, postId), eq(posts.ownerId, userId)));
-  // } else {
-  //   existedPost = await db
-  //     .select({ slug: posts.slug })
-  //     .from(posts)
-  //     .where(and(eq(posts.id, postId)));
-  // }
-
-  // if (!existedPost[0]) {
-  //   throw new Error("Post with such id does not exist");
-  // }
-
   const updatedPost = await db
     .update(posts)
     .set({
@@ -401,11 +374,11 @@ export async function moderatePostById(
   postData: Partial<TPost & TDBPostRecord>,
   { confirmed }: { confirmed: boolean }
 ) {
-  const existedPost = await db.select().from(posts).where(eq(posts.id, postId));
+  // const existedPost = await db.select().from(posts).where(eq(posts.id, postId));
 
-  if (!existedPost[0]) {
-    throw new Error("Post with such id does not exist");
-  }
+  // if (!existedPost[0]) {
+  //   throw new Error("Post with such id does not exist");
+  // }
 
   const updatedPost = await db
     .update(posts)

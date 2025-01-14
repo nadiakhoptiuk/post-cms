@@ -1,18 +1,25 @@
 import { publicGate } from "~/shared/.server/services/auth";
 import { getAllPublishedPosts } from "~/shared/.server/repository/posts";
 import { getPostsWithSlicedString } from "~/shared/utils/getPostsWithSlicedString";
+import { getPaginationDataFromRequest } from "~/shared/.server/utils/commonUtils";
 
-import type { TSerializedUser } from "~/shared/types/react";
+import type {
+  NewSerializeFrom,
+  TDBPostRecord,
+  TPost,
+  TSerializedUser,
+} from "~/shared/types/react";
 import { NavigationLink } from "~/shared/constants/navigation";
-import {
-  PAGE_PARAMETER_NAME,
-  ROLE_ADMIN,
-  ROLE_USER,
-  SEARCH_PARAMETER_NAME,
-} from "~/shared/constants/common";
+import { ROLE_ADMIN, ROLE_USER } from "~/shared/constants/common";
 import type { Route } from "../+types/route";
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: Route.LoaderArgs): Promise<{
+  posts: Array<TPost & TDBPostRecord>;
+  user: TSerializedUser | null;
+  query: string;
+  actualPage: number;
+  pagesCount: number;
+}> {
   return await publicGate(
     request,
     {
@@ -20,9 +27,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       allowedRoles: [ROLE_ADMIN, ROLE_USER],
     },
     async (sessionUser: TSerializedUser | null) => {
-      const url = new URL(request.url);
-      const query = url.searchParams.get(SEARCH_PARAMETER_NAME) || "";
-      const page = Number(url.searchParams.get(PAGE_PARAMETER_NAME) || "1");
+      const { query, page } = getPaginationDataFromRequest(request);
 
       const { allPosts, actualPage, pagesCount } = await getAllPublishedPosts(
         query,
@@ -42,3 +47,6 @@ export async function loader({ request }: Route.LoaderArgs) {
     }
   );
 }
+
+export type TLoader = typeof loader;
+export type TLoaderData = NewSerializeFrom<TLoader>;

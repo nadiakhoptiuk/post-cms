@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { PostForm } from "~/shared/components/modules/PostForm";
 
 export { action } from "./action";
+export { loader  } from "./loader";
 
 export const handle = { i18n: ["posts", "common"] };
 

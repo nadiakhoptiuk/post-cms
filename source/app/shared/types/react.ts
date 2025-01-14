@@ -23,6 +23,7 @@ export type TErrorsMessages = {
 };
 
 export interface TModal extends ModalProps {}
+
 export interface TItemId {
   itemId: number | null;
 }
@@ -70,10 +71,6 @@ export interface TSerializedUser {
   lastName: string;
   role: TRolesEnum;
 }
-
-export type THomeLoader = {
-  user: TSerializedUser;
-};
 
 export interface TTextInput extends MTextInputProps {
   label: string;

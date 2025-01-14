@@ -7,10 +7,10 @@ import { StyledLink } from "~/shared/components/ui/StyledLink";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 
-import type { TUserLoaderData } from "./types";
 import { formatDateWithTime } from "~/shared/utils/dateFormat";
 import { TimestampItem } from "~/shared/components/ui/TimestampItem";
 import { EditUserForm } from "../EditUserForm";
+import type { TLoaderData } from "./loader";
 
 export { loader } from "./loader";
 export { action } from "./action";
@@ -18,7 +18,7 @@ export { action } from "./action";
 export const handle = { i18n: ["user", "common"] };
 
 export default function DashBoardEditUserPage() {
-  const { user } = useLoaderData<TUserLoaderData>();
+  const { user } = useLoaderData<TLoaderData>();
   const { t } = useTranslation("user");
 
   const { createdAt, updatedAt, updatedBy, deletedAt, deletedBy, ...userData } =

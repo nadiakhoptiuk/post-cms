@@ -1,14 +1,20 @@
 import { authGate } from "~/shared/.server/services/auth";
-import { NavigationLink } from "~/shared/constants/navigation";
-
 import {
   getCountOfPostsWithComplaints,
   getCountOfPostsForModeration,
 } from "~/shared/.server/repository/posts";
+
+import { NavigationLink } from "~/shared/constants/navigation";
 import { ROLE_ADMIN } from "~/shared/constants/common";
+import type { NewSerializeFrom } from "~/shared/types/react";
 import type { Route } from "./+types/route";
 
-export const loader = async ({ request }: Route.LoaderArgs) => {
+export const loader = async ({
+  request,
+}: Route.LoaderArgs): Promise<{
+  postsOnModeration: number;
+  postsWithComplaints: number;
+}> => {
   return await authGate(
     request,
     {
@@ -29,3 +35,5 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
     }
   );
 };
+
+export type TLoaderData = NewSerializeFrom<typeof loader>;

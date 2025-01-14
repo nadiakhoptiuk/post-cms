@@ -6,13 +6,14 @@ import { PostsList } from "../PostsList";
 import { StyledLink } from "~/shared/components/ui/StyledLink";
 
 import { NavigationLink } from "~/shared/constants/navigation";
+import type { TLoaderData } from "./loader";
 
 export { loader } from "./loader";
 
 export const handle = { i18n: ["posts", "common"] };
 
 export default function HomeMyPostsPage() {
-  const { posts, userId } = useLoaderData();
+  const { posts, user } = useLoaderData<TLoaderData>();
   const { t } = useTranslation("posts");
 
   return (
@@ -27,7 +28,7 @@ export default function HomeMyPostsPage() {
           {t("link.addNewPost")}
         </StyledLink>
 
-        <PostsList posts={posts} userId={userId} />
+        <PostsList posts={posts} userId={user?.id} />
       </Container>
     </Box>
   );

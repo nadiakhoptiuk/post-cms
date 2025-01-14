@@ -1,4 +1,4 @@
-import { data } from "react-router";
+import { data, type Params } from "react-router";
 import { v4 as uuidv4 } from "uuid";
 
 import {
@@ -9,6 +9,33 @@ import {
 } from "../repository/posts";
 
 import type { TSerializedUser } from "~/shared/types/react";
+
+export const getPostIdFromParams = (params: Params) => {
+  const postId = params?.postId;
+
+  if (!postId) {
+    throw new Error("Post Id not Found");
+  }
+
+  return postId;
+};
+
+export const getPostDataFromRequest = async (request: Request) => {
+  const formData = await request.formData();
+  const title = formData.get("title");
+  const slug = formData.get("slug");
+  const content = formData.get("content");
+
+  if (
+    typeof title !== "string" ||
+    typeof slug !== "string" ||
+    typeof content !== "string"
+  ) {
+    throw new Error("Some field is not a string");
+  }
+
+  return { title, slug, content };
+};
 
 export const checkIfIdExists = async (id: string) => {
   const allPostsSlugs = await getAllPostsSlugs();
@@ -31,19 +58,7 @@ export const updatePostAction = async (
   sessionUser: TSerializedUser,
   postId: number
 ) => {
-  const formData = await request.formData();
-
-  const title = formData.get("title");
-  const slug = formData.get("slug");
-  const content = formData.get("content");
-
-  if (
-    typeof title !== "string" ||
-    typeof slug !== "string" ||
-    typeof content !== "string"
-  ) {
-    throw new Error("Some field is not a string");
-  }
+  const { title, slug, content } = await getPostDataFromRequest(request);
 
   const existingPost = await getPostById(postId);
 

@@ -5,12 +5,14 @@ import { SearchForm } from "~/shared/components/modules/SearchForm";
 import { PostsList } from "../PostsList";
 
 import { PAGE_PARAMETER_NAME } from "~/shared/constants/common";
+import type { TLoaderData } from "./loader";
 
 export { loader } from "./loader";
 export { action } from "./action";
 
 export default function HomePage() {
-  const { posts, query, user, actualPage, pagesCount } = useLoaderData();
+  const { posts, query, user, actualPage, pagesCount } =
+    useLoaderData<TLoaderData>();
   const navigate = useNavigate();
 
   return (

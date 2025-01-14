@@ -6,20 +6,21 @@ import { SearchForm } from "~/shared/components/modules/SearchForm";
 import { PostsTable } from "../PostsTable";
 
 import { PAGE_PARAMETER_NAME } from "~/shared/constants/common";
+import type { TLoaderData } from "./loader";
 
 export { loader } from "./loader";
 
 export const handle = { i18n: ["posts", "common"] };
 
 export default function DashBoardComplaintsPage() {
-  const { posts, query, actualPage, pagesCount } = useLoaderData();
+  const { posts, query, actualPage, pagesCount } = useLoaderData<TLoaderData>();
   const { t } = useTranslation("posts");
   const navigate = useNavigate();
 
   return (
     <Box component="section">
       <Container>
-        {posts.length > 0 && (
+        {posts?.length > 0 && (
           <>
             <SearchForm query={query} />
 
@@ -38,7 +39,7 @@ export default function DashBoardComplaintsPage() {
           </>
         )}
 
-        {posts.length === 0 && (
+        {posts?.length === 0 && (
           <Text mx="auto" mt={30} w="fit-content">
             {t("noPostsForModeration")}
           </Text>

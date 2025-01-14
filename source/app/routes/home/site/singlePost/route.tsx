@@ -14,6 +14,7 @@ import { Button } from "~/shared/components/ui/Button";
 import { StyledLink } from "~/shared/components/ui/StyledLink";
 import { NavigationLink } from "~/shared/constants/navigation";
 import { ModalForComplaint } from "../ModalForComplaint";
+import type { TLoaderData } from "./loader";
 
 export { loader } from "./loader";
 export { action } from "./action";
@@ -21,7 +22,7 @@ export { action } from "./action";
 export const handle = { i18n: ["posts", "common"] };
 
 export default function HomeSinglePostPage() {
-  const { post, user } = useLoaderData();
+  const { post, user } = useLoaderData<TLoaderData>();
   const navigate = useNavigate();
   const { t } = useTranslation("posts");
   const [opened, { open, close }] = useDisclosure(false);

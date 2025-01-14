@@ -9,12 +9,14 @@ import { UsersTable } from "./UsersTable";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import { PAGE_PARAMETER_NAME } from "~/shared/constants/common";
+import type { TLoaderData } from "./loader";
+
 export { loader } from "./loader";
 
 export const handle = { i18n: ["user", "common"] };
 
 export default function DashBoardUsersPage() {
-  const { users, query, actualPage, pagesCount } = useLoaderData();
+  const { users, query, actualPage, pagesCount } = useLoaderData<TLoaderData>();
   const { t } = useTranslation();
   const navigate = useNavigate();
 

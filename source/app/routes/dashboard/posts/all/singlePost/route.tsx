@@ -3,11 +3,13 @@ import { Box, Container } from "@mantine/core";
 
 import { PostForm } from "~/shared/components/modules/PostForm";
 
+import type { TLoaderData } from "./loader";
+
 export { loader } from "./loader";
 export { action } from "./action";
 
 export default function DashBoardHomePage() {
-  const { post } = useLoaderData();
+  const { post } = useLoaderData<TLoaderData>();
 
   return (
     <Box component="section">

@@ -3,6 +3,7 @@ import { redirect } from "react-router";
 import { authGate } from "~/shared/.server/services/auth";
 import { createNewPost } from "~/shared/.server/repository/posts";
 import { generateUniqueIdForSlug } from "~/shared/.server/utils/postUtils";
+import { getPostDataFromRequest } from "~/shared/.server/utils/commonUtils";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import { ROLE_ADMIN, ROLE_USER } from "~/shared/constants/common";
@@ -17,19 +18,7 @@ export async function action({ request }: Route.ActionArgs) {
       allowedRoles: [ROLE_ADMIN, ROLE_USER],
     },
     async (sessionUser: TSerializedUser) => {
-      const formData = await request.formData();
-
-      const title = formData.get("title");
-      const slug = formData.get("slug");
-      const content = formData.get("content");
-
-      if (
-        typeof title !== "string" ||
-        typeof slug !== "string" ||
-        typeof content !== "string"
-      ) {
-        throw new Error("Some field is not a string");
-      }
+      const { title, slug, content } = await getPostDataFromRequest(request);
 
       const idForSlug = await generateUniqueIdForSlug();
 

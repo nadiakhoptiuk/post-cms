@@ -6,6 +6,7 @@ import { authGate } from "~/shared/.server/services/auth";
 import { ROLE_ADMIN } from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
 import type { Route } from "./+types/route";
+import { getPostIdFromParams } from "~/shared/.server/utils/commonUtils";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   return await authGate(
@@ -15,10 +16,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       allowedRoles: [ROLE_ADMIN],
     },
     async () => {
-      const postId = params.postId;
-      if (!postId) {
-        throw new Error("Post Id not Found");
-      }
+      const postId = getPostIdFromParams(params);
 
       const post = await getPostById(Number(postId));
 

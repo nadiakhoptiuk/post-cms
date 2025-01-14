@@ -2,14 +2,22 @@ import { data } from "react-router";
 import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
 
+import { publicGate } from "~/shared/.server/services/auth";
 import { getPostBySlug } from "~/shared/.server/repository/posts";
 
 import { ROLE_ADMIN, ROLE_USER } from "~/shared/constants/common";
-import { publicGate } from "~/shared/.server/services/auth";
-import type { TSerializedUser } from "~/shared/types/react";
+import type {
+  NewSerializeFrom,
+  TDBPostRecord,
+  TPost,
+  TSerializedUser,
+} from "~/shared/types/react";
 import type { Route } from "../../+types/route";
 
-export async function loader({ request, params }: Route.LoaderArgs) {
+export async function loader({ request, params }: Route.LoaderArgs): Promise<{
+  post: TPost & TDBPostRecord;
+  user: TSerializedUser | null;
+}> {
   return await publicGate(
     request,
     {
@@ -35,3 +43,6 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     }
   );
 }
+
+export type TLoader = typeof loader;
+export type TLoaderData = NewSerializeFrom<TLoader>;

@@ -5,10 +5,11 @@ import { commitSession, sessionStorage } from "../services/session";
 import { DEFAULT_LANG, LANGUAGES } from "~/shared/constants/locale";
 import type { NewSerializeFrom, TLocale } from "~/shared/types/react";
 import type { Route } from ".react-router/types/app/+types/root";
+import { data } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const locale = await i18next.getLocale(request);
-  const t = await i18next.getFixedT(request, "root");
+  // const t = await i18next.getFixedT(request, "root");
 
   const meta = {
     title: "app.title",
@@ -18,7 +19,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     request.headers.get("cookie")
   );
 
-  return Response.json(
+  return data(
     {
       theme: "light" satisfies "light" | "dark",
       locale: LANGUAGES.includes(locale) ? locale : DEFAULT_LANG,

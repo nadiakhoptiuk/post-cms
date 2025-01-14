@@ -6,13 +6,14 @@ import { SearchForm } from "~/shared/components/modules/SearchForm";
 import { PostsTable } from "../PostsTable";
 
 import { PAGE_PARAMETER_NAME } from "~/shared/constants/common";
+import type { TLoaderData } from "./loader";
 
 export { loader } from "./loader";
 
 export const handle = { i18n: ["posts", "common"] };
 
 export default function DashBoardModerationPage() {
-  const { posts, query, actualPage, pagesCount } = useLoaderData();
+  const { posts, query, actualPage, pagesCount } = useLoaderData<TLoaderData>();
   const { t } = useTranslation("posts");
   const navigate = useNavigate();
 

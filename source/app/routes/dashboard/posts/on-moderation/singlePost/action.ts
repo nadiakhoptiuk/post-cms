@@ -1,6 +1,7 @@
 import { redirect } from "react-router";
 
 import { authGate } from "~/shared/.server/services/auth";
+import { getPostIdFromParams } from "~/shared/.server/utils/commonUtils";
 import { confirmPublishPost } from "~/shared/.server/utils/postUtils";
 
 import { ROLE_ADMIN } from "~/shared/constants/common";
@@ -16,10 +17,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       allowedRoles: [ROLE_ADMIN],
     },
     async (sessionUser: TSerializedUser) => {
-      const postId = params.postId;
-      if (!postId) {
-        throw new Error("Post Id not Found");
-      }
+      const postId = getPostIdFromParams(params);
 
       await confirmPublishPost(Number(postId), sessionUser.id);
 

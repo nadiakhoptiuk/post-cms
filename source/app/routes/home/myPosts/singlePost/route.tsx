@@ -8,6 +8,7 @@ import { StyledLink } from "~/shared/components/ui/StyledLink";
 import { TimestampItem } from "~/shared/components/ui/TimestampItem";
 import { NavigationLink } from "~/shared/constants/navigation";
 import { formatDateWithTime } from "~/shared/utils/dateFormat";
+import type { TLoaderData } from "./loader";
 
 export const handle = { i18n: ["posts", "common"] };
 
@@ -15,15 +16,13 @@ export { loader } from "./loader";
 export { action } from "./action";
 
 export default function HomeMyCurrentPostPage() {
+  const { post } = useLoaderData<TLoaderData>();
   const { t } = useTranslation("posts");
-  const { post } = useLoaderData();
 
   const {
     createdAt,
     updatedAt,
     updatedBy,
-    deletedAt,
-    deletedBy,
     publishedAt,
     moderatedBy,
     title,
@@ -34,7 +33,6 @@ export default function HomeMyCurrentPostPage() {
   const createdDate = formatDateWithTime(createdAt);
   const publicationDate = formatDateWithTime(publishedAt);
   const updatedDate = formatDateWithTime(updatedAt);
-  const deletedDate = formatDateWithTime(deletedAt);
 
   return (
     <Box component="section" py="lg">
@@ -65,14 +63,6 @@ export default function HomeMyCurrentPostPage() {
               type="updated"
               date={updatedDate}
               madeBy={updatedBy}
-            />
-          )}
-
-          {deletedDate && deletedBy && (
-            <TimestampItem
-              type="deleted"
-              date={deletedDate}
-              madeBy={deletedBy}
             />
           )}
         </Box>

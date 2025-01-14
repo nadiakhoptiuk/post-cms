@@ -1,18 +1,17 @@
 import { redirect } from "react-router";
-import { getSession } from "~/shared/.server/services/session";
-import type { Route } from "../../+types/root";
 
-import { ROLE_ADMIN, SESSION_USER_KEY } from "~/shared/constants/common";
+import { getSession } from "~/shared/.server/services/session";
+import { getPostIdFromParams } from "~/shared/.server/utils/commonUtils";
 import { deletePostById } from "~/shared/.server/repository/posts";
-import { NavigationLink } from "~/shared/constants/navigation";
 import { getUserById } from "~/shared/.server/repository/users";
 import { errorHandler } from "~/shared/.server/utils/errorHandler";
 
+import { ROLE_ADMIN, SESSION_USER_KEY } from "~/shared/constants/common";
+import { NavigationLink } from "~/shared/constants/navigation";
+import type { Route } from "../../+types/root";
+
 export async function action({ request, params }: Route.ActionArgs) {
-  const postId = params.postId;
-  if (!postId) {
-    return new Response("Post id not Found", { status: 404 });
-  }
+  const postId = getPostIdFromParams(params);
 
   const session = await getSession(request.headers.get("cookie"));
   const sessionUser = session.get(SESSION_USER_KEY);

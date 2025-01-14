@@ -1,14 +1,22 @@
 import { data } from "react-router";
 
 import { authGate } from "~/shared/.server/services/auth";
+import { getPostIdFromParams } from "~/shared/.server/utils/commonUtils";
 import { getUserPostById } from "~/shared/.server/repository/posts";
 
 import { ROLE_ADMIN, ROLE_USER } from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
-import type { TSerializedUser } from "~/shared/types/react";
+import type {
+  NewSerializeFrom,
+  TDBPostRecord,
+  TPost,
+  TSerializedUser,
+} from "~/shared/types/react";
 import type { Route } from "../../+types/route";
 
-export async function loader({ request, params }: Route.LoaderArgs) {
+export async function loader({ request, params }: Route.LoaderArgs): Promise<{
+  post: TPost & TDBPostRecord;
+}> {
   return await authGate(
     request,
     {
@@ -16,11 +24,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       allowedRoles: [ROLE_ADMIN, ROLE_USER],
     },
     async (sessionUser: TSerializedUser) => {
-      const postId = params.postId;
-
-      if (!postId) {
-        throw data("Not Found", { status: 404 });
-      }
+      const postId = getPostIdFromParams(params);
 
       const post = await getUserPostById(sessionUser.id, Number(postId));
 
@@ -35,3 +39,5 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     }
   );
 }
+
+export type TLoaderData = NewSerializeFrom<typeof loader>;

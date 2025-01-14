@@ -1,11 +1,22 @@
-import { getPostById } from "~/shared/.server/repository/posts";
-import type { Route } from "./+types/route";
-import { authGate } from "~/shared/.server/services/auth";
-import { ROLE_ADMIN } from "~/shared/constants/common";
 import { data } from "react-router";
-import { NavigationLink } from "~/shared/constants/navigation";
 
-export async function loader({ request, params }: Route.LoaderArgs) {
+import { getPostById } from "~/shared/.server/repository/posts";
+import { authGate } from "~/shared/.server/services/auth";
+import { getPostIdFromParams } from "~/shared/.server/utils/commonUtils";
+
+import { NavigationLink } from "~/shared/constants/navigation";
+import { ROLE_ADMIN } from "~/shared/constants/common";
+import type {
+  NewSerializeFrom,
+  TDBPostRecord,
+  TPost,
+} from "~/shared/types/react";
+import type { Route } from "./+types/route";
+
+export async function loader({
+  request,
+  params,
+}: Route.LoaderArgs): Promise<{ post: TDBPostRecord & TPost }> {
   return await authGate(
     request,
     {
@@ -13,11 +24,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       allowedRoles: [ROLE_ADMIN],
     },
     async () => {
-      const postId = params.postId;
-
-      if (!postId) {
-        throw new Error("Post id not found");
-      }
+      const postId = getPostIdFromParams(params);
 
       const post = await getPostById(Number(postId));
 
@@ -32,3 +39,5 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     }
   );
 }
+
+export type TLoaderData = NewSerializeFrom<typeof loader>;

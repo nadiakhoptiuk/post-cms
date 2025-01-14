@@ -1,7 +1,8 @@
-import { data, redirect } from "react-router";
+import { redirect } from "react-router";
 
 import { authGate } from "~/shared/.server/services/auth";
 import { updatePostAction } from "~/shared/.server/utils/postUtils";
+import { getPostIdFromParams } from "~/shared/.server/utils/commonUtils";
 
 import { ROLE_ADMIN, ROLE_USER } from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
@@ -16,11 +17,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       allowedRoles: [ROLE_ADMIN, ROLE_USER],
     },
     async (sessionUser: TSerializedUser) => {
-      const postId = params.postId;
-
-      if (!postId) {
-        throw data("Not Found", { status: 404 });
-      }
+      const postId = getPostIdFromParams(params);
 
       await updatePostAction(request, sessionUser, Number(postId));
 

@@ -2,10 +2,12 @@ import { publicGate } from "~/shared/.server/services/auth";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import { ROLE_ADMIN, ROLE_USER } from "~/shared/constants/common";
-import type { TSerializedUser } from "~/shared/types/react";
+import type { NewSerializeFrom, TSerializedUser } from "~/shared/types/react";
 import type { Route } from "./+types/route";
 
-export const loader = async ({ request }: Route.LoaderArgs) => {
+export const loader = async ({
+  request,
+}: Route.LoaderArgs): Promise<{ user: TSerializedUser | null }> => {
   return await publicGate(
     request,
     {
@@ -20,3 +22,6 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
     }
   );
 };
+
+type THomeLoader = typeof loader;
+export type THomeLoaderData = NewSerializeFrom<THomeLoader>;

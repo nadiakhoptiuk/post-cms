@@ -1,5 +1,11 @@
-import { PAGINATION_LIMIT, SESSION_USER_KEY } from "~/shared/constants/common";
 import { getSession } from "../services/session";
+
+import {
+  PAGE_PARAMETER_NAME,
+  PAGINATION_LIMIT,
+  SEARCH_PARAMETER_NAME,
+  SESSION_USER_KEY,
+} from "~/shared/constants/common";
 import type { TSerializedUser } from "~/shared/types/react";
 
 export const getCountForPagination = (total: number, page: number) => {
@@ -15,4 +21,12 @@ export const getSessionUserFromRequest = async (request: Request) => {
   const sessionUser: TSerializedUser = session.get(SESSION_USER_KEY);
 
   return sessionUser;
+};
+
+export const getPaginationDataFromRequest = (request: Request) => {
+  const url = new URL(request.url);
+  const query = url.searchParams.get(SEARCH_PARAMETER_NAME) || "";
+  const page = Number(url.searchParams.get(PAGE_PARAMETER_NAME) || "1");
+
+  return { query, page };
 };

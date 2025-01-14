@@ -17,7 +17,10 @@ export const errorHandler = (error: any) => {
   }
 
   if (error?.name === "PostgresError") {
-    console.log("instanceof PostgresError", error?.constraint_name);
+    console.log(
+      "instanceof PostgresError",
+      error?.constraint_name || error.message
+    );
 
     return data(error?.constraint_name || error.message || "PostgresError", {
       status: 500,
