@@ -15,7 +15,7 @@ import { BurgerMenu } from "../BurgerMenu";
 
 export function Home({ children, user }: THomeLayout) {
   const data = useRouteLoaderData<TRootLoader>("root");
-  const { t } = useTranslation(["common", "auth"]);
+  const { t } = useTranslation("common");
   const [menuOpened, { toggle: toggleMenu, close: closeMenu }] =
     useDisclosure(false);
 
@@ -33,7 +33,7 @@ export function Home({ children, user }: THomeLayout) {
               opened={menuOpened}
               onClick={toggleMenu}
               hiddenFrom="xs"
-              aria-label={t("aria.toggleMenu", { ns: "common" })}
+              aria-label={t("aria.toggleMenu")}
             />
           )}
 

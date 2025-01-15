@@ -23,7 +23,7 @@ export const Editor = ({ label, scope }: TTextInput) => {
   const field = useField(scope);
   const inputId = useId();
   const errorId = useId();
-  const { t } = useTranslation();
+  const { t } = useTranslation("posts");
 
   const editor = useEditor({
     extensions: [
@@ -35,7 +35,7 @@ export const Editor = ({ label, scope }: TTextInput) => {
       SubScript,
       TextAlign,
       Placeholder.configure({
-        placeholder: t("editor.placeholder", { ns: "posts" }),
+        placeholder: t("editor.placeholder"),
       }),
     ],
     content: field.value() || "",

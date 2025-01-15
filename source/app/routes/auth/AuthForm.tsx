@@ -13,7 +13,9 @@ import { loginValidator } from "~/shared/utils/validators/loginValidator";
 import type { TErrorsMessages } from "~/shared/types/react";
 
 export const AuthForm = ({ formType }: { formType: "signup" | "login" }) => {
-  const { t } = useTranslation(["auth", "common", "user"]);
+  const { t } = useTranslation("common");
+  const { t: u } = useTranslation("user");
+  const { t: a } = useTranslation("auth");
   const errorMessages = t("formErrorsMessages", {
     ns: "common",
     returnObjects: true,
@@ -50,23 +52,20 @@ export const AuthForm = ({ formType }: { formType: "signup" | "login" }) => {
           {formType === "signup" && (
             <>
               <TextInput
-                label={t("userData.firstName", { ns: "user" })}
+                label={u("userData.firstName")}
                 scope={form.scope("firstName") as FormScope<string>}
               />
 
               <TextInput
-                label={t("userData.lastName", { ns: "user" })}
+                label={u("userData.lastName")}
                 scope={form.scope("lastName") as FormScope<string>}
               />
             </>
           )}
 
-          <TextInput
-            label={t("userData.email", { ns: "user" })}
-            scope={form.scope("email")}
-          />
+          <TextInput label={u("userData.email")} scope={form.scope("email")} />
           <PasswordInput
-            label={t("userData.password", { ns: "user" })}
+            label={u("userData.password")}
             scope={form.scope("password")}
           />
 
@@ -77,8 +76,8 @@ export const AuthForm = ({ formType }: { formType: "signup" | "login" }) => {
             w="100%"
           >
             {formType === "signup"
-              ? t("authForm.button.signup", { ns: "auth" })
-              : t("authForm.button.login", { ns: "auth" })}
+              ? a("authForm.button.signup")
+              : a("authForm.button.login")}
           </Button>
         </Form>
       )}

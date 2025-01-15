@@ -15,7 +15,7 @@ import { NavigationLink } from "~/shared/constants/navigation";
 import type { TUsersData } from "./types";
 
 export const UsersTable = ({ users }: TUsersData) => {
-  const { t } = useTranslation("user");
+  const { t } = useTranslation("common");
   const [userId, setUserId] = useState<null | number>(null);
   const [opened, { open, close }] = useDisclosure(false);
   const hasBeenDeleted =
@@ -52,7 +52,7 @@ export const UsersTable = ({ users }: TUsersData) => {
             <Flex columnGap={4}>
               <StyledNavLink
                 variant="unstyled"
-                aria-label={t("buttons.button.edit", { ns: "common" })}
+                aria-label={t("buttons.button.edit")}
                 to={`${NavigationLink.DASHBOARD_USERS}/${id}`}
                 style={{ padding: 8 }}
               >
@@ -62,8 +62,8 @@ export const UsersTable = ({ users }: TUsersData) => {
               <Tooltip
                 label={
                   deletedAt === null
-                    ? t("buttons.button.delete", { ns: "common" })
-                    : t("buttons.button.restore", { ns: "common" })
+                    ? t("buttons.button.delete")
+                    : t("buttons.button.restore")
                 }
               >
                 <Button
@@ -112,9 +112,7 @@ export const UsersTable = ({ users }: TUsersData) => {
               </TableTh>
 
               <TableTh>{t("userData.role")}</TableTh>
-              <TableTh>
-                {t("timestampsLabels.createdAt", { ns: "common" })}
-              </TableTh>
+              <TableTh>{t("timestampsLabels.createdAt")}</TableTh>
 
               <TableTh> </TableTh>
             </MTable.Tr>

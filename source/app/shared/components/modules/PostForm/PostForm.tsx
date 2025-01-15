@@ -20,7 +20,8 @@ export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
   const submit = useSubmit();
 
   const [opened, { open, close }] = useDisclosure(false);
-  const { i18n, t } = useTranslation(["common", "posts"]);
+  const { i18n, t } = useTranslation("common");
+  const { t: p } = useTranslation("posts");
   const errorMessages = t("formErrorsMessages", {
     ns: "common",
     returnObjects: true,
@@ -48,21 +49,21 @@ export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
         <Stack align="stretch" justify="center" gap="md">
           <Box maw={600} w="100%" mx="auto">
             <TextInput
-              label={t("postData.title", { ns: "posts" })}
+              label={p("postData.title")}
               scope={form.scope("title")}
             />
 
             <SlugInput
-              label={t("postData.slug", { ns: "posts" })}
+              label={p("postData.slug")}
               scope={form.scope("slug")}
-              aria={t("button.generateSlug", { ns: "posts" })}
+              aria={p("button.generateSlug")}
               title={form.field("title").value()}
               locale={i18n.language as TLocale}
             />
           </Box>
 
           <RichTextEditor
-            label={t("postData.content", { ns: "posts" })}
+            label={p("postData.content")}
             scope={form.scope("content")}
           />
 
@@ -76,10 +77,7 @@ export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
             {t(
               formType === "update"
                 ? "buttons.button.update"
-                : "buttons.button.create",
-              {
-                ns: "common",
-              }
+                : "buttons.button.create"
             )}
           </Button>
         </Stack>
@@ -95,9 +93,7 @@ export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
           mx="auto"
           mt="lg"
         >
-          {t("buttons.button.delete", {
-            ns: "common",
-          })}
+          {t("buttons.button.delete")}
         </Button>
       )}
 

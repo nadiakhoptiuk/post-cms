@@ -17,7 +17,7 @@ import { NavigationLink } from "~/shared/constants/navigation";
 import type { TPostCard } from "./PostCard.types";
 
 export const PostCard = ({ item, userId, location, setPostId }: TPostCard) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const { id, title, slug, author, publishedAt, updatedAt, status } = item;
   const isUserOwner = userId === item.ownerId;
 
@@ -82,7 +82,7 @@ export const PostCard = ({ item, userId, location, setPostId }: TPostCard) => {
               style={{ width: "100%", height: "100%" }}
             >
               <IconEye size={18} color="white" style={{ flexShrink: 0 }} />
-              {t("buttons.button.view", { ns: "common" })}
+              {t("buttons.button.view")}
             </StyledLink>
           </Grid.Col>
 
@@ -93,7 +93,7 @@ export const PostCard = ({ item, userId, location, setPostId }: TPostCard) => {
                 w="100%"
                 h="100%"
                 styles={{ label: { gap: 10 } }}
-                aria-label={t("buttons.button.complain", { ns: "common" })}
+                aria-label={t("buttons.button.complain")}
                 onClick={() => setPostId(id)}
               >
                 <IconAlertSquareRounded
@@ -101,7 +101,7 @@ export const PostCard = ({ item, userId, location, setPostId }: TPostCard) => {
                   color="pink"
                   style={{ flexShrink: 0 }}
                 />
-                {t("buttons.button.complain", { ns: "common" })}
+                {t("buttons.button.complain")}
               </Button>
             </Grid.Col>
           )}
@@ -119,7 +119,7 @@ export const PostCard = ({ item, userId, location, setPostId }: TPostCard) => {
                 style={{ width: "100%" }}
               >
                 <IconPencil size={18} />
-                {t("buttons.button.edit", { ns: "common" })}
+                {t("buttons.button.edit")}
               </StyledLink>
             </Grid.Col>
           )}

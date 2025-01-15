@@ -41,19 +41,19 @@ export const ComplaintsTable = ({
             <Flex columnGap={4}>
               <StyledNavLink
                 variant="unstyled"
-                aria-label={t("buttons.button.view", { ns: "common" })}
+                aria-label={t("buttons.button.view")}
                 to={`/${postSlug}`}
                 style={{ padding: 8 }}
               >
                 <IconEye size={18} stroke={1.5} />
               </StyledNavLink>
 
-              <Tooltip label={t("buttons.button.block", { ns: "common" })}>
+              <Tooltip label={t("buttons.button.block")}>
                 <Button
                   type="button"
                   variant="subtle"
                   p={8}
-                  aria-label={t("buttons.button.block", { ns: "common" })}
+                  aria-label={t("buttons.button.block")}
                   onClick={() => {
                     fetcher.submit(
                       { postId: postId, id: id, actionId: ACTION_ACCEPT },
@@ -65,9 +65,7 @@ export const ComplaintsTable = ({
                 </Button>
               </Tooltip>
 
-              <Tooltip
-                label={t("buttons.button.reject.complaint", { ns: "common" })}
-              >
+              <Tooltip label={t("buttons.button.reject.complaint")}>
                 <Button
                   onClick={() => {
                     fetcher.submit(
@@ -110,9 +108,7 @@ export const ComplaintsTable = ({
 
             <TableTh>{c("complaintData.author")}</TableTh>
             <TableTh>{c("complaintData.reason")}</TableTh>
-            <TableTh>
-              {t("timestampsLabels.complainedAt", { ns: "common" })}
-            </TableTh>
+            <TableTh>{t("timestampsLabels.complainedAt")}</TableTh>
 
             <TableTh> </TableTh>
           </MTable.Tr>

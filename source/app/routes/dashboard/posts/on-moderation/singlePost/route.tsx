@@ -19,7 +19,7 @@ export default function DashBoardSinglePostPage() {
   const { post } = useLoaderData();
   const submit = useSubmit();
   const [opened, { open, close }] = useDisclosure(false);
-  const { t } = useTranslation("posts");
+  const { t } = useTranslation("common");
   const navigate = useNavigate();
 
   return (
@@ -33,7 +33,7 @@ export default function DashBoardSinglePostPage() {
             variant="light"
           >
             <IconArrowNarrowLeft size={18} />
-            {t("buttons.button.back", { ns: "common" })}
+            {t("buttons.button.back")}
           </Button>
         </Group>
         <PostHeading post={post} />
@@ -54,9 +54,7 @@ export default function DashBoardSinglePostPage() {
           </Button>
 
           <Button onClick={open} c="red" variant="default">
-            {t("buttons.button.reject", {
-              ns: "common",
-            })}
+            {t("buttons.button.reject")}
           </Button>
         </Flex>
 

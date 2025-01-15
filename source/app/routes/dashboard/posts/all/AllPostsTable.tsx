@@ -16,7 +16,7 @@ import { ModalForDeletingWithoutRedirect } from "~/shared/components/modules/Mod
 import type { TPostsTable } from "~/shared/types/react";
 
 export const AllPostsTable = ({ posts }: TPostsTable) => {
-  const { t } = useTranslation("posts");
+  const { t } = useTranslation("common");
   const [opened, { open, close }] = useDisclosure(false);
   const [postId, setPostId] = useState<null | number>(null);
 
@@ -51,14 +51,14 @@ export const AllPostsTable = ({ posts }: TPostsTable) => {
             <Flex columnGap={4}>
               <StyledNavLink
                 variant="unstyled"
-                aria-label={t("buttons.button.edit", { ns: "common" })}
+                aria-label={t("buttons.button.edit")}
                 to={`${NavigationLink.DASHBOARD_ALL_POSTS}/${id}`}
                 style={{ padding: 8 }}
               >
                 <IconPencil size={18} stroke={1.5} />
               </StyledNavLink>
 
-              <Tooltip label={t("buttons.button.delete", { ns: "common" })}>
+              <Tooltip label={t("buttons.button.delete")}>
                 <Button
                   onClick={() => {
                     setPostId(id);
@@ -98,10 +98,10 @@ export const AllPostsTable = ({ posts }: TPostsTable) => {
               <TableTh>{t("postData.author")}</TableTh>
 
               <TableTh>
-                {t("timestampsLabels.createdAt", { ns: "common" })}
+                {t("timestampsLabels.createdAt")}
               </TableTh>
               <TableTh>
-                {t("timestampsLabels.updatedAt", { ns: "common" })}
+                {t("timestampsLabels.updatedAt")}
               </TableTh>
 
               <TableTh>{t("postData.status")}</TableTh>

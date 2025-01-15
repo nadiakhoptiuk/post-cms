@@ -16,6 +16,7 @@ export const ModalForComplaint = ({
   itemId,
 }: TModal & TItemId) => {
   const { t } = useTranslation("common");
+  const { t: p } = useTranslation("posts");
   const fetcher = useFetcher();
   const errorMessages = t("formErrorsMessages", {
     ns: "common",
@@ -47,7 +48,7 @@ export const ModalForComplaint = ({
     <Modal
       opened={opened}
       onClose={onClose}
-      title={t("modal.title", { ns: "common" })}
+      title={t("modal.title")}
       p="lg"
       centered
       styles={{
@@ -57,7 +58,7 @@ export const ModalForComplaint = ({
     >
       <Form {...form.getFormProps()}>
         <SingleSelectField
-          label={t("postData.complaintReason", { ns: "posts" })}
+          label={p("postData.complaintReason")}
           scope={form.scope("complaintReason")}
           options={selectOptions}
           styles={{
@@ -73,9 +74,7 @@ export const ModalForComplaint = ({
           bg="red"
           fullWidth
         >
-          {t("buttons.button.complain", {
-            ns: "common",
-          })}
+          {t("buttons.button.complain")}
         </Button>
       </Form>
     </Modal>

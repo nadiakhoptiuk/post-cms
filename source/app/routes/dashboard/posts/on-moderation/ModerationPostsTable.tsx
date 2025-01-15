@@ -16,7 +16,7 @@ import { ACTION_PUBLISH } from "~/shared/constants/common";
 import type { TPostsTable } from "~/shared/types/react";
 
 export const ModerationPostsTable = ({ posts }: TPostsTable) => {
-  const { t } = useTranslation("posts");
+  const { t } = useTranslation("common");
   const [opened, { open, close }] = useDisclosure(false);
   const [postId, setPostId] = useState<null | number>(null);
   const fetcher = useFetcher();
@@ -46,19 +46,19 @@ export const ModerationPostsTable = ({ posts }: TPostsTable) => {
           <Flex columnGap={4}>
             <StyledNavLink
               variant="unstyled"
-              aria-label={t("buttons.button.view", { ns: "common" })}
+              aria-label={t("buttons.button.view")}
               to={`${id.toString()}`}
               style={{ padding: 8 }}
             >
               <IconEye size={18} stroke={1.5} />
             </StyledNavLink>
 
-            <Tooltip label={t("buttons.button.publish", { ns: "common" })}>
+            <Tooltip label={t("buttons.button.publish")}>
               <Button
                 type="button"
                 variant="subtle"
                 p={8}
-                aria-label={t("buttons.button.publish", { ns: "common" })}
+                aria-label={t("buttons.button.publish")}
                 onClick={() => {
                   fetcher.submit(
                     { id: id, actionId: ACTION_PUBLISH },
@@ -70,7 +70,7 @@ export const ModerationPostsTable = ({ posts }: TPostsTable) => {
               </Button>
             </Tooltip>
 
-            <Tooltip label={t("buttons.button.reject", { ns: "common" })}>
+            <Tooltip label={t("buttons.button.reject")}>
               <Button
                 onClick={() => {
                   setPostId(id);
@@ -107,9 +107,7 @@ export const ModerationPostsTable = ({ posts }: TPostsTable) => {
               </TableTh>
 
               <TableTh>{t("postData.author")}</TableTh>
-              <TableTh>
-                {t("timestampsLabels.createdAt", { ns: "common" })}
-              </TableTh>
+              <TableTh>{t("timestampsLabels.createdAt")}</TableTh>
 
               <TableTh> </TableTh>
             </MTable.Tr>

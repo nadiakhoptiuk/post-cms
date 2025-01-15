@@ -13,6 +13,7 @@ import type { TErrorsMessages, TItemId, TModal } from "~/shared/types/react";
 
 export const ModalRejectPost = ({ opened, onClose }: TModal) => {
   const { t } = useTranslation("common");
+  const { t: p } = useTranslation("posts");
   const submit = useSubmit();
   const errorMessages = t("formErrorsMessages", {
     ns: "common",
@@ -36,13 +37,13 @@ export const ModalRejectPost = ({ opened, onClose }: TModal) => {
     <Modal
       opened={opened}
       onClose={onClose}
-      title={t("modal.title", { ns: "common" })}
+      title={t("modal.title")}
       p="lg"
       centered
     >
       <Form {...form.getFormProps()}>
         <TextInput
-          label={t("postData.rejectReason", { ns: "posts" })}
+          label={p("postData.rejectReason")}
           scope={form.scope("reason")}
           styles={{
             wrapper: { marginBottom: 30 },
@@ -57,9 +58,7 @@ export const ModalRejectPost = ({ opened, onClose }: TModal) => {
           bg="red"
           fullWidth
         >
-          {t("buttons.button.reject", {
-            ns: "common",
-          })}
+          {t("buttons.button.reject")}
         </Button>
       </Form>
     </Modal>
@@ -72,6 +71,7 @@ export const ModalRejectPostWithoutRedirect = ({
   onClose,
 }: TModal & TItemId) => {
   const { t } = useTranslation("common");
+  const { t: p } = useTranslation("posts");
   const errorMessages = t("formErrorsMessages", {
     ns: "common",
     returnObjects: true,
@@ -98,13 +98,13 @@ export const ModalRejectPostWithoutRedirect = ({
     <Modal
       opened={opened}
       onClose={onClose}
-      title={t("modal.title", { ns: "common" })}
+      title={t("modal.title")}
       p="lg"
       centered
     >
       <Form {...form.getFormProps()}>
         <TextInput
-          label={t("postData.rejectReason", { ns: "posts" })}
+          label={p("postData.rejectReason")}
           scope={form.scope("reason")}
           styles={{
             wrapper: { marginBottom: 30 },
@@ -119,9 +119,7 @@ export const ModalRejectPostWithoutRedirect = ({
           bg="red"
           fullWidth
         >
-          {t("buttons.button.reject", {
-            ns: "common",
-          })}
+          {t("buttons.button.reject")}
         </Button>
       </Form>
     </Modal>

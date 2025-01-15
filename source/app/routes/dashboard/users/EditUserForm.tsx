@@ -29,7 +29,8 @@ export const EditUserForm = ({
 }: TEditUserForm & TFormType) => {
   const submit = useSubmit();
 
-  const { t } = useTranslation(["user", "common"]);
+  const { t } = useTranslation("common");
+  const { t: u } = useTranslation("user");
   const [opened, { open, close }] = useDisclosure(false);
   const errorMessages = t("formErrorsMessages", {
     ns: "common",
@@ -60,28 +61,25 @@ export const EditUserForm = ({
       >
         <Group mb={10}>
           <TextInput
-            label={t("userData.firstName", { ns: "user" })}
+            label={u("userData.firstName")}
             scope={form.scope("firstName")}
           />
           <TextInput
-            label={t("userData.lastName", { ns: "user" })}
+            label={u("userData.lastName")}
             scope={form.scope("lastName")}
           />
         </Group>
 
         <Group mb={10} styles={{ root: { alignItems: "flex-start" } }}>
-          <TextInput
-            label={t("userData.email", { ns: "user" })}
-            scope={form.scope("email")}
-          />
+          <TextInput label={u("userData.email")} scope={form.scope("email")} />
           <PasswordInput
-            label={t("userData.password", { ns: "user" })}
+            label={u("userData.password")}
             scope={form.scope("password")}
           />
         </Group>
 
         <SingleSelectField
-          label={t("userData.role", { ns: "user" })}
+          label={u("userData.role")}
           scope={form.scope("role")}
           options={ROLE_SELECT_OPTIONS}
           styles={{
@@ -101,10 +99,7 @@ export const EditUserForm = ({
           {t(
             formType === "update"
               ? "buttons.button.update"
-              : "buttons.button.create",
-            {
-              ns: "common",
-            }
+              : "buttons.button.create"
           )}
         </Button>
       </Form>
@@ -121,19 +116,15 @@ export const EditUserForm = ({
           }}
         >
           {hasBeenDeleted
-            ? t("buttons.button.restore", {
-                ns: "common",
-              })
-            : t("buttons.button.delete", {
-                ns: "common",
-              })}
+            ? t("buttons.button.restore")
+            : t("buttons.button.delete")}
         </Button>
       )}
 
       <Modal
         opened={opened}
         onClose={close}
-        title={t("modal.title", { ns: "common" })}
+        title={t("modal.title")}
         p="lg"
         centered
       >
@@ -141,9 +132,7 @@ export const EditUserForm = ({
           <Grid columns={2}>
             <Grid.Col span={1}>
               <Button variant="light" onClick={close} w="100%">
-                {t("buttons.button.cancel", {
-                  ns: "common",
-                })}
+                {t("buttons.button.cancel")}
               </Button>
             </Grid.Col>
 
@@ -164,12 +153,8 @@ export const EditUserForm = ({
                 fullWidth
               >
                 {hasBeenDeleted
-                  ? t("buttons.button.restore", {
-                      ns: "common",
-                    })
-                  : t("buttons.button.delete", {
-                      ns: "common",
-                    })}
+                  ? t("buttons.button.restore")
+                  : t("buttons.button.delete")}
               </Button>
             </Grid.Col>
           </Grid>

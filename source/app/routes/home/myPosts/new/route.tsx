@@ -4,12 +4,12 @@ import { useTranslation } from "react-i18next";
 import { PostForm } from "~/shared/components/modules/PostForm";
 
 export { action } from "./action";
-export { loader  } from "./loader";
+export { loader } from "./loader";
 
 export const handle = { i18n: ["posts", "common"] };
 
 export default function HomeNewPostPage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation("posts");
 
   return (
     <Box component="section" my="lg">
@@ -19,7 +19,7 @@ export default function HomeNewPostPage() {
           size="xl"
           styles={{ root: { textAlign: "center", marginBottom: 30 } }}
         >
-          {t("link.addNewPost", { ns: "posts" })}
+          {t("link.addNewPost")}
         </Title>
 
         <PostForm

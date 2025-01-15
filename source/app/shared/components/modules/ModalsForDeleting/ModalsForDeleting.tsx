@@ -56,14 +56,14 @@ export const ModalForDeletingWithoutRedirect = ({
   onClose,
   hasBeenDeleted,
 }: TModal & TItemId & { hasBeenDeleted: boolean }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const fetcher = useFetcher();
 
   return (
     <Modal
       opened={opened}
       onClose={onClose}
-      title={t("modal.title", { ns: "common" })}
+      title={t("modal.title")}
       p="lg"
       centered
     >

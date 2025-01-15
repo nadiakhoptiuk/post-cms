@@ -24,7 +24,7 @@ export const handle = { i18n: ["posts", "common"] };
 export default function HomeSinglePostPage() {
   const { post, user } = useLoaderData<TLoaderData>();
   const navigate = useNavigate();
-  const { t } = useTranslation("posts");
+  const { t } = useTranslation("common");
   const [opened, { open, close }] = useDisclosure(false);
   const [postId, setPostId] = useState<number | null>(null);
   const isOwnPost = user?.id === post.ownerId;
@@ -48,7 +48,7 @@ export default function HomeSinglePostPage() {
             variant="light"
           >
             <IconArrowNarrowLeft size={18} />
-            {t("buttons.button.back", { ns: "common" })}
+            {t("buttons.button.back")}
           </Button>
 
           <StyledLink to={NavigationLink.HOME} variant="accent" fill="filled">
@@ -63,11 +63,11 @@ export default function HomeSinglePostPage() {
             variant="subtle"
             mt={10}
             styles={{ label: { gap: 10 } }}
-            aria-label={t("buttons.button.complain", { ns: "common" })}
+            aria-label={t("buttons.button.complain")}
             onClick={() => setPostId(post.id)}
           >
             <IconAlertSquareRounded size={18} color="pink" />
-            {t("buttons.button.complain", { ns: "common" })}
+            {t("buttons.button.complain")}
           </Button>
         )}
 

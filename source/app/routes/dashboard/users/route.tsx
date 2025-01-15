@@ -18,7 +18,7 @@ export const handle = { i18n: ["user", "common"] };
 
 export default function DashBoardUsersPage() {
   const { users, query, actualPage, pagesCount } = useLoaderData<TLoaderData>();
-  const { t } = useTranslation();
+  const { t } = useTranslation("user");
   const navigate = useNavigate();
 
   // const [_, setSearchParams] = useSearchParams();
@@ -45,7 +45,7 @@ export default function DashBoardUsersPage() {
           >
             <IconPlus />
             <Text component="span" visibleFrom="xs">
-              {t("link.addNewUser", { ns: "user" })}
+              {t("link.addNewUser")}
             </Text>
           </StyledNavLink>
 
