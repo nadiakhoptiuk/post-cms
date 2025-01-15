@@ -1,13 +1,13 @@
 import { authGate } from "~/shared/.server/services/auth";
-import { getAllPostsWithComplaints } from "~/shared/.server/repository/posts";
+
 import { getPaginationDataFromRequest } from "~/shared/.server/utils/commonUtils";
+import { getAllComplaints } from "~/shared/.server/repository/complaints";
 
 import { ROLE_ADMIN } from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
 import type {
   NewSerializeFrom,
-  TDBPostRecord,
-  TPost,
+  TDBComplaintRecord,
   TSerializedUser,
 } from "~/shared/types/react";
 import type { Route } from "./+types/route";
@@ -18,7 +18,7 @@ import type {
 
 export async function loader({ request }: Route.LoaderArgs): Promise<
   {
-    posts: Array<TPost & TDBPostRecord>;
+    complaints: Array<TDBComplaintRecord>;
     user: TSerializedUser;
   } & WithPaginationData &
     WithSearchData
@@ -32,10 +32,17 @@ export async function loader({ request }: Route.LoaderArgs): Promise<
     async (sessionUser: TSerializedUser) => {
       const { query, page } = getPaginationDataFromRequest(request);
 
-      const { allPosts, actualPage, pagesCount } =
-        await getAllPostsWithComplaints(query, page);
+      const { allComplaints, actualPage, pagesCount } = await getAllComplaints(
+        query,
+        page
+      );
 
-      return { posts: allPosts, user: sessionUser, actualPage, pagesCount };
+      return {
+        complaints: allComplaints,
+        user: sessionUser,
+        actualPage,
+        pagesCount,
+      };
     },
     {
       failureRedirect: NavigationLink.LOGIN,

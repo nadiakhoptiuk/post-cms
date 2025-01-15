@@ -3,10 +3,10 @@ import { useTranslation } from "react-i18next";
 import { useLoaderData, useNavigate } from "react-router";
 
 import { SearchForm } from "~/shared/components/modules/SearchForm";
-import { PostsTable } from "../PostsTable";
 
 import { PAGE_PARAMETER_NAME } from "~/shared/constants/common";
 import type { TLoaderData } from "./loader";
+import { ModerationPostsTable } from "./ModerationPostsTable";
 
 export { loader } from "./loader";
 export { action } from "./action";
@@ -25,7 +25,7 @@ export default function DashBoardModerationPage() {
           <>
             <SearchForm query={query} />
 
-            <PostsTable posts={posts} />
+            <ModerationPostsTable posts={posts} />
 
             <Pagination
               total={pagesCount}

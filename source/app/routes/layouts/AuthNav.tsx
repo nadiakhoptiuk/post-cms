@@ -1,12 +1,10 @@
 import { List, ListItem } from "@mantine/core";
 import { useTranslation } from "react-i18next";
-
-import { StyledNavLink } from "../StyledNavLink";
+import { StyledNavLink } from "~/shared/components/ui/StyledNavLink";
 
 import { AuthNavLinks } from "~/shared/constants/navigation";
-import type { TAuthNav } from "./AuthNav.types";
 
-export const AuthNav = ({ burgerMenu = false }: TAuthNav) => {
+export const AuthNav = ({ burgerMenu = false }: { burgerMenu?: boolean }) => {
   const { t } = useTranslation(["common", "auth"]);
 
   const items = AuthNavLinks.map(({ id, link }) => (

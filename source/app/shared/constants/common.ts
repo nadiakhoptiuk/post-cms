@@ -19,6 +19,7 @@ export const ACTION_UPDATE = "update";
 export const ACTION_CREATE = "create";
 export const ACTION_PUBLISH = "publish";
 export const ACTION_REJECT = "reject";
+export const ACTION_ACCEPT = "accept";
 
 export const enum USER_ROLE {
   ADMIN = "admin",
@@ -30,4 +31,9 @@ export const enum POST_STATUS {
   ON_MODERATION = "on moderation",
   REJECTED = "rejected",
   BLOCKED = "blocked",
+}
+
+export const enum COMPLAINT_STATUS {
+  REJECTED = "rejected",
+  ACCEPTED = "accepted",
 }

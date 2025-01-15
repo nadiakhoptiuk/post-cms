@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import { db } from "server/app";
-import { users } from "~/database/schema";
+import { posts } from "~/database/schema/posts";
+import { users } from "~/database/schema/users";
 
 export const concattedUserName = sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`;
 
@@ -43,3 +44,12 @@ export const cmpl = db
   })
   .from(users)
   .as("cmpl");
+
+export const joinPost = db
+  .select({
+    postSlug: posts.slug,
+    postTitle: posts.title,
+    postId: posts.id,
+  })
+  .from(posts)
+  .as("joinPost");

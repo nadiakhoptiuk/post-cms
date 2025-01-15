@@ -1,8 +1,6 @@
 import { authGate } from "~/shared/.server/services/auth";
-import {
-  getCountOfPostsWithComplaints,
-  getCountOfPostsForModeration,
-} from "~/shared/.server/repository/posts";
+import { getCountOfPostsForModeration } from "~/shared/.server/repository/posts";
+import { getCountOfComplaints } from "~/shared/.server/repository/complaints";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import { ROLE_ADMIN } from "~/shared/constants/common";
@@ -23,7 +21,7 @@ export const loader = async ({
     },
     async () => {
       const postsOnModeration = await getCountOfPostsForModeration();
-      const postsWithComplaints = await getCountOfPostsWithComplaints();
+      const postsWithComplaints = await getCountOfComplaints();
 
       return {
         postsOnModeration,

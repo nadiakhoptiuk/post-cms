@@ -43,6 +43,7 @@
 
   "timestampsLabels": {
     "createdAt": "Created",
+    "complainedAt": "Made",
     "author": "Author",
     "updatedAt": "Updated",
     "updatedBy": "Updated by",

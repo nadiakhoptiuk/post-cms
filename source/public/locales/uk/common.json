@@ -43,6 +43,7 @@
 
   "timestampsLabels": {
     "createdAt": "Створено",
+    "complainedAt": "Подано",
     "author": "Автор",
     "updatedAt": "Оновлено",
     "updatedBy": "Ким оновлено",

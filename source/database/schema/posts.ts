@@ -1,24 +1,13 @@
 import { pgEnum, pgTable } from "drizzle-orm/pg-core";
 import * as t from "drizzle-orm/pg-core";
-import { postTimestamps, userTimestamps } from "./columns.helpers";
+import { users } from "./users";
 
-export const rolesEnum = pgEnum("roles", ["admin", "user"]);
 export const postStatusEnum = pgEnum("postStatus", [
   "published",
   "rejected",
   "on moderation",
   "blocked",
 ]);
-
-export const users = pgTable("Users", {
-  id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
-  firstName: t.varchar({ length: 40 }).notNull(),
-  lastName: t.varchar({ length: 40 }).notNull(),
-  email: t.varchar({ length: 255 }).notNull().unique(),
-  password: t.varchar({ length: 255 }).notNull(),
-  role: rolesEnum().notNull().default("user"),
-  ...userTimestamps,
-});
 
 export const posts = pgTable("Posts", {
   id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -30,7 +19,13 @@ export const posts = pgTable("Posts", {
     .references(() => users.id)
     .notNull(),
   postStatus: postStatusEnum().notNull().default("on moderation"),
+  createdAt: t.timestamp().defaultNow().notNull(),
+  updatedAt: t.timestamp(),
+  updatedById: t.integer().references((): t.AnyPgColumn => users.id),
+  publishedAt: t.timestamp(),
+  rejectedAt: t.timestamp(),
   rejectReason: t.varchar({ length: 50 }),
-  complaintReason: t.varchar({ length: 50 }),
-  ...postTimestamps,
+  moderatedById: t.integer().references((): t.AnyPgColumn => users.id),
+  blockedAt: t.timestamp(),
+  blockedById: t.integer().references((): t.AnyPgColumn => users.id),
 });

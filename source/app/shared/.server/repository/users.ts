@@ -8,7 +8,7 @@ import type {
   TUser,
   TUserPassword,
 } from "~/shared/types/react";
-import { users } from "~/database/schema";
+import { users } from "~/database/schema/users";
 import { PAGINATION_LIMIT } from "~/shared/constants/common";
 import { getCountForPagination } from "../utils/commonUtils";
 import { del, rstr, upd } from "./repositoryUtils";

@@ -1,22 +1,12 @@
 import { db } from "server/app";
-import {
-  and,
-  asc,
-  desc,
-  eq,
-  exists,
-  ilike,
-  isNotNull,
-  not,
-  or,
-  sql,
-} from "drizzle-orm";
-import { posts, users } from "~/database/schema";
+import { and, asc, desc, eq, exists, ilike, not, or, sql } from "drizzle-orm";
+import { posts } from "~/database/schema/posts";
+import { users } from "~/database/schema/users";
 
 import type { TDBPostRecord, TPost } from "~/shared/types/react";
 import { PAGINATION_LIMIT, POST_STATUS } from "~/shared/constants/common";
 import { getCountForPagination } from "../utils/commonUtils";
-import { cmpl, crt, upd } from "./repositoryUtils";
+import { crt, upd } from "./repositoryUtils";
 
 export async function createNewPost(userId: number, postData: TPost) {
   const createdPost = await db
@@ -124,7 +114,7 @@ export async function getAllPostsForAdmin(query: string, page: number) {
     .limit(PAGINATION_LIMIT)
     .offset(offset)
     .leftJoin(crt, eq(posts.ownerId, crt.id))
-    .orderBy(desc(posts.updatedAt));
+    .orderBy(desc(posts.updatedAt), desc(posts.createdAt));
 
   return { allPosts, actualPage, pagesCount };
 }
@@ -134,10 +124,6 @@ export async function getCountOfPostsForModeration() {
     posts,
     eq(posts.postStatus, POST_STATUS.ON_MODERATION)
   );
-}
-
-export async function getCountOfPostsWithComplaints() {
-  return await db.$count(posts, isNotNull(posts.complainedAt));
 }
 
 export async function getAllPostsForModeration(query: string, page: number) {
@@ -179,51 +165,6 @@ export async function getAllPostsForModeration(query: string, page: number) {
   return { allPosts, actualPage, pagesCount };
 }
 
-export async function getAllPostsWithComplaints(query: string, page: number) {
-  const totalCount = await db.$count(
-    posts,
-    and(
-      eq(posts.postStatus, POST_STATUS.PUBLISHED),
-      isNotNull(posts.complainedAt),
-      or(ilike(posts.title, `%${query}%`), ilike(posts.content, `%${query}%`))
-    )
-  );
-
-  if (totalCount === 0) {
-    return { allPosts: [], actualPage: 1, pagesCount: 1 };
-  }
-
-  const { offset, actualPage, pagesCount } = getCountForPagination(
-    totalCount,
-    page
-  );
-
-  const allPosts = await db
-    .select({
-      id: posts.id,
-      title: posts.title,
-      slug: posts.slug,
-      content: posts.content,
-      status: posts.postStatus,
-      complaintReason: posts.complaintReason,
-      complaintById: posts.complainedById,
-      complaintBy: cmpl.complaintAuthor,
-      createdAt: posts.createdAt,
-      complainedAt: posts.complainedAt,
-      ownerId: posts.ownerId,
-      author: crt.author,
-    })
-    .from(posts)
-    .leftJoin(crt, eq(posts.ownerId, crt.id))
-    .leftJoin(cmpl, eq(posts.complainedById, cmpl.id))
-    .where(and(isNotNull(posts.publishedAt), isNotNull(posts.complainedAt)))
-    .limit(PAGINATION_LIMIT)
-    .offset(offset)
-    .orderBy(desc(posts.complainedAt));
-
-  return { allPosts, actualPage, pagesCount };
-}
-
 export async function getPostById(postId: number) {
   const existedPost = await db
     .select({
@@ -236,6 +177,7 @@ export async function getPostById(postId: number) {
       publishedAt: posts.publishedAt,
       rejectedAt: posts.rejectedAt,
       author: crt.author,
+      postStatus: posts.postStatus,
     })
     .from(posts)
     .leftJoin(crt, eq(posts.ownerId, crt.id))
@@ -387,20 +329,15 @@ export async function deletePostById(postId: number, userId: number) {
   return deletedPost[0];
 }
 
-export async function complaintAboutPost(
-  postId: number,
-  postData: Partial<TPost & TDBPostRecord>,
-  userId: number
-) {
-  const updatedPost = await db
+export async function blockPostById(postId: number, userId: number) {
+  const blockedPost = await db
     .update(posts)
     .set({
-      ...postData,
-      complainedAt: sql`NOW()`,
-      complainedById: userId,
+      blockedAt: sql`NOW()`,
+      blockedById: userId,
+      postStatus: POST_STATUS.BLOCKED,
     })
-    .where(and(eq(posts.id, postId), not(eq(posts.ownerId, userId))))
-    .returning();
+    .where(eq(posts.id, postId));
 
-  return updatedPost[0];
+  return blockedPost[0];
 }

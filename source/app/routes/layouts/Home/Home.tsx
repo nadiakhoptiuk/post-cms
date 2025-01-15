@@ -7,11 +7,11 @@ import type { TRootLoader } from "~/shared/.server/root/loader";
 
 import { UserBar } from "../../../shared/components/ui/UserBar";
 import { Logo } from "../../../shared/components/ui/Logo";
-import { BurgerMenu } from "../../../shared/components/ui/BurgerMenu";
-import { AuthBlockVsLang } from "../../../shared/components/modules/AuthBlockVsLang";
+import { AuthBlockVsLang } from "../AuthBlockVsLang";
 
 import { DEFAULT_LANG } from "~/shared/constants/locale";
 import type { THomeLayout } from "./Home.types";
+import { BurgerMenu } from "../BurgerMenu";
 
 export function Home({ children, user }: THomeLayout) {
   const data = useRouteLoaderData<TRootLoader>("root");

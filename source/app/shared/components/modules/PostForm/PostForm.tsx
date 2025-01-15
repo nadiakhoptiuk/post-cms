@@ -12,9 +12,9 @@ import { ModalForDeletingPost } from "../ModalsForDeleting";
 
 import { postValidator } from "~/shared/utils/validators/postValidator";
 
+import { ACTION_CREATE, ACTION_UPDATE } from "~/shared/constants/common";
 import type { TErrorsMessages, TFormType, TLocale } from "~/shared/types/react";
 import type { TPostForm } from "./PostForm.types";
-import { ACTION_CREATE, ACTION_UPDATE } from "~/shared/constants/common";
 
 export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
   const submit = useSubmit();

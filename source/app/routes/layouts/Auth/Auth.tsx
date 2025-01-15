@@ -6,8 +6,8 @@ import { useDisclosure } from "@mantine/hooks";
 import type { TRootLoader } from "~/shared/.server/root/loader";
 
 import { Logo } from "../../../shared/components/ui/Logo";
-import { BurgerMenu } from "../../../shared/components/ui/BurgerMenu";
-import { AuthBlockVsLang } from "../../../shared/components/modules/AuthBlockVsLang";
+import { BurgerMenu } from "../BurgerMenu";
+import { AuthBlockVsLang } from "../AuthBlockVsLang";
 
 import type { WithChildren } from "~/shared/types/react";
 import { DEFAULT_LANG } from "~/shared/constants/locale";

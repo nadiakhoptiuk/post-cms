@@ -1,7 +1,6 @@
 import { Flex } from "@mantine/core";
-
-import { AuthNav } from "../../ui/AuthNav";
-import { LanguageSelector } from "../../ui/LanguageSelector";
+import { LanguageSelector } from "~/shared/components/ui/LanguageSelector";
+import { AuthNav } from "./AuthNav";
 
 import type { TLocale } from "~/shared/types/react";
 
