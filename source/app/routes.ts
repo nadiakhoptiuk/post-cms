@@ -29,27 +29,14 @@ export default [
     route(NavigationLink.DASHBOARD, "./routes/dashboard/index/route.tsx"),
 
     // ----------------------- USERS ----------------------------
-    route(
-      NavigationLink.DASHBOARD_USERS,
-      "./routes/dashboard/users/route.tsx",
-      [
-        route(
-          NavigationLink.DELETE_USER,
-          "./routes/api/deleteUserWithoutRedirect.ts"
-        ),
-      ]
-    ),
+    route(NavigationLink.DASHBOARD_USERS, "./routes/dashboard/users/route.tsx"),
     route(
       NavigationLink.DASHBOARD_USERS_NEW,
       "./routes/dashboard/users/new/route.tsx"
     ),
     route(
       NavigationLink.DASHBOARD_CURRENT_USER,
-      "./routes/dashboard/users/singleUser/route.tsx",
-      [
-        route(NavigationLink.DELETE_USER, "./routes/api/deleteUser.ts"),
-        route(NavigationLink.RESTORE_USER, "./routes/api/restoreUser.ts"),
-      ]
+      "./routes/dashboard/users/singleUser/route.tsx"
     ),
 
     // ----------------------- POSTS ----------------------------
@@ -64,23 +51,11 @@ export default [
 
     route(
       NavigationLink.DASHBOARD_POSTS_ON_MODERATION,
-      "./routes/dashboard/posts/on-moderation/route.tsx",
-      [
-        route(
-          NavigationLink.REJECT_PUBLISHING_POST,
-          "./routes/api/rejectPublicationPostWithoutRedirect.ts"
-        ),
-      ]
+      "./routes/dashboard/posts/on-moderation/route.tsx"
     ),
     route(
       NavigationLink.DASHBOARD_SINGLE_POST_ON_MODERATION,
-      "./routes/dashboard/posts/on-moderation/singlePost/route.tsx",
-      [
-        route(
-          NavigationLink.REJECT_PUBLISHING_POST,
-          "./routes/api/rejectPublicationPost.ts"
-        ),
-      ]
+      "./routes/dashboard/posts/on-moderation/singlePost/route.tsx"
     ),
 
     route(

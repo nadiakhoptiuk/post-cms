@@ -12,6 +12,7 @@ import { PAGE_PARAMETER_NAME } from "~/shared/constants/common";
 import type { TLoaderData } from "./loader";
 
 export { loader } from "./loader";
+export { action } from "./action";
 
 export const handle = { i18n: ["user", "common"] };
 

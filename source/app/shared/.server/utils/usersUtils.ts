@@ -1,14 +1,24 @@
 import bcrypt from "bcryptjs";
+import type { Params } from "react-router";
 import type {
   TDBUser,
   TRolesEnum,
   TSerializedUser,
   TUserPassword,
 } from "~/shared/types/react";
+import { getUserByEmailWithPassword } from "../repository/users";
 
-export const getUserDataFromRequest = async (request: Request) => {
-  const formData = await request.formData();
+export const getUserIdFromParams = (params: Params) => {
+  const userId = params?.userId;
 
+  if (!userId) {
+    throw new Error("User Id not Found");
+  }
+
+  return userId;
+};
+
+export const getUserDataFromRequest = async (formData: FormData) => {
   const firstName = formData.get("firstName");
   const lastName = formData.get("lastName");
   const email = formData.get("email");
@@ -53,12 +63,26 @@ export const serializeUser = (
 export const verifyPasswordAndSerialize = async (
   user: TDBUser & TUserPassword,
   enteredPassword: string
-): Promise<TSerializedUser | null> => {
+): Promise<TSerializedUser> => {
   const isPasswordValid = await checkPassword(enteredPassword, user.password);
 
   if (!isPasswordValid) {
-    return null;
+    throw new Error("Invalid username or password");
   }
 
   return serializeUser(user);
 };
+
+export async function verifyUserAndSerialize(email: string, password: string) {
+  const existingUser = await getUserByEmailWithPassword(email);
+
+  if (!existingUser) {
+    throw new Error("User with such email does not exist in database");
+  }
+
+  if (existingUser && existingUser.deletedAt !== null) {
+    throw new Error("This account was deleted");
+  }
+
+  return await verifyPasswordAndSerialize(existingUser, password);
+}

@@ -1,10 +1,10 @@
 import { redirect } from "react-router";
 
 import { authGate } from "~/shared/.server/services/auth";
-import {
-  getPostIdFromParams,
-  updatePostAction,
-} from "~/shared/.server/utils/postUtils";
+import { getPostIdFromParams } from "~/shared/.server/utils/postUtils";
+import { getActionIdFromRequest } from "~/shared/.server/utils/commonUtils";
+import { updatePostAction } from "../actions/update";
+import { deletePostAction } from "../actions/delete";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import {
@@ -14,8 +14,7 @@ import {
 } from "~/shared/constants/common";
 import type { TSerializedUser } from "~/shared/types/react";
 import type { Route } from "./+types/route";
-import { getActionIdFromRequest } from "~/shared/.server/utils/commonUtils";
-import { deletePostById } from "~/shared/.server/repository/posts";
+import { getPostById } from "~/shared/.server/repository/posts";
 
 export async function action({ request, params }: Route.ActionArgs) {
   return await authGate(
@@ -28,16 +27,33 @@ export async function action({ request, params }: Route.ActionArgs) {
       const postId = getPostIdFromParams(params);
 
       const formData = await request.formData();
-      const action = await getActionIdFromRequest(formData);
+      const action = getActionIdFromRequest(formData);
+
+      const existingPost = await getPostById(Number(postId));
+
+      if (!existingPost) {
+        throw new Error("Post with such id does not exist");
+      }
+
+      let result;
 
       switch (action) {
         case ACTION_DELETE:
-          await deletePostById(Number(postId), sessionUser.id);
+          result = await deletePostAction(Number(postId), sessionUser.id);
           break;
 
         case ACTION_UPDATE:
-          await updatePostAction(formData, sessionUser, Number(postId));
+          result = await updatePostAction(
+            formData,
+            sessionUser.id,
+            Number(postId),
+            existingPost.slug
+          );
           break;
+      }
+
+      if (!result) {
+        throw Error("Something went wrong");
       }
 
       return redirect(NavigationLink.DASHBOARD_ALL_POSTS);

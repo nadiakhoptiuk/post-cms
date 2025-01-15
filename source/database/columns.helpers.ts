@@ -12,6 +12,8 @@ export const userTimestamps = {
   ...timestamps,
   deletedAt: timestamp(),
   deletedById: t.integer().references((): t.AnyPgColumn => users.id),
+  restoredAt: timestamp(),
+  restoredById: t.integer().references((): t.AnyPgColumn => users.id),
 };
 
 export const postTimestamps = {

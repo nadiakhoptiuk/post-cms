@@ -23,6 +23,7 @@ import { ModalForDeletingWithoutRedirect } from "~/shared/components/modules/Mod
 import { ModalRejectPostWithoutRedirect } from "~/shared/components/modules/ModalsForRejectingPost";
 
 import type { TDBPostRecord, TPost } from "~/shared/types/react";
+import { ACTION_PUBLISH } from "~/shared/constants/common";
 
 export const PostsTable = ({
   posts,
@@ -113,7 +114,10 @@ export const PostsTable = ({
                     p={8}
                     aria-label={t("buttons.button.publish", { ns: "common" })}
                     onClick={() => {
-                      fetcher.submit({ postId: id }, { method: "post" });
+                      fetcher.submit(
+                        { id: id, actionId: ACTION_PUBLISH },
+                        { method: "post" }
+                      );
                     }}
                   >
                     <IconCheck size={18} stroke={1.5} />
@@ -223,6 +227,7 @@ export const PostsTable = ({
           itemId={postId}
           opened={opened}
           onClose={() => setPostId(null)}
+          hasBeenDeleted={false}
         />
       )}
 

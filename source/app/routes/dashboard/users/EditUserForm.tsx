@@ -1,4 +1,4 @@
-import { Form } from "react-router";
+import { Form, useSubmit } from "react-router";
 import { useForm } from "@rvf/react-router";
 import { useTranslation } from "react-i18next";
 import { Grid, Group } from "@mantine/core";
@@ -12,8 +12,13 @@ import { TextInput } from "~/shared/components/ui/TextInput";
 import { PasswordInput } from "~/shared/components/ui/PasswordInput";
 import { Modal } from "~/shared/components/ui/Modal";
 
-import { NavigationLink } from "~/shared/constants/navigation";
-import { ROLE_SELECT_OPTIONS } from "~/shared/constants/common";
+import {
+  ACTION_CREATE,
+  ACTION_DELETE,
+  ACTION_RESTORE,
+  ACTION_UPDATE,
+  ROLE_SELECT_OPTIONS,
+} from "~/shared/constants/common";
 import type { TErrorsMessages, TFormType } from "~/shared/types/react";
 import type { TEditUserForm } from "./types";
 
@@ -22,6 +27,8 @@ export const EditUserForm = ({
   formType,
   hasBeenDeleted = false,
 }: TEditUserForm & TFormType) => {
+  const submit = useSubmit();
+
   const { t } = useTranslation(["user", "common"]);
   const [opened, { open, close }] = useDisclosure(false);
   const errorMessages = t("formErrorsMessages", {
@@ -32,7 +39,17 @@ export const EditUserForm = ({
   const form = useForm({
     validator: userFormValidator(errorMessages),
     defaultValues: { ...userData, password: "" },
-    method: "POST",
+    handleSubmit: (data) => {
+      {
+        submit(
+          {
+            ...data,
+            actionId: formType === "update" ? ACTION_UPDATE : ACTION_CREATE,
+          },
+          { method: "post" }
+        );
+      }
+    },
   });
 
   return (
@@ -131,32 +148,29 @@ export const EditUserForm = ({
             </Grid.Col>
 
             <Grid.Col span={1}>
-              <Form
-                style={{}}
-                method="post"
-                action={
-                  hasBeenDeleted
-                    ? NavigationLink.RESTORE_USER
-                    : NavigationLink.DELETE_USER
+              <Button
+                type="button"
+                onClick={() =>
+                  submit(
+                    {
+                      actionId: hasBeenDeleted ? ACTION_RESTORE : ACTION_DELETE,
+                    },
+                    { method: "post" }
+                  )
                 }
+                c="white"
+                variant="filled"
+                bg="red"
+                fullWidth
               >
-                <Button
-                  type="submit"
-                  loading={form.formState.isSubmitting}
-                  c="white"
-                  variant="filled"
-                  bg="red"
-                  fullWidth
-                >
-                  {hasBeenDeleted
-                    ? t("buttons.button.restore", {
-                        ns: "common",
-                      })
-                    : t("buttons.button.delete", {
-                        ns: "common",
-                      })}
-                </Button>
-              </Form>
+                {hasBeenDeleted
+                  ? t("buttons.button.restore", {
+                      ns: "common",
+                    })
+                  : t("buttons.button.delete", {
+                      ns: "common",
+                    })}
+              </Button>
             </Grid.Col>
           </Grid>
         }

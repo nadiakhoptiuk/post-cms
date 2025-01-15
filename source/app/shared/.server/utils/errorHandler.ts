@@ -16,6 +16,12 @@ export const errorHandler = (error: any) => {
     });
   }
 
+  if (error?.code === "ECONNREFUSED") {
+    console.log("Database isn't connect", error.code);
+
+    throw Error("Database isn't connect");
+  }
+
   if (error?.name === "PostgresError") {
     console.log(
       "instanceof PostgresError",

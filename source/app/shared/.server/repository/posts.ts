@@ -16,32 +16,7 @@ import { posts, users } from "~/database/schema";
 import type { TDBPostRecord, TPost } from "~/shared/types/react";
 import { PAGINATION_LIMIT, POST_STATUS } from "~/shared/constants/common";
 import { getCountForPagination } from "../utils/commonUtils";
-
-const concattedUserName = sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`;
-
-const crt = db
-  .select({
-    author: concattedUserName.as("author"),
-    id: users.id,
-  })
-  .from(users)
-  .as("crt");
-
-const cmpl = db
-  .select({
-    complaintAuthor: concattedUserName.as("complaintAuthor"),
-    id: users.id,
-  })
-  .from(users)
-  .as("cmpl");
-
-const upd = db
-  .select({
-    updatedBy: concattedUserName.as("updatedBy"),
-    id: users.id,
-  })
-  .from(users)
-  .as("upd");
+import { cmpl, crt, upd } from "./repositoryUtils";
 
 export async function createNewPost(userId: number, postData: TPost) {
   const createdPost = await db
@@ -258,6 +233,8 @@ export async function getPostById(postId: number) {
       content: posts.content,
       createdAt: posts.createdAt,
       updatedAt: posts.updatedAt,
+      publishedAt: posts.publishedAt,
+      rejectedAt: posts.rejectedAt,
       author: crt.author,
     })
     .from(posts)
@@ -374,12 +351,6 @@ export async function moderatePostById(
   postData: Partial<TPost & TDBPostRecord>,
   { confirmed }: { confirmed: boolean }
 ) {
-  // const existedPost = await db.select().from(posts).where(eq(posts.id, postId));
-
-  // if (!existedPost[0]) {
-  //   throw new Error("Post with such id does not exist");
-  // }
-
   const updatedPost = await db
     .update(posts)
     .set({
@@ -389,7 +360,7 @@ export async function moderatePostById(
       rejectedAt: confirmed ? null : sql`NOW()`,
     })
     .where(eq(posts.id, postId))
-    .returning();
+    .returning({ id: posts.id, postStatus: posts.postStatus });
 
   return updatedPost[0];
 }

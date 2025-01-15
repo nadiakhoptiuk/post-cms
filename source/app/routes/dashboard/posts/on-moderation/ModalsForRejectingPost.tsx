@@ -2,9 +2,9 @@ import { useForm } from "@rvf/react-router";
 import { useTranslation } from "react-i18next";
 import { Form, useFetcher, useSubmit } from "react-router";
 
-import { Modal } from "../../ui/Modal";
-import { Button } from "../../ui/Button";
-import { TextInput } from "../../ui/TextInput";
+import { Modal } from "~/shared/components/ui/Modal";
+import { TextInput } from "~/shared/components/ui/TextInput";
+import { Button } from "~/shared/components/ui/Button";
 
 import { rejectPostValidator } from "~/shared/utils/validators/rejectPostValidator";
 
@@ -14,7 +14,6 @@ import type { TErrorsMessages, TItemId, TModal } from "~/shared/types/react";
 export const ModalRejectPost = ({ opened, onClose }: TModal) => {
   const { t } = useTranslation("common");
   const submit = useSubmit();
-
   const errorMessages = t("formErrorsMessages", {
     ns: "common",
     returnObjects: true,
@@ -25,7 +24,6 @@ export const ModalRejectPost = ({ opened, onClose }: TModal) => {
     defaultValues: {
       reason: "",
     },
-    method: "POST",
     handleSubmit: (data) => {
       {
         submit({ ...data, actionId: ACTION_REJECT }, { method: "post" });
@@ -85,11 +83,10 @@ export const ModalRejectPostWithoutRedirect = ({
     defaultValues: {
       reason: "",
     },
-    method: "POST",
     handleSubmit: (data) => {
       {
         fetcher.submit(
-          { ...data, id: itemId, actionId: ACTION_REJECT },
+          { ...data, postId: itemId, actionId: ACTION_REJECT },
           { method: "post" }
         );
         onClose();

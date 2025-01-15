@@ -1,7 +1,17 @@
 import { authGate } from "~/shared/.server/services/auth";
 import { confirmPublishPost } from "~/shared/.server/utils/postUtils";
+import {
+  getActionIdFromRequest,
+  getIdFromRequest,
+} from "~/shared/.server/utils/commonUtils";
+import { getPostById } from "~/shared/.server/repository/posts";
+import { rejectPublishPostAction } from "./actions/reject";
 
-import { ROLE_ADMIN } from "~/shared/constants/common";
+import {
+  ACTION_PUBLISH,
+  ACTION_REJECT,
+  ROLE_ADMIN,
+} from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
 import type { TSerializedUser } from "~/shared/types/react";
 import type { Route } from "./+types/route";
@@ -15,13 +25,42 @@ export async function action({ request }: Route.ActionArgs) {
     },
     async (sessionUser: TSerializedUser) => {
       const formData = await request.formData();
-      const postId = formData.get("postId");
+      const postId = getIdFromRequest(formData);
 
-      if (!postId) {
-        throw new Error("Post Id not found");
+      const existingPost = await getPostById(Number(postId));
+
+      if (!existingPost) {
+        throw new Error("Post with such id does not exist");
+      } else if (
+        (existingPost && existingPost.publishedAt !== null) ||
+        (existingPost && existingPost.rejectedAt !== null)
+      ) {
+        throw new Error("Post has been already moderated");
       }
 
-      await confirmPublishPost(Number(postId), sessionUser.id);
+      const action = getActionIdFromRequest(formData);
+
+      let result;
+
+      switch (action) {
+        case ACTION_PUBLISH:
+          result = await confirmPublishPost(Number(postId), sessionUser.id);
+          break;
+
+        case ACTION_REJECT:
+          result = await rejectPublishPostAction(
+            formData,
+            Number(postId),
+            sessionUser.id
+          );
+          break;
+      }
+
+      if (!result) {
+        throw Error("Something went wrong");
+      }
+
+      return result;
     },
     {
       failureRedirect: NavigationLink.LOGIN,

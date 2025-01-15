@@ -1,11 +1,12 @@
 import { authGate } from "~/shared/.server/services/auth";
-import { getIdFromRequest } from "~/shared/.server/utils/postUtils";
-import { deletePostById } from "~/shared/.server/repository/posts";
+import { getIdFromRequest } from "~/shared/.server/utils/commonUtils";
+import { deletePostAction } from "./actions/delete";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import { ROLE_ADMIN } from "~/shared/constants/common";
 import type { TSerializedUser } from "~/shared/types/react";
 import type { Route } from "./+types/route";
+import { getPostById } from "~/shared/.server/repository/posts";
 
 export async function action({ request }: Route.ActionArgs) {
   return await authGate(
@@ -18,7 +19,13 @@ export async function action({ request }: Route.ActionArgs) {
       const formData = await request.formData();
       const postId = getIdFromRequest(formData);
 
-      await deletePostById(Number(postId), sessionUser.id);
+      const existingPost = await getPostById(Number(postId));
+
+      if (!existingPost) {
+        throw new Error("Post with such id does not exist");
+      }
+
+      await deletePostAction(Number(postId), sessionUser.id);
     },
     {
       failureRedirect: NavigationLink.HOME,

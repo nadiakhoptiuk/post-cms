@@ -9,6 +9,16 @@ import {
 } from "~/shared/constants/common";
 import type { TSerializedUser } from "~/shared/types/react";
 
+export const getIdFromRequest = (formData: FormData) => {
+  const id = formData.get("id");
+
+  if (typeof id !== "string") {
+    throw new Error("Id not Found");
+  }
+
+  return id;
+};
+
 export const getCountForPagination = (total: number, page: number) => {
   const pagesCount = Math.ceil(total / PAGINATION_LIMIT);
   const actualPage = page > pagesCount ? pagesCount : page;

@@ -14,7 +14,7 @@ import { postValidator } from "~/shared/utils/validators/postValidator";
 
 import type { TErrorsMessages, TFormType, TLocale } from "~/shared/types/react";
 import type { TPostForm } from "./PostForm.types";
-import { ACTION_UPDATE } from "~/shared/constants/common";
+import { ACTION_CREATE, ACTION_UPDATE } from "~/shared/constants/common";
 
 export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
   const submit = useSubmit();
@@ -31,7 +31,13 @@ export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
     defaultValues: postData,
     handleSubmit: (data) => {
       {
-        submit({ ...data, actionId: ACTION_UPDATE }, { method: "post" });
+        submit(
+          {
+            ...data,
+            actionId: formType === "update" ? ACTION_UPDATE : ACTION_CREATE,
+          },
+          { method: "post" }
+        );
       }
     },
   });

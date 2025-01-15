@@ -6,6 +6,7 @@
     "build": "react-router build",
     "db:generate": "dotenv -- drizzle-kit generate",
     "db:migrate": "dotenv -- drizzle-kit migrate",
+    "db:push": "dotenv -- drizzle-kit push",
     "dev": "dotenv -- node server.js",
     "lint": "eslint --ignore-pattern .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "node server.js",

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Flex, Table as MTable, Text, Tooltip } from "@mantine/core";
-import { IconPencil, IconTrash } from "@tabler/icons-react";
+import { IconPencil, IconRestore, IconTrash } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 
 import { TableTd, TableTh } from "~/shared/components/ui/TableElements";
@@ -18,6 +18,8 @@ export const UsersTable = ({ users }: TUsersData) => {
   const { t } = useTranslation("user");
   const [userId, setUserId] = useState<null | number>(null);
   const [opened, { open, close }] = useDisclosure(false);
+  const hasBeenDeleted =
+    users.find((user) => user.id === userId)?.deletedAt !== null;
 
   useEffect(() => {
     if (!userId) {
@@ -57,20 +59,28 @@ export const UsersTable = ({ users }: TUsersData) => {
                 <IconPencil size={18} stroke={1.5} />
               </StyledNavLink>
 
-              {deletedAt === null && (
-                <Tooltip label={t("buttons.button.delete", { ns: "common" })}>
-                  <Button
-                    onClick={() => {
-                      setUserId(id);
-                    }}
-                    c="red"
-                    p={8}
-                    variant="subtle"
-                  >
+              <Tooltip
+                label={
+                  deletedAt === null
+                    ? t("buttons.button.delete", { ns: "common" })
+                    : t("buttons.button.restore", { ns: "common" })
+                }
+              >
+                <Button
+                  onClick={() => {
+                    setUserId(id);
+                  }}
+                  c={deletedAt === null ? "red" : "green"}
+                  p={8}
+                  variant="subtle"
+                >
+                  {deletedAt === null ? (
                     <IconTrash size={18} stroke={1.5} />
-                  </Button>
-                </Tooltip>
-              )}
+                  ) : (
+                    <IconRestore size={18} stroke={1.5} />
+                  )}
+                </Button>
+              </Tooltip>
             </Flex>
           </TableTd>
         </MTable.Tr>
@@ -119,7 +129,7 @@ export const UsersTable = ({ users }: TUsersData) => {
           itemId={userId}
           opened={opened}
           onClose={() => setUserId(null)}
-          action={NavigationLink.DELETE_USER}
+          hasBeenDeleted={hasBeenDeleted}
         />
       )}
     </>

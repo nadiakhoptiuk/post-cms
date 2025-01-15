@@ -6,7 +6,7 @@ import { Modal } from "../../ui/Modal";
 import { Button } from "../../ui/Button";
 
 import type { TItemId, TModal } from "~/shared/types/react";
-import { ACTION_DELETE } from "~/shared/constants/common";
+import { ACTION_DELETE, ACTION_RESTORE } from "~/shared/constants/common";
 
 export const ModalForDeletingPost = ({ opened, onClose }: TModal) => {
   const { t } = useTranslation("common");
@@ -54,7 +54,8 @@ export const ModalForDeletingWithoutRedirect = ({
   itemId,
   opened,
   onClose,
-}: TModal & TItemId) => {
+  hasBeenDeleted,
+}: TModal & TItemId & { hasBeenDeleted: boolean }) => {
   const { t } = useTranslation();
   const fetcher = useFetcher();
 
@@ -84,7 +85,10 @@ export const ModalForDeletingWithoutRedirect = ({
               fullWidth
               onClick={() => {
                 fetcher.submit(
-                  { id: itemId },
+                  {
+                    id: itemId,
+                    actionId: hasBeenDeleted ? ACTION_RESTORE : ACTION_DELETE,
+                  },
                   {
                     method: "post",
                   }
@@ -92,9 +96,13 @@ export const ModalForDeletingWithoutRedirect = ({
                 onClose();
               }}
             >
-              {t("buttons.button.delete", {
-                ns: "common",
-              })}
+              {hasBeenDeleted
+                ? t("buttons.button.restore", {
+                    ns: "common",
+                  })
+                : t("buttons.button.delete", {
+                    ns: "common",
+                  })}
             </Button>
           </Grid.Col>
         </Grid>

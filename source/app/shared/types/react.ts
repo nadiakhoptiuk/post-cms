@@ -61,6 +61,9 @@ export type TDBUserRecord = {
   deletedAt?: Date | null;
   deletedBy?: string | null;
   deletedById?: number | null;
+  restoredAt?: Date | null;
+  restoredBy?: string | null;
+  restoredById?: number | null;
 };
 
 export type TDBUser = TUser & TDBUserRecord;

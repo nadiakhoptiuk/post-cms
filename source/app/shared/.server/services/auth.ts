@@ -3,8 +3,8 @@ import { data, redirect } from "react-router";
 import {
   createNewUser,
   deleteUserById,
+  getUserByEmailWithPassword,
   getUserById,
-  verifyUserAndSerialize,
 } from "../repository/users";
 import { commitSession, getSession } from "./session";
 
@@ -15,6 +15,7 @@ import { getSessionUserFromRequest } from "../utils/commonUtils";
 import { errorHandler } from "../utils/errorHandler";
 
 import type { TSerializedUser } from "~/shared/types/react";
+import { passwordHash, verifyUserAndSerialize } from "../utils/usersUtils";
 
 export const loginUser = async (request: Request): Promise<Response> => {
   const form = await request.formData();
@@ -55,11 +56,19 @@ export const signupUser = async (request: Request): Promise<Response> => {
 
   const session = await getSession(request.headers.get("cookie"));
 
+  const existingUser = await getUserByEmailWithPassword(email);
+
+  if (existingUser) {
+    throw new Error("User with such email has already exist in database");
+  }
+
+  const hashedPassword = await passwordHash(password);
+
   await createNewUser({
     firstName,
     lastName,
     email,
-    password,
+    password: hashedPassword,
   });
 
   return redirect(NavigationLink.LOGIN, {
