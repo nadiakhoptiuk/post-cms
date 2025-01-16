@@ -1,16 +1,16 @@
-import { Form, useFetcher } from "react-router";
+import { useFetcher, useSubmit } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Grid } from "@mantine/core";
 
 import { Modal } from "../../ui/Modal";
 import { Button } from "../../ui/Button";
 
-import { NavigationLink } from "~/shared/constants/navigation";
 import type { TItemId, TModal } from "~/shared/types/react";
-import type { TModalWithAction } from "./ModalsForDeleting.types";
+import { ACTION_DELETE, ACTION_RESTORE } from "~/shared/constants/common";
 
 export const ModalForDeletingPost = ({ opened, onClose }: TModal) => {
   const { t } = useTranslation("common");
+  const submit = useSubmit();
 
   return (
     <Modal
@@ -31,17 +31,18 @@ export const ModalForDeletingPost = ({ opened, onClose }: TModal) => {
           </Grid.Col>
 
           <Grid.Col span={1}>
-            <Form method="post" action={NavigationLink.DELETE_POST}>
-              <Button
-                type="submit"
-                c="white"
-                variant="filled"
-                bg="red"
-                fullWidth
-              >
-                {t("buttons.button.delete")}
-              </Button>
-            </Form>
+            <Button
+              type="button"
+              onClick={() =>
+                submit({ actionId: ACTION_DELETE }, { method: "post" })
+              }
+              variant="filled"
+              c="white"
+              bg="red"
+              fullWidth
+            >
+              {t("buttons.button.delete")}
+            </Button>
           </Grid.Col>
         </Grid>
       }
@@ -53,16 +54,16 @@ export const ModalForDeletingWithoutRedirect = ({
   itemId,
   opened,
   onClose,
-  action,
-}: TModalWithAction & TItemId) => {
-  const { t } = useTranslation();
+  hasBeenDeleted,
+}: TModal & TItemId & { hasBeenDeleted: boolean }) => {
+  const { t } = useTranslation("common");
   const fetcher = useFetcher();
 
   return (
     <Modal
       opened={opened}
       onClose={onClose}
-      title={t("modal.title", { ns: "common" })}
+      title={t("modal.title")}
       p="lg"
       centered
     >
@@ -84,19 +85,24 @@ export const ModalForDeletingWithoutRedirect = ({
               fullWidth
               onClick={() => {
                 fetcher.submit(
-                  { id: itemId },
+                  {
+                    id: itemId,
+                    actionId: hasBeenDeleted ? ACTION_RESTORE : ACTION_DELETE,
+                  },
                   {
                     method: "post",
-                    // action: NavigationLink.DELETE_POST,
-                    action: action,
                   }
                 );
                 onClose();
               }}
             >
-              {t("buttons.button.delete", {
-                ns: "common",
-              })}
+              {hasBeenDeleted
+                ? t("buttons.button.restore", {
+                    ns: "common",
+                  })
+                : t("buttons.button.delete", {
+                    ns: "common",
+                  })}
             </Button>
           </Grid.Col>
         </Grid>

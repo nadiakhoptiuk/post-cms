@@ -25,19 +25,22 @@ export const PostContent = ({
 };
 
 export const PostHeading = ({ post }: { post: TPost & TDBPostRecord }) => {
-  const createdDate = formatDateWithMonthName(post.createdAt);
   const updatedDate = formatDateWithMonthName(post.updatedAt);
+  const publishedDate = formatDateWithMonthName(post.publishedAt);
 
   return (
     <Box>
-      <TimestampItem type="created" date={createdDate} madeBy={post.author} />
-      {/* //TODO change to published */}
+      <TimestampItem
+        type="published"
+        date={publishedDate}
+        madeBy={post.author}
+      />
 
       {updatedDate && (
         <TimestampItem
           type="updated"
           date={updatedDate}
-          // madeBy={post.updatedBy} //TODO change if admin can update posts
+          madeBy={post.updatedBy}
         />
       )}
     </Box>

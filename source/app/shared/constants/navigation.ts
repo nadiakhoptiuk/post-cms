@@ -39,15 +39,12 @@ export const enum NavigationLink {
 
   SIGNUP = "/signup",
 
+  NOT_FOUND = "/404",
+
   // FOR ACTIONS
   CHANGE_LANGUAGE = "change-language",
   DELETE_USER = "delete-user",
   RESTORE_USER = "restore-user",
-
-  CREATE_NEW_POST = "create-new-post",
-  DELETE_POST = "delete-post",
-  REJECT_PUBLISHING_POST = "reject-publishing",
-  COMPLAINT_ABOUT_POST = "complaint-about-post",
 }
 
 export const DashboardNavLinks = [

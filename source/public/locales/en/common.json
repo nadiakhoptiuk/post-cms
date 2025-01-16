@@ -6,6 +6,9 @@
   "auth.signup": "Register",
   "auth.deleteAccount": "Delete account",
 
+  "goToHomePage": "Home Page",
+  "notFound": "Resource not found",
+
   "userBarNavLinks": {
     "profile": "Profile",
     "myPosts": "My Posts",
@@ -31,7 +34,9 @@
     "button.cancel": "Cancel",
     "button.delete": "Delete",
     "button.restore": "Restore",
-    "button.complain": "Complain",
+    "button.complain": "Complaint",
+    "button.block": "Ban post",
+    "button.reject.complaint": "Reject complain",
     "button.publish": "Publish",
     "button.reject": "Reject post",
     "button.back": "Back"
@@ -41,6 +46,7 @@
 
   "timestampsLabels": {
     "createdAt": "Created",
+    "complainedAt": "Made",
     "author": "Author",
     "updatedAt": "Updated",
     "updatedBy": "Updated by",

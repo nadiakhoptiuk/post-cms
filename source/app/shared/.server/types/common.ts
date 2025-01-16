@@ -11,3 +11,12 @@ export type GetRouteOptions = {
   allowedRoles: TRolesEnum[];
   isAuthRoute?: boolean;
 };
+
+export interface WithPaginationData {
+  actualPage: number;
+  pagesCount: number;
+}
+
+export interface WithSearchData {
+  query: string;
+}

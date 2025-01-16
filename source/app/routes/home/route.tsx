@@ -1,18 +1,20 @@
-import { Box, Container } from "@mantine/core";
-import { useLoaderData } from "react-router";
+import { Outlet, useLoaderData } from "react-router";
 
-import { PostsList } from "~/shared/components/modules/PostsList";
+import { Home } from "~/routes/layouts/Home";
+import type { THomeLoaderData } from "./loader";
 
 export { loader } from "./loader";
 
-export default function DashBoardHomePage() {
-  const { posts, user } = useLoaderData();
+export const handle = {
+  i18n: ["common", "auth"],
+};
+
+export default function HomeLayout() {
+  const data = useLoaderData<THomeLoaderData>();
 
   return (
-    <Box component="section">
-      <Container>
-        <PostsList posts={posts} userId={user?.id} />
-      </Container>
-    </Box>
+    <Home user={data?.user}>
+      <Outlet />
+    </Home>
   );
 }

@@ -6,7 +6,7 @@ import type {
 import type { FormScope } from "@rvf/react-router";
 
 import type { LANG_EN, LANG_UK } from "../constants/locale";
-import type { POST_STATUS } from "../constants/common";
+import type { COMPLAINT_STATUS, POST_STATUS } from "../constants/common";
 
 export type NewSerializeFrom<T> = ReturnType<typeof useLoaderData<T>>;
 
@@ -23,6 +23,7 @@ export type TErrorsMessages = {
 };
 
 export interface TModal extends ModalProps {}
+
 export interface TItemId {
   itemId: number | null;
 }
@@ -60,6 +61,9 @@ export type TDBUserRecord = {
   deletedAt?: Date | null;
   deletedBy?: string | null;
   deletedById?: number | null;
+  restoredAt?: Date | null;
+  restoredBy?: string | null;
+  restoredById?: number | null;
 };
 
 export type TDBUser = TUser & TDBUserRecord;
@@ -70,10 +74,6 @@ export interface TSerializedUser {
   lastName: string;
   role: TRolesEnum;
 }
-
-export type THomeLoader = {
-  user: TSerializedUser;
-};
 
 export interface TTextInput extends MTextInputProps {
   label: string;
@@ -95,10 +95,6 @@ export type TDBPostRecord = {
   rejectReason?: string | null;
   moderatedById?: number | null;
   moderatedBy?: string | null;
-  complainedAt?: Date;
-  complainedById?: number | null;
-  complaintReason: string | null;
-  complainedBy?: string | null;
   blockedAt?: Date | null;
   blockedById?: number | null;
   blockedBy?: string | null;
@@ -108,4 +104,23 @@ export type TPost = {
   title: string;
   slug: string;
   content: string;
+};
+
+export type TPostsTable = {
+  posts: Array<TPost & TDBPostRecord>;
+};
+
+export type TDBComplaintRecord = {
+  id: string;
+  createdAt: Date;
+  createdById: number;
+  reason: string;
+  complainedAboutPostId: number;
+  consideredById?: number | null;
+  status?: (typeof COMPLAINT_STATUS)[keyof typeof COMPLAINT_STATUS];
+
+  postSlug: string;
+  postTitle: string;
+  postId: number;
+  author: string;
 };

@@ -6,9 +6,12 @@
   "auth.signup": "Реєстрація",
   "auth.deleteAccount": "Видалити акаунт",
 
+  "goToHomePage": "Головна сторінка",
+  "notFound": "Ресурс не знайдено",
+
   "userBarNavLinks": {
     "profile": "Профіль",
-    "myPosts": "Мої пости",
+    "myPosts": "Мої дописи",
     "dashboard": "Адміністратор"
   },
 
@@ -27,11 +30,13 @@
     "button.update": "Оновити",
     "button.create": "Створити",
     "button.edit": "Редагувати",
-    "button.view": "Переглянути",
+    "button.view": "Дивитись",
     "button.cancel": "Відміна",
     "button.delete": "Видалити",
     "button.restore": "Відновити",
-    "button.complain": "Поскаржитись",
+    "button.complain": "Скарга",
+    "button.block": "Забанити допис",
+    "button.reject.complaint": "Відхилити скаргу",
     "button.publish": "Опублікувати",
     "button.reject": "Відхилити допис",
     "button.back": "Назад"
@@ -41,6 +46,7 @@
 
   "timestampsLabels": {
     "createdAt": "Створено",
+    "complainedAt": "Подано",
     "author": "Автор",
     "updatedAt": "Оновлено",
     "updatedBy": "Ким оновлено",

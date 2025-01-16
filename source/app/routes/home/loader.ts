@@ -1,15 +1,27 @@
-import { getAllPublishedPosts } from "~/shared/.server/repository/posts";
-import { getSession } from "~/shared/.server/services/session";
-import { getPostsWithSlicedString } from "~/shared/utils/getPostsWithSlicedString";
+import { publicGate } from "~/shared/.server/services/auth";
 
-import { SESSION_USER_KEY } from "~/shared/constants/common";
+import { NavigationLink } from "~/shared/constants/navigation";
+import { ROLE_ADMIN, ROLE_USER } from "~/shared/constants/common";
+import type { NewSerializeFrom, TSerializedUser } from "~/shared/types/react";
 import type { Route } from "./+types/route";
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const session = await getSession(request.headers.get("cookie"));
-  const sessionUser = session.get(SESSION_USER_KEY);
+export const loader = async ({
+  request,
+}: Route.LoaderArgs): Promise<{ user: TSerializedUser | null }> => {
+  return await publicGate(
+    request,
+    {
+      isPublicRoute: true,
+      allowedRoles: [ROLE_ADMIN, ROLE_USER],
+    },
+    async (user: TSerializedUser | null) => {
+      return { user };
+    },
+    {
+      failureRedirect: NavigationLink.LOGIN,
+    }
+  );
+};
 
-  const allPosts = await getAllPublishedPosts();
-
-  return { posts: getPostsWithSlicedString(allPosts), user: sessionUser };
-}
+type THomeLoader = typeof loader;
+export type THomeLoaderData = NewSerializeFrom<THomeLoader>;

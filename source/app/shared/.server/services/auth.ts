@@ -1,21 +1,23 @@
-import { redirect } from "react-router";
-import { DrizzleError } from "drizzle-orm";
+import { data, redirect } from "react-router";
 
 import {
   createNewUser,
   deleteUserById,
+  getUserByEmailWithPassword,
   getUserById,
-  verifyUserAndSerialize,
 } from "../repository/users";
 import { commitSession, getSession } from "./session";
 
-import type { TSerializedUser } from "~/shared/types/react";
 import type { GetCurrentUserOptions, GetRouteOptions } from "../types/common";
 import { NavigationLink } from "~/shared/constants/navigation";
 import { SESSION_ERROR_KEY, SESSION_USER_KEY } from "~/shared/constants/common";
-// import { errorHandler } from "../utils/errorHandler";
+import { getSessionUserFromRequest } from "../utils/commonUtils";
+import { errorHandler } from "../utils/errorHandler";
 
-export const loginUser = async (request: Request) => {
+import type { TSerializedUser } from "~/shared/types/react";
+import { passwordHash, verifyUserAndSerialize } from "../utils/usersUtils";
+
+export const loginUser = async (request: Request): Promise<Response> => {
   const form = await request.formData();
   const email = form.get("email");
   const password = form.get("password");
@@ -26,33 +28,16 @@ export const loginUser = async (request: Request) => {
 
   const session = await getSession(request.headers.get("cookie"));
 
-  try {
-    const serializedUser = await verifyUserAndSerialize(email, password);
+  const serializedUser = await verifyUserAndSerialize(email, password);
 
-    session.set(SESSION_USER_KEY, serializedUser);
+  session.set(SESSION_USER_KEY, serializedUser);
 
-    return redirect(NavigationLink.HOME, {
-      headers: { "Set-Cookie": await commitSession(session) },
-    });
-  } catch (error) {
-    if (error instanceof DrizzleError) {
-      session.set(SESSION_ERROR_KEY, "Wrong request to database");
-      throw redirect(NavigationLink.SIGNUP, {
-        headers: { "Set-Cookie": await commitSession(session) },
-      });
-    } else if (error instanceof Error) {
-      session.set(SESSION_ERROR_KEY, error.message);
-
-      throw redirect(NavigationLink.LOGIN, {
-        headers: { "Set-Cookie": await commitSession(session) },
-      });
-    }
-
-    return error;
-  }
+  return redirect(NavigationLink.HOME, {
+    headers: { "Set-Cookie": await commitSession(session) },
+  });
 };
 
-export const signupUser = async (request: Request) => {
+export const signupUser = async (request: Request): Promise<Response> => {
   const formData = await request.formData();
 
   const email = formData.get("email");
@@ -66,56 +51,42 @@ export const signupUser = async (request: Request) => {
     typeof lastName !== "string" ||
     typeof password !== "string"
   ) {
-    throw new Error("invalid data");
+    throw new Error("Invalid data");
   }
 
   const session = await getSession(request.headers.get("cookie"));
-  try {
-    await createNewUser({
-      firstName,
-      lastName,
-      email,
-      password,
-    });
 
-    return redirect(NavigationLink.LOGIN, {
-      headers: { "Set-Cookie": await commitSession(session) },
-    });
-  } catch (error) {
-    if (error instanceof DrizzleError) {
-      session.set(SESSION_ERROR_KEY, "Wrong request to database");
-      throw redirect(NavigationLink.SIGNUP, {
-        headers: { "Set-Cookie": await commitSession(session) },
-      });
-    } else if (error instanceof Error) {
-      session.set(SESSION_ERROR_KEY, error.message);
+  const existingUser = await getUserByEmailWithPassword(email);
 
-      throw redirect(NavigationLink.SIGNUP, {
-        headers: { "Set-Cookie": await commitSession(session) },
-      });
-    }
-    return error;
+  if (existingUser) {
+    throw new Error("User with such email has already exist in database");
   }
+
+  const hashedPassword = await passwordHash(password);
+
+  await createNewUser({
+    firstName,
+    lastName,
+    email,
+    password: hashedPassword,
+  });
+
+  return redirect(NavigationLink.LOGIN, {
+    headers: { "Set-Cookie": await commitSession(session) },
+  });
 };
 
 export const logoutUser = async (
   request: Request,
   options?: GetCurrentUserOptions
-) => {
+): Promise<Response> => {
   const { successRedirect } = options || {};
 
   const session = await getSession(request.headers.get("Cookie"));
   session.unset(SESSION_USER_KEY);
 
-  // return redirect(successRedirect || NavigationLink.HOME, {
-  //   headers: {
-  //     "Set-Cookie": await commitSession(session),
-  //   },
-  // });
-  return new Response(null, {
-    status: 302,
+  return redirect(successRedirect || NavigationLink.HOME, {
     headers: {
-      Location: successRedirect || NavigationLink.HOME,
       "Set-Cookie": await commitSession(session),
     },
   });
@@ -123,29 +94,23 @@ export const logoutUser = async (
 
 export const deleteUserAccount = async (
   request: Request,
+  sessionUser: TSerializedUser,
   options?: GetCurrentUserOptions
-) => {
+): Promise<Response> => {
   const { successRedirect } = options || {};
 
-  const session = await getSession(request.headers.get("Cookie"));
-  const userId = session.get(SESSION_USER_KEY).id;
+  const userId = sessionUser.id;
 
   await deleteUserById(userId, userId);
+
+  const session = await getSession(request.headers.get("Cookie"));
   session.unset(SESSION_USER_KEY);
 
-  return new Response(null, {
-    status: 302,
+  return redirect(successRedirect || NavigationLink.HOME, {
     headers: {
-      Location: successRedirect || NavigationLink.HOME,
       "Set-Cookie": await commitSession(session),
     },
   });
-
-  // return redirect(successRedirect || NavigationLink.HOME, {
-  //   headers: {
-  //     "Set-Cookie": await commitSession(session),
-  //   },
-  // });
 };
 
 export const getAuthUser = async (
@@ -156,11 +121,20 @@ export const getAuthUser = async (
   const { failureRedirect } = options || {};
   const { isPublicRoute, allowedRoles, isAuthRoute = false } = routeOptions;
 
-  // try {
   const session = await getSession(request.headers.get("Cookie"));
-  const sessionUser: TSerializedUser = session.get(SESSION_USER_KEY);
+  const sessionUser = await getSessionUserFromRequest(request);
 
   if (!sessionUser && !isPublicRoute) {
+    throw redirect(failureRedirect || NavigationLink.LOGIN);
+  }
+
+  if ((!sessionUser && isAuthRoute) || (!sessionUser && isPublicRoute)) {
+    return null;
+  }
+
+  const existingUser = await getUserById(sessionUser.id);
+
+  if (!existingUser && !isPublicRoute) {
     session.unset(SESSION_USER_KEY);
     throw redirect(failureRedirect || NavigationLink.LOGIN, {
       headers: {
@@ -169,52 +143,79 @@ export const getAuthUser = async (
     });
   }
 
-  if (!sessionUser && isAuthRoute) {
-    return null;
-  }
-
-  if (!sessionUser && isPublicRoute) {
-    return null;
-  }
-
-  const existedUser = await getUserById(sessionUser.id);
-
-  if (existedUser && existedUser.deletedAt !== null) {
-    throw redirect(NavigationLink.HOME, {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    });
-  }
-
-  if (existedUser && isAuthRoute) {
-    throw redirect(NavigationLink.HOME, {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    });
-  }
-
-  if (!existedUser && !isPublicRoute) {
+  // if user has been deleted
+  if (existingUser && existingUser.deletedAt !== null) {
     session.unset(SESSION_USER_KEY);
-    throw redirect(failureRedirect || NavigationLink.LOGIN, {
+    throw redirect(NavigationLink.HOME, {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
     });
   }
 
-  if (existedUser && !allowedRoles.includes(sessionUser.role)) {
-    throw redirect(NavigationLink.HOME, {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    });
+  if (existingUser && isAuthRoute) {
+    throw redirect(NavigationLink.HOME);
+  }
+
+  if (existingUser && !allowedRoles.includes(sessionUser.role)) {
+    throw redirect(NavigationLink.HOME);
   }
 
   return sessionUser;
-  // } catch (error) {
-  //   console.error("Error during auth process", error);
-  //   errorHandler(error);
-  // }
+};
+
+export const publicGate = async (
+  request: Request,
+  routeOptions: GetRouteOptions,
+  cb: (sessionUser: TSerializedUser | null) => Promise<any>,
+  options?: GetCurrentUserOptions
+) => {
+  try {
+    const sessionUser = await getAuthUser(request, routeOptions, options);
+
+    return await cb(sessionUser);
+  } catch (error) {
+    const res = errorHandler(error);
+
+    if (res instanceof Response) {
+      return res;
+    }
+
+    const session = await getSession(request.headers.get("cookie"));
+    session.set(SESSION_ERROR_KEY, res.data);
+
+    return data(res, {
+      headers: { "Set-Cookie": await commitSession(session) },
+    });
+  }
+};
+
+export const authGate = async (
+  request: Request,
+  routeOptions: GetRouteOptions,
+  cb: (sessionUser: TSerializedUser) => Promise<any>,
+  options?: GetCurrentUserOptions
+) => {
+  try {
+    const sessionUser = await getAuthUser(request, routeOptions, options);
+
+    if (!sessionUser) {
+      throw redirect(NavigationLink.LOGIN);
+    }
+
+    return await cb(sessionUser);
+  } catch (error) {
+    const res = errorHandler(error);
+
+    if (res instanceof Response) {
+      return res;
+    }
+
+    const session = await getSession(request.headers.get("cookie"));
+    session.set(SESSION_ERROR_KEY, res.data);
+
+    return data(res, {
+      headers: { "Set-Cookie": await commitSession(session) },
+    });
+  }
 };

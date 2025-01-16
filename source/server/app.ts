@@ -9,7 +9,7 @@ import dotenv from "dotenv";
 dotenv.config({ path: "../.env" });
 
 import { DatabaseContext } from "~/database/context";
-import * as schema from "~/database/schema";
+import * as schema from "~/database/schema/complaints";
 
 declare module "react-router" {
   interface AppLoadContext {
