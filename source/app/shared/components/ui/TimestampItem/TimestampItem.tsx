@@ -1,16 +1,23 @@
 import { Group, Text } from "@mantine/core";
 import { useTranslation } from "react-i18next";
+import { formatDateWithTime } from "~/shared/utils/dateFormat";
+import { formatDateToRelative } from "~/shared/utils/dateRelativeFormat";
 
 export const TimestampItem = ({
   type = "created",
   date,
   madeBy,
+  relative = false,
 }: {
   type: "created" | "updated" | "deleted" | "published" | "blocked";
-  date: string | null;
+  date: Date | null | undefined;
+  relative?: boolean;
   madeBy?: string | undefined | null;
 }) => {
   const { t } = useTranslation("common");
+  const formattedDate = relative
+    ? formatDateToRelative(date)
+    : formatDateWithTime(date);
 
   if (type === "created") {
     return (
@@ -19,7 +26,7 @@ export const TimestampItem = ({
           <Text component="span" fw="bolder">
             {t("timestampsLabels.createdAt")}:{" "}
           </Text>
-          {date}
+          {formattedDate}
         </Text>
 
         {madeBy && (
@@ -41,7 +48,7 @@ export const TimestampItem = ({
           <Text component="span" fw="bolder">
             {t("timestampsLabels.publishedAt")}:{" "}
           </Text>
-          {date}
+          {formattedDate}
         </Text>
 
         {madeBy && (
@@ -63,7 +70,7 @@ export const TimestampItem = ({
           <Text component="span" fw="bolder">
             {t("timestampsLabels.updatedAt")}:{" "}
           </Text>
-          {date}
+          {formattedDate}
         </Text>
 
         {madeBy && (
@@ -85,7 +92,7 @@ export const TimestampItem = ({
           <Text component="span" fw="bolder">
             {t("timestampsLabels.deletedAt")}:{" "}
           </Text>
-          {date}
+          {formattedDate}
         </Text>
 
         {madeBy && (
@@ -107,7 +114,7 @@ export const TimestampItem = ({
           <Text component="span" fw="bolder">
             {t("timestampsLabels.blockedAt")}:{" "}
           </Text>
-          {date}
+          {formattedDate}
         </Text>
 
         {madeBy && (

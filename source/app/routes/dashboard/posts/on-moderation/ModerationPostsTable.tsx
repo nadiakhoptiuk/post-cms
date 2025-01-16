@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import { useFetcher } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Flex, Table as MTable, Text, Tooltip } from "@mantine/core";
+import {  Group, Table as MTable, Text, Tooltip } from "@mantine/core";
 import { IconCheck, IconEye, IconX } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -13,26 +12,16 @@ import { Button } from "~/shared/components/ui/Button";
 import { ModalRejectPostWithoutRedirect } from "./ModalsForRejectingPost";
 
 import { ACTION_PUBLISH } from "~/shared/constants/common";
-import type { TPostsTable } from "~/shared/types/react";
+import type { TDBPostRecord, TPost, TPostsTable } from "~/shared/types/react";
 
-export const ModerationPostsTable = ({ posts }: TPostsTable) => {
-  const { t } = useTranslation("common");
+const TableRow = ({ id, title, createdAt, author }: TPost & TDBPostRecord) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [postId, setPostId] = useState<null | number>(null);
+  const { t } = useTranslation("common");
+  const createdRelDate = formatDateToRelative(createdAt);
   const fetcher = useFetcher();
 
-  useEffect(() => {
-    if (!postId) {
-      close();
-    } else {
-      open();
-    }
-  }, [postId]);
-
-  const rows = posts.map(({ id, title, createdAt, author }) => {
-    const createdRelDate = formatDateToRelative(createdAt);
-
-    return (
+  return (
+    <>
       <MTable.Tr key={id}>
         <TableTd>
           <Text fz="sm" fw={500}>
@@ -43,21 +32,22 @@ export const ModerationPostsTable = ({ posts }: TPostsTable) => {
         <TableTd>{createdRelDate}</TableTd>
 
         <TableTd>
-          <Flex columnGap={4}>
-            <StyledNavLink
-              variant="unstyled"
-              aria-label={t("buttons.button.view")}
-              to={`${id.toString()}`}
-              style={{ padding: 8 }}
-            >
-              <IconEye size={18} stroke={1.5} />
-            </StyledNavLink>
+          <Group gap="xs">
+            <Tooltip label={t("buttons.button.view")}>
+              <StyledNavLink
+                aria-label={t("buttons.button.view")}
+                to={`${id.toString()}`}
+                p="xs"
+              >
+                <IconEye size={18} stroke={1.5} />
+              </StyledNavLink>
+            </Tooltip>
 
             <Tooltip label={t("buttons.button.publish")}>
               <Button
                 type="button"
                 variant="subtle"
-                p={8}
+                p="xs"
                 aria-label={t("buttons.button.publish")}
                 onClick={() => {
                   fetcher.submit(
@@ -71,59 +61,57 @@ export const ModerationPostsTable = ({ posts }: TPostsTable) => {
             </Tooltip>
 
             <Tooltip label={t("buttons.button.reject")}>
-              <Button
-                onClick={() => {
-                  setPostId(id);
-                }}
-                c="red"
-                p={8}
-                variant="subtle"
-              >
+              <Button onClick={open} c="red" p="xs" variant="subtle">
                 <IconX size={18} stroke={1.5} />
               </Button>
             </Tooltip>
-          </Flex>
+          </Group>
         </TableTd>
       </MTable.Tr>
-    );
-  });
+
+      <ModalRejectPostWithoutRedirect
+        itemId={id}
+        opened={opened}
+        onClose={close}
+      />
+    </>
+  );
+};
+
+export const ModerationPostsTable = ({ posts }: TPostsTable) => {
+  const { t } = useTranslation("common");
+  const { t: p } = useTranslation("posts");
 
   return (
-    <>
-      <MTable.ScrollContainer
-        type="scrollarea"
-        minWidth={500}
-        w="fit-content"
-        mx="auto"
-        mih={345}
-      >
-        <MTable withColumnBorders>
-          <MTable.Thead>
-            <MTable.Tr>
-              <TableTh>
-                <Text fz="sm" fw={500}>
-                  {t("postData.title")}
-                </Text>
-              </TableTh>
+    <MTable.ScrollContainer
+      type="scrollarea"
+      minWidth={500}
+      w="fit-content"
+      mx="auto"
+      mih={345}
+    >
+      <MTable withColumnBorders>
+        <MTable.Thead>
+          <MTable.Tr>
+            <TableTh>
+              <Text fz="sm" fw={500}>
+                {p("postData.title")}
+              </Text>
+            </TableTh>
 
-              <TableTh>{t("postData.author")}</TableTh>
-              <TableTh>{t("timestampsLabels.createdAt")}</TableTh>
+            <TableTh>{p("postData.author")}</TableTh>
+            <TableTh>{t("timestampsLabels.createdAt")}</TableTh>
 
-              <TableTh> </TableTh>
-            </MTable.Tr>
-          </MTable.Thead>
+            <TableTh> </TableTh>
+          </MTable.Tr>
+        </MTable.Thead>
 
-          <MTable.Tbody>{rows}</MTable.Tbody>
-        </MTable>
-      </MTable.ScrollContainer>
-
-      {opened && postId && (
-        <ModalRejectPostWithoutRedirect
-          itemId={postId}
-          opened={opened}
-          onClose={() => setPostId(null)}
-        />
-      )}
-    </>
+        <MTable.Tbody>
+          {posts.map((post) => (
+            <TableRow key={post.id} {...post} />
+          ))}
+        </MTable.Tbody>
+      </MTable>
+    </MTable.ScrollContainer>
   );
 };

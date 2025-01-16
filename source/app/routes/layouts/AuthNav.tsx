@@ -1,4 +1,4 @@
-import { List, ListItem } from "@mantine/core";
+import { Flex, List, ListItem } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { StyledNavLink } from "~/shared/components/ui/StyledNavLink";
 
@@ -10,33 +10,29 @@ export const AuthNav = ({ burgerMenu = false }: { burgerMenu?: boolean }) => {
   const items = AuthNavLinks.map(({ id, link }) => (
     <ListItem
       key={id}
+      w="100%"
       styles={{
         itemWrapper: { width: "100%" },
         itemLabel: { width: "100%" },
         item: { flexWrap: "nowrap" },
       }}
     >
-      <StyledNavLink to={link} fullWidth>
+      <StyledNavLink to={link} fullWidth size="md" c="blue.8">
         {t(id)}
       </StyledNavLink>
     </ListItem>
   ));
 
   return (
-    <List
-      display="flex"
-      styles={{
-        root: {
-          alignItems: burgerMenu ? "flex-start" : "center",
-          justifyContent: "flex-start",
-          flexDirection: burgerMenu ? "column" : "row",
-          columnGap: 10,
-          rowGap: 10,
-        },
-        item: { width: "100%" },
-      }}
+    <Flex
+      component={List}
+      align={burgerMenu ? "flex-start" : "center"}
+      justify="flex-start"
+      direction={burgerMenu ? "column" : "row"}
+      columnGap="xs"
+      rowGap="xs"
     >
       {items}
-    </List>
+    </Flex>
   );
 };

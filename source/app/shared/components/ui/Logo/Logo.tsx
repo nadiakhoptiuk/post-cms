@@ -1,18 +1,16 @@
-import { Link } from "react-router";
-import { NavLink, ThemeIcon } from "@mantine/core";
+import { ThemeIcon } from "@mantine/core";
 import { IconFloatNone } from "@tabler/icons-react";
 
 import { NavigationLink } from "~/shared/constants/navigation";
+import { StyledLink } from "../StyledLink";
 
 import type { TLogo } from "./Logo.types";
 
 export const Logo = ({ accent = true }: TLogo) => {
   return (
-    <NavLink
-      component={Link}
+    <StyledLink
       to={NavigationLink.HOME}
-      variant="subtle"
-      label="POST CMS"
+      variant="transparent"
       leftSection={
         <ThemeIcon
           variant="gradient"
@@ -24,10 +22,7 @@ export const Logo = ({ accent = true }: TLogo) => {
               : { from: "gray", to: "white", deg: 90 }
           }
         >
-          <IconFloatNone
-            size={28}
-            style={{ color: accent ? "white" : "white" }}
-          />
+          <IconFloatNone size={28} color="white" />
         </ThemeIcon>
       }
       fw={900}
@@ -35,6 +30,8 @@ export const Logo = ({ accent = true }: TLogo) => {
       td="none"
       w="fit-content"
       c="blue"
-    />
+    >
+      POST CMS
+    </StyledLink>
   );
 };

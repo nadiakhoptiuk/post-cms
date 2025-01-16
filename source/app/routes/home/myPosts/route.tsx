@@ -20,9 +20,9 @@ export default function HomeMyPostsPage() {
     <Box component="section" py="lg">
       <Container>
         <StyledLink
-          fill="filled"
-          variant="accent"
-          style={{ marginBottom: 30, marginLeft: "auto", marginRight: "auto" }}
+          variant="filled"
+          mb="lg"
+          mx="auto"
           to={NavigationLink.MY_POSTS_NEW}
         >
           {t("link.addNewPost")}

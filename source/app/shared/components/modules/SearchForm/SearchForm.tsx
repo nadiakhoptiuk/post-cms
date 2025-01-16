@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import debounce from "lodash.debounce";
 import { useTranslation } from "react-i18next";
 import { Form, useNavigation, useSubmit } from "react-router";
 import { Box, CloseButton, Input, Loader, type BoxProps } from "@mantine/core";
@@ -16,7 +17,7 @@ export const SearchForm = ({
   mb = "lg",
   mt = "lg",
 }: TSearchForm) => {
-  const [queryString, setQueryString] = useState(query ?? "");
+  const [queryString, setQueryString] = useState<string>(query ?? "");
   const { t } = useTranslation("common");
   const navigation = useNavigation();
   const submit = useSubmit();
@@ -25,19 +26,25 @@ export const SearchForm = ({
     navigation.location &&
     new URLSearchParams(navigation.location.search).has(SEARCH_PARAMETER_NAME);
 
+  const debouncedSubmit = useCallback(
+    debounce((data: Record<"search", string> | null) => {
+      const isFirstSearch = query === null;
+      submit(data, { method: "get", replace: !isFirstSearch });
+    }, 500),
+    []
+  );
+
+  useEffect(() => {
+    if (queryString === "") {
+      debouncedSubmit(null);
+    } else {
+      debouncedSubmit({ search: queryString });
+    }
+  }, [queryString]);
+
   return (
     <Box w="100%" mb={mb} maw={maw} mx="auto" mt={mt}>
-      <Form
-        id="search-form"
-        role="search"
-        onChange={(event) => {
-          const isFirstSearch = query === null;
-
-          submit(event.currentTarget, {
-            replace: !isFirstSearch,
-          });
-        }}
-      >
+      <Form id="search-form" role="search">
         <Input
           id="query"
           name="search"
@@ -46,7 +53,9 @@ export const SearchForm = ({
           aria-label={t("aria.searchForm")}
           placeholder={t("search.placeholder")}
           size="md"
-          onChange={(e) => setQueryString(e.target.value)}
+          onChange={(e) => {
+            setQueryString(e.target.value);
+          }}
           leftSection={<IconSearch size={16} stroke={1.5} />}
           rightSection={
             !!searching ? (
@@ -54,9 +63,7 @@ export const SearchForm = ({
             ) : (
               <CloseButton
                 aria-label="Clear input"
-                onClick={() => {
-                  setQueryString("");
-                }}
+                onClick={() => setQueryString("")}
               />
             )
           }

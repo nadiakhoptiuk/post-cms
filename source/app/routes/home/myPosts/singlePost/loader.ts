@@ -26,7 +26,7 @@ export async function loader({ request, params }: Route.LoaderArgs): Promise<{
     async (sessionUser: TSerializedUser) => {
       const postId = getPostIdFromParams(params);
 
-      const post = await getUserPostById(sessionUser.id, Number(postId));
+      const post = await getUserPostById(sessionUser.id, postId);
 
       if (!post) {
         throw data("Not found", { status: 404 });

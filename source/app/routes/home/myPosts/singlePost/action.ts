@@ -1,12 +1,9 @@
-import { redirect } from "react-router";
+import { data, redirect } from "react-router";
 
 import { authGate } from "~/shared/.server/services/auth";
-import {
-  getPostIdFromParams,
-  updatePostAction,
-} from "~/shared/.server/utils/postUtils";
+import { getPostIdFromParams } from "~/shared/.server/utils/postUtils";
 import { getActionIdFromRequest } from "~/shared/.server/utils/commonUtils";
-import { deletePostById } from "~/shared/.server/repository/posts";
+import { deletePostById, getPostById } from "~/shared/.server/repository/posts";
 
 import {
   ACTION_DELETE,
@@ -17,6 +14,7 @@ import {
 import { NavigationLink } from "~/shared/constants/navigation";
 import type { TSerializedUser } from "~/shared/types/react";
 import type { Route } from "../../+types/route";
+import { updatePostAction } from "~/shared/.server/actions/updatePost";
 
 export async function action({ request, params }: Route.ActionArgs) {
   return await authGate(
@@ -29,16 +27,35 @@ export async function action({ request, params }: Route.ActionArgs) {
       const postId = getPostIdFromParams(params);
 
       const formData = await request.formData();
-      const action = await getActionIdFromRequest(formData);
+      const action = getActionIdFromRequest(formData);
+
+      const existingPost = await getPostById(postId);
+
+      if (!existingPost) {
+        throw Error("Post with such id does not exists");
+      } else if (existingPost && existingPost?.ownerId !== sessionUser.id) {
+        throw data("Operation is permitted", { status: 403 });
+      }
+
+      let result;
 
       switch (action) {
         case ACTION_DELETE:
-          await deletePostById(Number(postId), sessionUser.id);
+          result = await deletePostById(postId);
           break;
 
         case ACTION_UPDATE:
-          await updatePostAction(formData, sessionUser, Number(postId));
+          result = await updatePostAction(
+            formData,
+            sessionUser.id,
+            postId,
+            existingPost.slug
+          );
           break;
+      }
+
+      if (!result) {
+        throw Error("Somethong went wrong");
       }
 
       return redirect(NavigationLink.MY_POSTS);

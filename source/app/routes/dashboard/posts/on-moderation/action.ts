@@ -1,10 +1,12 @@
 import { authGate } from "~/shared/.server/services/auth";
-import { confirmPublishPost } from "~/shared/.server/utils/postUtils";
 import {
   getActionIdFromRequest,
   getIdFromRequest,
 } from "~/shared/.server/utils/commonUtils";
-import { getPostById } from "~/shared/.server/repository/posts";
+import {
+  getPostById,
+  moderatePostById,
+} from "~/shared/.server/repository/posts";
 import { rejectPublishPostAction } from "./actions/reject";
 
 import {
@@ -27,7 +29,7 @@ export async function action({ request }: Route.ActionArgs) {
       const formData = await request.formData();
       const postId = getIdFromRequest(formData);
 
-      const existingPost = await getPostById(Number(postId));
+      const existingPost = await getPostById(postId);
 
       if (!existingPost) {
         throw new Error("Post with such id does not exist");
@@ -44,7 +46,13 @@ export async function action({ request }: Route.ActionArgs) {
 
       switch (action) {
         case ACTION_PUBLISH:
-          result = await confirmPublishPost(Number(postId), sessionUser.id);
+          result = await moderatePostById(
+            postId,
+            {
+              moderatedById: sessionUser.id,
+            },
+            { confirmed: true }
+          );
           break;
 
         case ACTION_REJECT:

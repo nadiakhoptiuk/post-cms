@@ -13,12 +13,12 @@ export const complaints = pgTable("Complaints", {
   createdAt: t.timestamp().defaultNow().notNull(),
   createdById: t
     .integer()
-    .references((): t.AnyPgColumn => users.id)
+    .references((): t.AnyPgColumn => users.id, { onDelete: "cascade" })
     .notNull(),
   reason: t.varchar({ length: 50 }).notNull(),
   complainedAboutPostId: t
     .integer()
-    .references((): t.AnyPgColumn => posts.id)
+    .references((): t.AnyPgColumn => posts.id, { onDelete: "cascade" })
     .notNull(),
   consideredAt: t.timestamp(),
   consideredById: t.integer().references((): t.AnyPgColumn => users.id),

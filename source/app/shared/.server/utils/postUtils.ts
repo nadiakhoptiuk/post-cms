@@ -1,7 +1,7 @@
 import { type Params } from "react-router";
 import { v4 as uuidv4 } from "uuid";
 
-import { getAllPostsSlugs, moderatePostById } from "../repository/posts";
+import { getAllPostsSlugs } from "../repository/posts";
 
 export const getPostIdFromParams = (params: Params) => {
   const postId = params?.postId;
@@ -10,7 +10,7 @@ export const getPostIdFromParams = (params: Params) => {
     throw new Error("Post Id not Found");
   }
 
-  return postId;
+  return Number(postId);
 };
 
 export const getPostDataFromRequest = (formData: FormData) => {
@@ -43,29 +43,4 @@ export const generateUniqueIdForSlug = async () => {
   }
 
   return id;
-};
-
-export const confirmPublishPost = async (postId: number, userId: number) => {
-  return await moderatePostById(
-    Number(postId),
-    {
-      moderatedById: userId,
-    },
-    { confirmed: true }
-  );
-};
-
-export const rejectPublishPost = async (
-  reason: string,
-  postId: number,
-  userId: number
-) => {
-  return await moderatePostById(
-    postId,
-    {
-      rejectReason: reason,
-      moderatedById: userId,
-    },
-    { confirmed: false }
-  );
 };

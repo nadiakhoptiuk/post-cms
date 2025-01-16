@@ -50,8 +50,16 @@ export function NavBarLinksGroup({
           itemLabel: { width: "100%" },
         }}
       >
-        <StyledNavLink fullWidth to={link} withCount count={count}>
-          <Icon />
+        <StyledNavLink
+          fullWidth
+          to={link}
+          withCount
+          count={count}
+          justify="flex-start"
+          leftSection={<Icon />}
+          c="gray.8"
+          size="md"
+        >
           <span>{t(`dashboardLinks.${id}`)}</span>
         </StyledNavLink>
       </List.Item>
@@ -62,16 +70,16 @@ export function NavBarLinksGroup({
     <>
       {hasLinks && (
         <Button
+          onClick={() => setOpened((o) => !o)}
           variant="subtle"
           justify="flex-start"
-          onClick={() => setOpened((o) => !o)}
-          mt="xs"
           p="xs"
           w="100%"
           h="100%"
           fz="md"
+          mb="xs"
           radius="sm"
-          color="dark"
+          c="gray.8"
           fw={500}
           leftSection={Icon && <Icon size={22} />}
           rightSection={
@@ -81,6 +89,7 @@ export function NavBarLinksGroup({
                 size={16}
                 style={{
                   transform: opened ? "rotate(-90deg)" : "none",
+                  marginLeft: "auto",
                 }}
               />
             )
@@ -98,16 +107,22 @@ export function NavBarLinksGroup({
             itemLabel: { width: "100%" },
           }}
         >
-          <StyledNavLink fullWidth to={link}>
-            {Icon && <Icon size={22} />}
+          <StyledNavLink
+            to={link}
+            fullWidth
+            justify="flex-start"
+            c="gray.8"
+            size="md"
+            leftSection={Icon && <Icon size={22} />}
+          >
             <span>{t(`dashboardLinks.${id}`)}</span>
           </StyledNavLink>
         </List.Item>
       )}
 
       {hasLinks ? (
-        <Collapse pl="20" w="100%" in={opened}>
-          <List mb="0" mt="xs" spacing="xs">
+        <Collapse w="100%" in={opened}>
+          <List mb="xs" withPadding>
             {items}
           </List>
         </Collapse>

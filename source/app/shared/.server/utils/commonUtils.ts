@@ -16,7 +16,7 @@ export const getIdFromRequest = (formData: FormData) => {
     throw new Error("Id not Found");
   }
 
-  return id;
+  return Number(id);
 };
 
 export const getCountForPagination = (total: number, page: number) => {

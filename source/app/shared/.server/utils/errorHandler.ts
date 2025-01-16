@@ -1,5 +1,6 @@
 import { DrizzleError } from "drizzle-orm";
-import { data } from "react-router";
+import { data, redirect } from "react-router";
+import { NavigationLink } from "~/shared/constants/navigation";
 
 export const errorHandler = (error: any) => {
   console.log("errorHandler", error);
@@ -14,6 +15,21 @@ export const errorHandler = (error: any) => {
     return data(error || "ErrorResponse", {
       status: error.status,
     });
+  }
+
+  if (error instanceof Response && error.status === 404) {
+    console.log("error.status === 404");
+    return redirect(NavigationLink.NOT_FOUND);
+  }
+
+  if (error.type === "DataWithResponseInit" && error.init.status === 404) {
+    console.log("DataWithResponseInit", error);
+
+    return redirect(NavigationLink.NOT_FOUND);
+
+    // return data(error.type || error.data || "ErrorResponse", {
+    //   status: error.init.status,
+    // });
   }
 
   if (error?.code === "ECONNREFUSED") {

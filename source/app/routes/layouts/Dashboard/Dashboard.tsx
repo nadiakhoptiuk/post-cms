@@ -1,6 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { Form, useRouteLoaderData } from "react-router";
-import { AppShell, Box, Burger, Group, List, ScrollArea } from "@mantine/core";
+import {
+  AppShell,
+  Box,
+  Burger,
+  Group,
+  List,
+  ScrollArea,
+  Tooltip,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconLogout } from "@tabler/icons-react";
 
@@ -44,9 +52,9 @@ export const DashboardLayout = ({
         breakpoint: "xs",
         collapsed: { mobile: !menuOpened },
       }}
-      padding="md"
+      p={{ base: "xs", sm: "xs", md: "md", xl: "lg" }}
     >
-      <AppShell.Header mih={61}>
+      <AppShell.Header mih={60} bg="blue.2">
         <Group h="100%" px="md">
           <Burger
             opened={menuOpened}
@@ -56,14 +64,11 @@ export const DashboardLayout = ({
           />
           <Logo />
 
-          <LanguageSelector
-            locale={data?.locale || DEFAULT_LANG}
-            styles={{ root: { marginLeft: "auto" } }}
-          />
+          <LanguageSelector locale={data?.locale || DEFAULT_LANG} ml="auto" />
         </Group>
       </AppShell.Header>
 
-      <AppShell.Navbar p="md" mt={1}>
+      <AppShell.Navbar p="md" bg="blue.1">
         <ScrollArea>
           <Group>
             <List component="div" spacing="xs" w="100%">
@@ -72,29 +77,31 @@ export const DashboardLayout = ({
           </Group>
         </ScrollArea>
 
-        <Box
-          pt="md"
-          mt="auto"
-          style={{ borderTop: "1px solid var(--mantine-color-gray-3)" }}
-        >
+        <Box pt="md" mt="auto">
           <Form action={NavigationLink.LOGOUT} method="post">
-            <Button
-              type="submit"
-              c="gray"
-              styles={{
-                root: { width: "100%", padding: "8px 12px" },
-                inner: { justifyContent: "flex-start" },
-              }}
-              variant="transparent"
-            >
-              <IconLogout size={22} stroke={1.5} style={{ marginRight: 10 }} />
-              {t("auth.logout")}
-            </Button>
+            <Tooltip label={t("auth.logout")}>
+              <Button
+                type="submit"
+                c="gray.6"
+                p="xs"
+                justify="flex-start"
+                variant="transparent"
+                leftSection={
+                  <IconLogout
+                    size={22}
+                    stroke={1.5}
+                    style={{ marginRight: 10 }}
+                  />
+                }
+              >
+                {t("auth.logout")}
+              </Button>
+            </Tooltip>
           </Form>
         </Box>
       </AppShell.Navbar>
 
-      <AppShell.Main className="content">{children}</AppShell.Main>
+      <AppShell.Main>{children}</AppShell.Main>
     </AppShell>
   );
 };

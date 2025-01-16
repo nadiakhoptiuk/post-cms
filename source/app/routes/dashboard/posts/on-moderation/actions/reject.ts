@@ -1,4 +1,4 @@
-import { rejectPublishPost } from "~/shared/.server/utils/postUtils";
+import { moderatePostById } from "~/shared/.server/repository/posts";
 
 export async function rejectPublishPostAction(
   formData: FormData,
@@ -11,5 +11,12 @@ export async function rejectPublishPostAction(
     throw new Error("Reason is not a string");
   }
 
-  return await rejectPublishPost(reason, postId, sessionUserId);
+  return await moderatePostById(
+    postId,
+    {
+      rejectReason: reason,
+      moderatedById: sessionUserId,
+    },
+    { confirmed: false }
+  );
 }

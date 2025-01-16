@@ -1,12 +1,11 @@
 import { db } from "server/app";
-import { and, asc, desc, eq, exists, ilike, not, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, ilike, not, or, sql } from "drizzle-orm";
 import { posts } from "~/database/schema/posts";
-import { users } from "~/database/schema/users";
 
 import type { TDBPostRecord, TPost } from "~/shared/types/react";
 import { PAGINATION_LIMIT, POST_STATUS } from "~/shared/constants/common";
 import { getCountForPagination } from "../utils/commonUtils";
-import { crt, upd } from "./repositoryUtils";
+import { crt, pbl, upd } from "./repositoryUtils";
 
 export async function createNewPost(userId: number, postData: TPost) {
   const createdPost = await db
@@ -169,18 +168,21 @@ export async function getPostById(postId: number) {
   const existedPost = await db
     .select({
       id: posts.id,
+      ownerId: posts.ownerId,
       title: posts.title,
       slug: posts.slug,
       content: posts.content,
       createdAt: posts.createdAt,
       updatedAt: posts.updatedAt,
       publishedAt: posts.publishedAt,
+      moderatedBy: pbl.moderatedBy,
       rejectedAt: posts.rejectedAt,
       author: crt.author,
       postStatus: posts.postStatus,
     })
     .from(posts)
     .leftJoin(crt, eq(posts.ownerId, crt.id))
+    .leftJoin(pbl, eq(posts.moderatedById, pbl.id))
     .where(eq(posts.id, postId));
 
   return existedPost[0];
@@ -307,24 +309,8 @@ export async function moderatePostById(
   return updatedPost[0];
 }
 
-export async function deletePostById(postId: number, userId: number) {
-  const deletedPost = await db
-    .delete(posts)
-    .where(
-      and(
-        eq(posts.id, postId),
-        or(
-          eq(posts.ownerId, userId),
-          exists(
-            db
-              .select()
-              .from(users)
-              .where(and(eq(users.id, userId), eq(users.role, "admin")))
-          )
-        )
-      )
-    )
-    .returning({ deletedId: posts.id });
+export async function deletePostById(postId: number) {
+  const deletedPost = await db.delete(posts).where(eq(posts.id, postId));
 
   return deletedPost[0];
 }

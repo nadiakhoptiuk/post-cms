@@ -4,7 +4,6 @@ import {
   IconAlertSquareRounded,
   IconArrowNarrowLeft,
 } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useNavigate } from "react-router";
 
@@ -26,16 +25,7 @@ export default function HomeSinglePostPage() {
   const navigate = useNavigate();
   const { t } = useTranslation("common");
   const [opened, { open, close }] = useDisclosure(false);
-  const [postId, setPostId] = useState<number | null>(null);
-  const isOwnPost = user?.id === post.ownerId;
-
-  useEffect(() => {
-    if (!postId) {
-      close();
-    } else {
-      open();
-    }
-  }, [postId]);
+  const isOwnPost = user?.id === post?.ownerId;
 
   return (
     <Box component="section" my="lg">
@@ -46,12 +36,12 @@ export default function HomeSinglePostPage() {
             type="button"
             size="sm"
             variant="light"
+            leftSection={<IconArrowNarrowLeft size={18} />}
           >
-            <IconArrowNarrowLeft size={18} />
             {t("buttons.button.back")}
           </Button>
 
-          <StyledLink to={NavigationLink.HOME} variant="accent" fill="filled">
+          <StyledLink to={NavigationLink.HOME} variant="filled">
             {t("link.toAll")}
           </StyledLink>
         </Group>
@@ -64,18 +54,18 @@ export default function HomeSinglePostPage() {
             mt={10}
             styles={{ label: { gap: 10 } }}
             aria-label={t("buttons.button.complain")}
-            onClick={() => setPostId(post.id)}
+            onClick={open}
+            leftSection={<IconAlertSquareRounded size={18} color="pink" />}
           >
-            <IconAlertSquareRounded size={18} color="pink" />
             {t("buttons.button.complain")}
           </Button>
         )}
 
-        {user?.id && !isOwnPost && opened && (
+        {user?.id && !isOwnPost && (
           <ModalForComplaint
             opened={opened}
-            onClose={() => setPostId(null)}
-            itemId={postId}
+            onClose={close}
+            itemId={post?.id}
           />
         )}
       </Container>

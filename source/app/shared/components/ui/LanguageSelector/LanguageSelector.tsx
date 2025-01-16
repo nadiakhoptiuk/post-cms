@@ -21,7 +21,7 @@ export const LanguageSelector = ({ locale, ...rest }: TLanguageSelector) => {
       }
       data={LANGUAGES.map((lng) => lng.toUpperCase())}
       defaultValue={locale.toUpperCase() || DEFAULT_LANG}
-      size='sm'
+      size="sm"
       fw={500}
       {...rest}
     />

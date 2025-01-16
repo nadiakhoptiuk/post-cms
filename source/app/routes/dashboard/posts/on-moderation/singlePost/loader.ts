@@ -18,7 +18,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     async () => {
       const postId = getPostIdFromParams(params);
 
-      const post = await getPostById(Number(postId));
+      const post = await getPostById(postId);
 
       if (!post) {
         throw data("Not found", { status: 404 });

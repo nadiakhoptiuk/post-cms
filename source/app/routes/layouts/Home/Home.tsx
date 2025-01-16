@@ -24,7 +24,13 @@ export function Home({ children, user }: THomeLayout) {
       <Box
         component="header"
         px="md"
-        style={{ borderBottom: "1px solid var(--mantine-color-gray-3)" }}
+        pos="fixed"
+        top={0}
+        w="100%"
+        bg="blue.2"
+        style={{
+          zIndex: 10,
+        }}
       >
         <Flex justify="space-between" align="center" mih={60}>
           <Logo />
@@ -54,7 +60,9 @@ export function Home({ children, user }: THomeLayout) {
         )}
       </Box>
 
-      <main>{children}</main>
+      <Box component="main" pt={60}>
+        {children}
+      </Box>
     </>
   );
 }

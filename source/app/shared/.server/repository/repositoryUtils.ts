@@ -37,6 +37,14 @@ export const crt = db
   .from(users)
   .as("crt");
 
+export const pbl = db
+  .select({
+    moderatedBy: concattedUserName.as("moderatedBy"),
+    id: users.id,
+  })
+  .from(users)
+  .as("pbl");
+
 export const cmpl = db
   .select({
     complaintAuthor: concattedUserName.as("complaintAuthor"),

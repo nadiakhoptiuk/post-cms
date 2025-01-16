@@ -20,13 +20,7 @@ export function AuthLayout({ children }: WithChildren) {
 
   return (
     <>
-      <Box
-        component="header"
-        w="100%"
-        px="md"
-        style={{ borderBottom: "1px solid var(--mantine-color-gray-3)" }}
-        // bd="1px solid gray.3"
-      >
+      <Box component="header" w="100%" px="md" bg="blue.2">
         <Flex w="100%" justify="space-between" align="center" mih={60}>
           <Logo />
           <Burger

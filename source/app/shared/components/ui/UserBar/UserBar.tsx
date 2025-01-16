@@ -1,13 +1,13 @@
 import { Form } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Avatar, Grid, Group, Menu, Text, UnstyledButton } from "@mantine/core";
+import { Avatar, Grid, Menu, Text } from "@mantine/core";
 import { IconChevronDown, IconLogout, IconTrash } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 
-import { StyledNavLink } from "../StyledNavLink/StyledNavLink";
 import { Button } from "../Button";
 import { LanguageSelector } from "../LanguageSelector";
 import { Modal } from "../Modal";
+import { StyledNavLink } from "../StyledNavLink";
 
 import { NavigationLink, UserBarNavLinks } from "~/shared/constants/navigation";
 import { ROLE_ADMIN } from "~/shared/constants/common";
@@ -21,23 +21,27 @@ export const UserBar = ({ user, locale }: TUserBar) => {
     <>
       <Menu
         width={200}
-        position="bottom-end"
+        position="bottom"
         transitionProps={{ transition: "pop-top-right" }}
         withinPortal
         shadow="md"
+        trigger="click-hover"
       >
         <Menu.Target>
-          <UnstyledButton>
-            <Group gap={7}>
-              <Avatar alt="user" color="cyan" radius="xl" size={30} />
-
-              <Text fw={500} size="sm" visibleFrom="xs" lh={1} mr={3}>
-                {user.firstName} {user.lastName}
-              </Text>
-
-              <IconChevronDown size={12} stroke={1.5} />
-            </Group>
-          </UnstyledButton>
+          <Button
+            size="md"
+            variant="transparent"
+            c="blue.8"
+            justify="flex-end"
+            leftSection={
+              <Avatar alt="user" color="blue.8" radius="xl" size="md" />
+            }
+            rightSection={<IconChevronDown size={18} stroke={1.5} />}
+          >
+            <Text component="span" visibleFrom="sm" fw={500}>
+              {user.firstName} {user.lastName}
+            </Text>
+          </Button>
         </Menu.Target>
 
         <Menu.Dropdown component="div" p="xs">
@@ -48,16 +52,22 @@ export const UserBar = ({ user, locale }: TUserBar) => {
 
             return (
               <Menu.Item key={id} component="div" p="0">
-                <StyledNavLink to={link} fullWidth>
-                  {Icon && <Icon size={22} />}
-
+                <StyledNavLink
+                  to={link}
+                  variant="subtle"
+                  fullWidth
+                  justify="flex-start"
+                  size="md"
+                  c="gray.7"
+                  leftSection={Icon && <Icon size={22} />}
+                >
                   {t(`userBarNavLinks.${id}`)}
                 </StyledNavLink>
               </Menu.Item>
             );
           })}
 
-          <Menu.Divider styles={{ divider: { margin: "8px" } }} />
+          <Menu.Divider m="xs" />
           <LanguageSelector
             locale={locale}
             styles={{
@@ -65,44 +75,32 @@ export const UserBar = ({ user, locale }: TUserBar) => {
             }}
           />
 
-          <Menu.Divider styles={{ divider: { margin: "8px" } }} />
+          <Menu.Divider m="xs" />
           <Menu.Item component="div" p="0">
             <Form action={NavigationLink.LOGOUT} method="post">
               <Button
                 type="submit"
                 c="gray"
-                styles={{
-                  root: { width: "100%", padding: "8px 12px" },
-                  inner: { justifyContent: "flex-start" },
-                }}
+                fullWidth
+                justify="flex-start"
                 variant="transparent"
                 fw="normal"
+                leftSection={<IconLogout size={22} stroke={1.5} />}
               >
-                <IconLogout
-                  size={22}
-                  stroke={1.5}
-                  style={{ marginRight: 10 }}
-                />
                 {t("auth.logout")}
               </Button>
             </Form>
           </Menu.Item>
 
-          <Menu.Divider styles={{ divider: { margin: "8px" } }} />
+          <Menu.Divider m="xs" />
           <Menu.Item
             component="div"
             onClick={open}
             color="red"
-            styles={{
-              itemLabel: {
-                display: "flex",
-                alignItems: "center",
-                columnGap: "10px",
-              },
-            }}
+            p="xs"
+            leftSection={<IconTrash size={22} stroke={1.5} />}
           >
-            <IconTrash size={22} stroke={1.5} />
-            <Text component="span" size="md" fw="normal">
+            <Text component="span" size="md">
               {t("auth.deleteAccount")}
             </Text>
           </Menu.Item>
@@ -112,9 +110,7 @@ export const UserBar = ({ user, locale }: TUserBar) => {
       <Modal
         opened={opened}
         onClose={close}
-        title={t("modal.title", {
-          ns: "common",
-        })}
+        title={t("modal.title")}
         p="lg"
         centered
       >
@@ -131,17 +127,18 @@ export const UserBar = ({ user, locale }: TUserBar) => {
                 <Button
                   type="submit"
                   c="red"
-                  styles={{
-                    root: { width: "100%", padding: "8px 12px" },
-                    inner: { justifyContent: "flex-start" },
-                  }}
+                  fullWidth
+                  justify="flex-start"
+                  p="xs"
                   variant="light"
+                  leftSection={
+                    <IconTrash
+                      size={22}
+                      stroke={1.5}
+                      style={{ marginRight: 10 }}
+                    />
+                  }
                 >
-                  <IconTrash
-                    size={22}
-                    stroke={1.5}
-                    style={{ marginRight: 10 }}
-                  />
                   {t("auth.deleteAccount")}
                 </Button>
               </Form>

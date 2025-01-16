@@ -16,7 +16,7 @@ export const posts = pgTable("Posts", {
   content: t.varchar({ length: 3000 }).notNull(),
   ownerId: t
     .integer()
-    .references(() => users.id)
+    .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
   postStatus: postStatusEnum().notNull().default("on moderation"),
   createdAt: t.timestamp().defaultNow().notNull(),

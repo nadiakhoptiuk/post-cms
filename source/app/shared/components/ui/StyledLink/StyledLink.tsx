@@ -2,28 +2,16 @@ import { Link } from "react-router";
 
 import type { TStyledLink } from "./StyledLink.types";
 
-import s from "./StyledLink.module.css";
+import { Button, type ButtonProps } from "@mantine/core";
 
 export const StyledLink = ({
   children,
-  variant = "unstyled",
-  fill = "outline",
+  to,
   ...rest
-}: TStyledLink) => {
+}: TStyledLink & ButtonProps) => {
   return (
-    <Link
-      className={
-        variant === "accent" && fill === "outline"
-          ? s.accentOutlinedLink
-          : variant === "accent" && fill === "filled"
-          ? s.accentFilledLink
-          : variant === "unstyled" && fill === "outline"
-          ? s.unstyledOutlinedLink
-          : s.unstyledFilledLink
-      }
-      {...rest}
-    >
+    <Button p="xs" component={Link} to={to} h="100%" size="sm" {...rest}>
       {children}
-    </Link>
+    </Button>
   );
 };

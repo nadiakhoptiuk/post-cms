@@ -86,7 +86,7 @@ export const ModalRejectPostWithoutRedirect = ({
     handleSubmit: (data) => {
       {
         fetcher.submit(
-          { ...data, postId: itemId, actionId: ACTION_REJECT },
+          { ...data, id: itemId, actionId: ACTION_REJECT },
           { method: "post" }
         );
         onClose();

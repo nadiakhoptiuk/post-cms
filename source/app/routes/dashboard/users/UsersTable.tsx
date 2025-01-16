@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Flex, Table as MTable, Text, Tooltip } from "@mantine/core";
 import { IconPencil, IconRestore, IconTrash } from "@tabler/icons-react";
@@ -13,123 +12,123 @@ import { formatDateToRelative } from "~/shared/utils/dateRelativeFormat";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import type { TUsersData } from "./types";
+import type { TDBUser } from "~/shared/types/react";
 
-export const UsersTable = ({ users }: TUsersData) => {
+const TableRow = ({
+  id,
+  createdAt,
+  deletedAt,
+  lastName,
+  firstName,
+  email,
+  role,
+}: TDBUser) => {
   const { t } = useTranslation("common");
-  const [userId, setUserId] = useState<null | number>(null);
   const [opened, { open, close }] = useDisclosure(false);
-  const hasBeenDeleted =
-    users.find((user) => user.id === userId)?.deletedAt !== null;
+  const createdRelDate = formatDateToRelative(createdAt);
 
-  useEffect(() => {
-    if (!userId) {
-      close();
-    } else {
-      open();
-    }
-  }, [userId]);
+  return (
+    <>
+      <MTable.Tr key={id}>
+        <TableTd>
+          <div>
+            <Text fz="sm" fw={500}>
+              {lastName} {firstName}
+            </Text>
+            <Text fz="xs" c="dimmed">
+              {email}
+            </Text>
+          </div>
+        </TableTd>
+        <TableTd>{role}</TableTd>
+        <TableTd>{createdRelDate}</TableTd>
 
-  const rows = users.map(
-    ({ id, createdAt, deletedAt, lastName, firstName, email, role }) => {
-      const createdRelDate = formatDateToRelative(createdAt);
-
-      return (
-        <MTable.Tr key={id} mih={57}>
-          <TableTd>
-            <div>
-              <Text fz="sm" fw={500}>
-                {lastName} {firstName}
-              </Text>
-              <Text fz="xs" c="dimmed">
-                {email}
-              </Text>
-            </div>
-          </TableTd>
-          <TableTd>{role}</TableTd>
-          <TableTd>{createdRelDate}</TableTd>
-
-          <TableTd>
-            <Flex columnGap={4}>
+        <TableTd>
+          <Flex columnGap={4}>
+            <Tooltip label={t("buttons.button.edit")}>
               <StyledNavLink
-                variant="unstyled"
                 aria-label={t("buttons.button.edit")}
                 to={`${NavigationLink.DASHBOARD_USERS}/${id}`}
                 style={{ padding: 8 }}
               >
                 <IconPencil size={18} stroke={1.5} />
               </StyledNavLink>
+            </Tooltip>
 
-              <Tooltip
-                label={
-                  deletedAt === null
-                    ? t("buttons.button.delete")
-                    : t("buttons.button.restore")
-                }
+            <Tooltip
+              label={
+                deletedAt === null
+                  ? t("buttons.button.delete")
+                  : t("buttons.button.restore")
+              }
+            >
+              <Button
+                onClick={open}
+                c={deletedAt === null ? "red" : "green"}
+                p={8}
+                variant="subtle"
               >
-                <Button
-                  onClick={() => {
-                    setUserId(id);
-                  }}
-                  c={deletedAt === null ? "red" : "green"}
-                  p={8}
-                  variant="subtle"
-                >
-                  {deletedAt === null ? (
-                    <IconTrash size={18} stroke={1.5} />
-                  ) : (
-                    <IconRestore size={18} stroke={1.5} />
-                  )}
-                </Button>
-              </Tooltip>
-            </Flex>
-          </TableTd>
-        </MTable.Tr>
-      );
-    }
+                {deletedAt === null ? (
+                  <IconTrash size={18} stroke={1.5} />
+                ) : (
+                  <IconRestore size={18} stroke={1.5} />
+                )}
+              </Button>
+            </Tooltip>
+          </Flex>
+        </TableTd>
+      </MTable.Tr>
+
+      <ModalForDeletingWithoutRedirect
+        itemId={id}
+        opened={opened}
+        onClose={close}
+        hasBeenDeleted={deletedAt !== null}
+      />
+    </>
   );
+};
+
+export const UsersTable = ({ users }: TUsersData) => {
+  const { t } = useTranslation("common");
+  const { t: u } = useTranslation("user");
 
   return (
     <>
       <MTable.ScrollContainer
         type="scrollarea"
-        minWidth={500}
+        minWidth={400}
         w="fit-content"
         mx="auto"
-        mih={345}
       >
-        <MTable withColumnBorders>
+        <MTable withColumnBorders highlightOnHover>
           <MTable.Thead>
             <MTable.Tr>
               <TableTh>
                 <div>
                   <Text fz="sm" fw={500}>
-                    {`${t("userData.lastName")}, ${t("userData.firstName")}`}
+                    {`${u("userData.lastName")}, ${u("userData.firstName")}`}
                   </Text>
                   <Text fz="xs" c="dimmed">
-                    {t("userData.email")}
+                    {u("userData.email")}
                   </Text>
                 </div>
               </TableTh>
 
-              <TableTh>{t("userData.role")}</TableTh>
+              <TableTh>{u("userData.role")}</TableTh>
               <TableTh>{t("timestampsLabels.createdAt")}</TableTh>
 
               <TableTh> </TableTh>
             </MTable.Tr>
           </MTable.Thead>
 
-          <MTable.Tbody>{rows}</MTable.Tbody>
+          <MTable.Tbody>
+            {users.map((user) => (
+              <TableRow key={user.id} {...user} />
+            ))}
+          </MTable.Tbody>
         </MTable>
       </MTable.ScrollContainer>
-
-      {opened && userId && (
-        <ModalForDeletingWithoutRedirect
-          itemId={userId}
-          opened={opened}
-          onClose={() => setUserId(null)}
-          hasBeenDeleted={hasBeenDeleted}
-        />
-      )}
     </>
   );
 };

@@ -32,7 +32,7 @@ export async function loader({ request, params }: Route.LoaderArgs): Promise<{
       const post = await getPostBySlug(params.slug);
 
       if (!post) {
-        throw data("Not Found", { status: 404 });
+        throw data("Post not found", { status: 404 });
       }
 
       const { window: serverWindow } = new JSDOM("");

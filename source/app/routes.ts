@@ -66,4 +66,6 @@ export default [
 
   route(NavigationLink.DELETE_ACCOUNT, "./routes/api/deleteAccount.ts"),
   route(NavigationLink.CHANGE_LANGUAGE, "./routes/api/changeLanguage.ts"),
+
+  route(NavigationLink.NOT_FOUND, "./routes/404.tsx"),
 ] satisfies RouteConfig;

@@ -1,11 +1,11 @@
 import { redirect } from "react-router";
 
 import { authGate } from "~/shared/.server/services/auth";
+import { getPostIdFromParams } from "~/shared/.server/utils/postUtils";
 import {
-  confirmPublishPost,
-  getPostIdFromParams,
-} from "~/shared/.server/utils/postUtils";
-import { getPostById } from "~/shared/.server/repository/posts";
+  getPostById,
+  moderatePostById,
+} from "~/shared/.server/repository/posts";
 import { getActionIdFromRequest } from "~/shared/.server/utils/commonUtils";
 import { rejectPublishPostAction } from "../actions/reject";
 
@@ -28,7 +28,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     async (sessionUser: TSerializedUser) => {
       const postId = getPostIdFromParams(params);
 
-      const existingPost = await getPostById(Number(postId));
+      const existingPost = await getPostById(postId);
 
       if (!existingPost) {
         throw new Error("Post with such id does not exist");
@@ -46,13 +46,19 @@ export async function action({ request, params }: Route.ActionArgs) {
 
       switch (action) {
         case ACTION_PUBLISH:
-          result = await confirmPublishPost(Number(postId), sessionUser.id);
+          result = await moderatePostById(
+            postId,
+            {
+              moderatedById: sessionUser.id,
+            },
+            { confirmed: true }
+          );
           break;
 
         case ACTION_REJECT:
           result = await rejectPublishPostAction(
             formData,
-            Number(postId),
+            postId,
             sessionUser.id
           );
           break;

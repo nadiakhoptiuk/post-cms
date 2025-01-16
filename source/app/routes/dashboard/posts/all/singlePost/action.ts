@@ -3,8 +3,6 @@ import { redirect } from "react-router";
 import { authGate } from "~/shared/.server/services/auth";
 import { getPostIdFromParams } from "~/shared/.server/utils/postUtils";
 import { getActionIdFromRequest } from "~/shared/.server/utils/commonUtils";
-import { updatePostAction } from "../actions/update";
-import { deletePostAction } from "../actions/delete";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import {
@@ -14,7 +12,8 @@ import {
 } from "~/shared/constants/common";
 import type { TSerializedUser } from "~/shared/types/react";
 import type { Route } from "./+types/route";
-import { getPostById } from "~/shared/.server/repository/posts";
+import { deletePostById, getPostById } from "~/shared/.server/repository/posts";
+import { updatePostAction } from "~/shared/.server/actions/updatePost";
 
 export async function action({ request, params }: Route.ActionArgs) {
   return await authGate(
@@ -29,7 +28,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       const formData = await request.formData();
       const action = getActionIdFromRequest(formData);
 
-      const existingPost = await getPostById(Number(postId));
+      const existingPost = await getPostById(postId);
 
       if (!existingPost) {
         throw new Error("Post with such id does not exist");
@@ -39,14 +38,14 @@ export async function action({ request, params }: Route.ActionArgs) {
 
       switch (action) {
         case ACTION_DELETE:
-          result = await deletePostAction(Number(postId), sessionUser.id);
+          result = await deletePostById(postId);
           break;
 
         case ACTION_UPDATE:
           result = await updatePostAction(
             formData,
             sessionUser.id,
-            Number(postId),
+            postId,
             existingPost.slug
           );
           break;

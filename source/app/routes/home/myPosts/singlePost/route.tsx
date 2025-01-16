@@ -40,10 +40,9 @@ export default function HomeMyCurrentPostPage() {
         <StyledLink
           to={NavigationLink.MY_POSTS}
           variant="unstyled"
-          fill="filled"
-          style={{ marginBottom: "20px" }}
+          mb="md"
+          leftSection={<IconArrowNarrowLeft size={18} />}
         >
-          <IconArrowNarrowLeft size={18} />
           {t("link.toMyPosts")}
         </StyledLink>
 

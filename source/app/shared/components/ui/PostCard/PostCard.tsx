@@ -1,4 +1,4 @@
-import { Card, Flex, Grid, Text, Title } from "@mantine/core";
+import { Card, Flex, Text, Title, Tooltip } from "@mantine/core";
 import parse from "html-react-parser";
 import { useTranslation } from "react-i18next";
 import {
@@ -42,7 +42,7 @@ export const PostCard = ({ item, userId, location, setPostId }: TPostCard) => {
     >
       <Card.Section>
         {location === "own" && (
-          <StatusBadge status={status} mb={10} display="block" mx="auto" />
+          <StatusBadge status={status} mb="xs" display="block" mx="auto" />
         )}
 
         <Flex justify="space-between" align="center">
@@ -59,7 +59,7 @@ export const PostCard = ({ item, userId, location, setPostId }: TPostCard) => {
           {parse(item.content)}
         </Text>
 
-        <Flex gap={10} mb={10} direction="column">
+        <Flex gap="xs" mb="xs" direction="column">
           {publishedDate && (
             <Text component="span" size="sm" c="gray">
               {publishedDate}
@@ -73,57 +73,60 @@ export const PostCard = ({ item, userId, location, setPostId }: TPostCard) => {
           )}
         </Flex>
 
-        <Grid columns={2} mt="auto">
-          <Grid.Col span={1}>
+        <Flex columnGap="xs" mt="auto">
+          <Tooltip label={t("buttons.button.view")}>
             <StyledLink
               to={`/${slug}`}
-              variant="accent"
-              fill="filled"
-              style={{ width: "100%", height: "100%" }}
+              variant="light"
+              fullWidth
+              style={{ height: "100%" }}
+              leftSection={<IconEye size={18} style={{ flexShrink: 0 }} />}
             >
-              <IconEye size={18} color="white" style={{ flexShrink: 0 }} />
               {t("buttons.button.view")}
             </StyledLink>
-          </Grid.Col>
+          </Tooltip>
 
           {userId && !isUserOwner && (
-            <Grid.Col span={1}>
+            <Tooltip label={t("buttons.button.complain")}>
               <Button
-                variant="subtle"
-                w="100%"
-                h="100%"
-                styles={{ label: { gap: 10 } }}
+                variant="light"
+                fullWidth
+                p="xs"
+                c="pink.3"
                 aria-label={t("buttons.button.complain")}
                 onClick={() => setPostId(id)}
+                size="xs"
+                h="100%"
+                leftSection={
+                  <IconAlertSquareRounded
+                    size={18}
+                    color="pink"
+                    style={{ flexShrink: 0 }}
+                  />
+                }
               >
-                <IconAlertSquareRounded
-                  size={18}
-                  color="pink"
-                  style={{ flexShrink: 0 }}
-                />
                 {t("buttons.button.complain")}
               </Button>
-            </Grid.Col>
+            </Tooltip>
           )}
 
           {isUserOwner && (
-            <Grid.Col span={1}>
+            <Tooltip label={t("buttons.button.edit")}>
               <StyledLink
                 to={
                   location === "own"
                     ? id?.toString()
                     : `${NavigationLink.MY_POSTS}/${id?.toString()}`
                 }
-                variant="unstyled"
-                fill="outline"
-                style={{ width: "100%" }}
+                variant="light"
+                fullWidth
+                leftSection={<IconPencil size={18} />}
               >
-                <IconPencil size={18} />
                 {t("buttons.button.edit")}
               </StyledLink>
-            </Grid.Col>
+            </Tooltip>
           )}
-        </Grid>
+        </Flex>
       </Card.Section>
     </Card>
   );
