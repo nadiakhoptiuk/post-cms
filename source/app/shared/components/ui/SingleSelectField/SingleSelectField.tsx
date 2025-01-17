@@ -27,7 +27,7 @@ export const SingleSelectField = <
       })}
       error={field.error()}
       styles={{ root: { flexGrow: 1 }, label: { fontWeight: "bold" } }}
-      size='md'
+      size="md"
       {...rest}
     />
   );

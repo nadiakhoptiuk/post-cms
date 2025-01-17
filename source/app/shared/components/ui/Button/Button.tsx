@@ -8,7 +8,13 @@ export const Button = ({
   ...rest
 }: TButton) => {
   return (
-    <MButton type={type} loading={loading} size='md' {...rest}>
+    <MButton
+      type={type}
+      loading={loading}
+      loaderProps={{ type: "dots" }}
+      size="md"
+      {...rest}
+    >
       {children}
     </MButton>
   );

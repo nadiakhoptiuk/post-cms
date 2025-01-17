@@ -1,0 +1,9 @@
+{
+  "complaintData": {
+    "post": "Post",
+    "author": "Complained",
+    "reason": "Reason"
+  },
+
+  "noComplaints": "There are no complaints now..."
+}

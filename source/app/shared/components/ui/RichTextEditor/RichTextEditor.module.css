@@ -1,0 +1,7 @@
+.editor {
+  border-color: var(--mantine-color-gray-4);
+}
+
+.errorEditor {
+  border-color: var(--mantine-color-red-6);
+}

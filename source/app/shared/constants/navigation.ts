@@ -8,16 +8,26 @@ import {
   IconLogin,
   IconUserScan,
   IconUserPlus,
+  IconShieldLock,
 } from "@tabler/icons-react";
 
 export const enum NavigationLink {
+  HOME_SINGLE_POST = "/:slug",
   HOME = "/",
+  MY_POSTS = "/my-posts",
+  MY_POSTS_NEW = "/my-posts/new",
+  MY_CURRENT_POST = "/my-posts/:postId",
+  PROFILE = "/profile",
 
   DASHBOARD = "/dashboard",
-  DASHBOARD_MY_POSTS = "/dashboard/my-posts",
-  DASHBOARD_ALL_POSTS = "/dashboard/posts/all",
+  DASHBOARD_SINGLE_POST_TO_VIEW = "/dashboard/:slug",
+
+  DASHBOARD_ALL_POSTS = "/dashboard/posts",
+  DASHBOARD_POSTS_SINGLE_POST = "/dashboard/posts/:postId",
   DASHBOARD_POSTS_ON_MODERATION = "/dashboard/posts/on-moderation",
+  DASHBOARD_SINGLE_POST_ON_MODERATION = "/dashboard/posts/on-moderation/:postId",
   DASHBOARD_POSTS_COMPLAINTS = "/dashboard/posts/complaints",
+
   DASHBOARD_USERS = "/dashboard/users",
   DASHBOARD_USERS_NEW = "/dashboard/users/new",
   DASHBOARD_CURRENT_USER = "/dashboard/users/:userId",
@@ -27,10 +37,11 @@ export const enum NavigationLink {
   LOGOUT = "/logout",
   DELETE_ACCOUNT = "/delete-account",
 
-  MY_POSTS = "/my-posts",
-  PROFILE = "/profile",
   SIGNUP = "/signup",
 
+  NOT_FOUND = "/404",
+
+  // FOR ACTIONS
   CHANGE_LANGUAGE = "change-language",
   DELETE_USER = "delete-user",
   RESTORE_USER = "restore-user",
@@ -38,18 +49,13 @@ export const enum NavigationLink {
 
 export const DashboardNavLinks = [
   {
-    id: "dashboard.myPosts",
-    link: NavigationLink.DASHBOARD_MY_POSTS,
-    icon: IconPencilMinus,
-  },
-  {
     id: "dashboard.posts",
     icon: IconNotebook,
     links: [
       {
         id: "dashboard.allPosts",
         link: NavigationLink.DASHBOARD_ALL_POSTS,
-        icon: IconNotebook,
+        icon: IconPencilMinus,
       },
       {
         id: "dashboard.onModeration",
@@ -83,4 +89,5 @@ export const AuthNavLinks = [
 export const UserBarNavLinks = [
   { id: "profile", link: NavigationLink.PROFILE, icon: IconUserScan },
   { id: "myPosts", link: NavigationLink.MY_POSTS, icon: IconPencilMinus },
+  { id: "dashboard", link: NavigationLink.DASHBOARD, icon: IconShieldLock },
 ];

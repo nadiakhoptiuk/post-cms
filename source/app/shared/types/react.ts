@@ -1,8 +1,12 @@
 import { useLoaderData } from "react-router";
-import type { TextInputProps as MTextInputProps } from "@mantine/core";
+import type {
+  ModalProps,
+  TextInputProps as MTextInputProps,
+} from "@mantine/core";
 import type { FormScope } from "@rvf/react-router";
 
 import type { LANG_EN, LANG_UK } from "../constants/locale";
+import type { COMPLAINT_STATUS, POST_STATUS } from "../constants/common";
 
 export type NewSerializeFrom<T> = ReturnType<typeof useLoaderData<T>>;
 
@@ -17,6 +21,14 @@ export type TRolesEnum = "admin" | "user";
 export type TErrorsMessages = {
   [key: string]: string;
 };
+
+export interface TModal extends ModalProps {}
+
+export interface TItemId {
+  itemId: number | null;
+}
+
+export type TFormType = { formType: "create" | "update" };
 
 export type TSignupData = {
   firstName: string;
@@ -40,16 +52,21 @@ export type TUserPassword = {
   password: string;
 };
 
-export interface TDBUser extends TUser {
+export type TDBUserRecord = {
   id: number;
   createdAt: Date;
   updatedAt?: Date | null;
-  updatedBy?: string;
+  updatedBy?: string | null;
   updatedById?: number | null;
   deletedAt?: Date | null;
-  deletedBy?: string;
+  deletedBy?: string | null;
   deletedById?: number | null;
-}
+  restoredAt?: Date | null;
+  restoredBy?: string | null;
+  restoredById?: number | null;
+};
+
+export type TDBUser = TUser & TDBUserRecord;
 
 export interface TSerializedUser {
   id: number;
@@ -58,12 +75,52 @@ export interface TSerializedUser {
   role: TRolesEnum;
 }
 
-export type THomeLoader = {
-  user: TSerializedUser;
-};
-
 export interface TTextInput extends MTextInputProps {
   label: string;
   scope: FormScope<string>;
   placeholder?: string;
 }
+
+export type TDBPostRecord = {
+  id: number;
+  ownerId: number;
+  createdAt: Date;
+  status: (typeof POST_STATUS)[keyof typeof POST_STATUS];
+  author?: string;
+  updatedAt?: Date | null;
+  updatedBy?: string | null;
+  updatedById?: number | null;
+  publishedAt?: Date | null;
+  rejectedAt?: Date | null;
+  rejectReason?: string | null;
+  moderatedById?: number | null;
+  moderatedBy?: string | null;
+  blockedAt?: Date | null;
+  blockedById?: number | null;
+  blockedBy?: string | null;
+};
+
+export type TPost = {
+  title: string;
+  slug: string;
+  content: string;
+};
+
+export type TPostsTable = {
+  posts: Array<TPost & TDBPostRecord>;
+};
+
+export type TDBComplaintRecord = {
+  id: string;
+  createdAt: Date;
+  createdById: number;
+  reason: string;
+  complainedAboutPostId: number;
+  consideredById?: number | null;
+  status?: (typeof COMPLAINT_STATUS)[keyof typeof COMPLAINT_STATUS];
+
+  postSlug: string;
+  postTitle: string;
+  postId: number;
+  author: string;
+};

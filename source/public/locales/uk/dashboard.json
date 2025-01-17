@@ -1,11 +1,14 @@
 {
   "dashboardLinks": {
-    "dashboard.myPosts": "Мої пости",
-    "dashboard.posts": "Пости",
+    "dashboard.myPosts": "Мої дописи",
+    "dashboard.posts": "Дописи",
     "dashboard.allPosts": "Всі",
     "dashboard.onModeration": "На модерації",
     "dashboard.postsComplains": "Скарги",
     "dashboard.users": "Користувачі",
     "dashboard.tags": "Теги"
-  }
+  },
+
+  "adminGreeting": "Адмін панель",
+  "adminChoose": "Оберіть потрібний пункт із сайдбару"
 }

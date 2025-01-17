@@ -6,29 +6,57 @@
   "auth.signup": "Register",
   "auth.deleteAccount": "Delete account",
 
+  "goToHomePage": "Home Page",
+  "notFound": "Resource not found",
+
   "userBarNavLinks": {
     "profile": "Profile",
-    "myPosts": "My Posts"
+    "myPosts": "My Posts",
+    "dashboard": "Administrator"
   },
 
   "aria.toggleMenu": "Open Mobile Menu",
+  "aria.searchForm": "Search records",
 
   "formErrorsMessages": {
     "emailError": "Must be a valid email",
-    "passwordErrorMin": "At least 8 symbols",
-    "passwordErrorMax": "No more than 12 symbols",
-    "stringErrorMin": "Required field",
-    "stringErrorMax": "Too many symbols"
+    "stringErrorRequired": "Required field",
+    "stringErrorMin": "Minimal count of symbols:",
+    "stringErrorMax": "Maximum count of symbols:",
+    "invalidRegex": "Only Latin letters, numbers and dashes are allowed"
   },
 
   "buttons": {
     "button.update": "Update",
     "button.create": "Create",
     "button.edit": "Edit",
+    "button.view": "View",
     "button.cancel": "Cancel",
     "button.delete": "Delete",
-    "button.restore": "Restore"
+    "button.restore": "Restore",
+    "button.complain": "Complaint",
+    "button.block": "Ban post",
+    "button.reject.complaint": "Reject complain",
+    "button.publish": "Publish",
+    "button.reject": "Reject post",
+    "button.back": "Back"
   },
 
-  "modal.title": "Are you sure?"
+  "modal.title": "Are you sure?",
+
+  "timestampsLabels": {
+    "createdAt": "Created",
+    "complainedAt": "Made",
+    "author": "Author",
+    "updatedAt": "Updated",
+    "updatedBy": "Updated by",
+    "publishedAt": "Published",
+    "moderatedBy": "Moderated by",
+    "deletedAt": "Deleted",
+    "deletedBy": "Deleted by",
+    "blockedAt": "Blocked",
+    "blockedBy": "Blocked by"
+  },
+
+  "search.placeholder": "Search..."
 }

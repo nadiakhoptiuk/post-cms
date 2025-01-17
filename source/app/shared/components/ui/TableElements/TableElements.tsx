@@ -1,15 +1,19 @@
-import { Table as MTable } from "@mantine/core";
+import {
+  Table as MTable,
+  type TableTdProps,
+  type TableThProps,
+} from "@mantine/core";
 
 import type { WithChildren } from "~/shared/types/react";
 
-export const TableTd = ({ children }: WithChildren) => {
-  return (
-    <MTable.Td styles={{ td: { textWrap: "nowrap" } }}>{children}</MTable.Td>
-  );
+export const TableTd = ({ children, ...rest }: WithChildren & TableTdProps) => {
+  return <MTable.Td {...rest}>{children}</MTable.Td>;
 };
 
-export const TableTh = ({ children }: WithChildren) => {
+export const TableTh = ({ children, ...rest }: WithChildren & TableThProps) => {
   return (
-    <MTable.Th styles={{ th: { textWrap: "nowrap" } }}>{children}</MTable.Th>
+    <MTable.Th c="blue.6" fw={600} {...rest}>
+      {children}
+    </MTable.Th>
   );
 };

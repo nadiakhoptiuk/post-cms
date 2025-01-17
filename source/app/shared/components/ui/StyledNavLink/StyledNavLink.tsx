@@ -1,45 +1,34 @@
 import { NavLink } from "react-router";
+import { Badge, Button, type ButtonProps } from "@mantine/core";
 
 import type { TStyledNavLink } from "./StyledNavLink.types";
-import classes from "./StyledNavLink.module.css";
 
 export const StyledNavLink = ({
   to,
   children,
-  variant = "unstyled",
-  fullWidth = false,
-}: TStyledNavLink) => {
+  withCount = false,
+  count = 0,
+  ...rest
+}: TStyledNavLink & ButtonProps) => {
   return (
-    <NavLink
+    <Button
+      p="xs"
+      component={NavLink}
+      end
       to={to}
-      className={({ isActive }) => {
-        if (variant === "gray") {
-          return classes.grayLink;
-        }
-
-        if (variant === "dangerous") {
-          return classes.dangerousLink;
-        }
-
-        if (variant === "unstyled") {
-          return isActive ? classes.unstyledActiveLink : classes.unstyledLink;
-        }
-
-        return isActive ? classes.accentActiveLink : classes.accentLink;
-      }}
-      style={
-        fullWidth
-          ? {
-              width: "100%",
-              textWrap: "nowrap",
-            }
-          : {
-              width: "max-content",
-              textWrap: "nowrap",
-            }
+      h="100%"
+      variant="subtle"
+      rightSection={
+        withCount &&
+        count > 0 && (
+          <Badge size="md" circle ml="auto">
+            {count}
+          </Badge>
+        )
       }
+      {...rest}
     >
       {children}
-    </NavLink>
+    </Button>
   );
 };

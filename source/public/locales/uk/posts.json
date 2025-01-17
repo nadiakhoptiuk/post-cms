@@ -1,0 +1,73 @@
+{
+  "postData": {
+    "title": "Заголовок",
+    "slug": "Слаг",
+    "content": "Контент",
+    "createdAt": "Створено",
+    "author": "Автор",
+    "updatedAt": "Оновлено",
+    "updatedBy": "Оновив",
+    "status": "Статус",
+
+    "rejectReason": "Причина відмови",
+    "complaintReason": "Чому ви скаржитеся на цей допис?"
+  },
+
+  "link.toAll": "До всіх дописів",
+  "link.toMyPosts": "До моїх дописів",
+  "link.addNewPost": "Новий допис",
+
+  "button.generateSlug": "Згенерувати слаг",
+
+  "noPosts": "Наразі дописів немає...",
+  "noPostsForModeration": "Наразі немає дописів для модерації...",
+
+  "complain.options": [
+    "Мені просто це не подобається",
+    "Цькування або небажаний контент",
+    "Самоушкодження",
+    "Насильство або ворожнеча",
+    "Продаж товарів з обмеженим доступом",
+    "Оголене тіло / сексуальна активність",
+    "Шахрайство або обман",
+    "Спам"
+  ],
+
+  "richEditorLabels": {
+    "highlightControlLabel": "Підсвітити текст",
+    "boldControlLabel": "Жирний",
+    "italicControlLabel": "Курсив",
+    "underlineControlLabel": "Підкреслений",
+    "strikeControlLabel": "Закреслений",
+    "clearFormattingControlLabel": "Очистити форматування",
+    "codeControlLabel": "Код",
+
+    "h1ControlLabel": "Заголовок 1",
+    "h2ControlLabel": "Заголовок 2",
+    "h3ControlLabel": "Заголовок 3",
+    "h4ControlLabel": "Заголовок 4",
+    "h5ControlLabel": "Заголовок 5",
+    "h6ControlLabel": "Заголовок 6",
+
+    "blockquoteControlLabel": "Блок цитати",
+    "hrControlLabel": "Горизонтальна лінія",
+    "bulletListControlLabel": "Маркований список",
+    "orderedListControlLabel": "Нумерований список",
+    "subscriptControlLabel": "Subscript",
+    "superscriptControlLabel": "Superscript",
+
+    "linkControlLabel": "Посилання",
+    "unlinkControlLabel": "Видалити посилання",
+
+    "undoControlLabel": "Скасувати",
+    "redoControlLabel": "Повторити",
+
+    "alignLeftControlLabel": "Вирівняти текст: ліворуч",
+    "alignCenterControlLabel": "Вирівняти текст: по центру",
+    "alignJustifyControlLabel": "Вирівняти текст: по ширині",
+    "alignRightControlLabel": "Вирівняти текст: праворуч",
+
+    "codeBlockControlLabel": "Блок коду"
+  },
+  "editor.placeholder": "Введіть контент допису"
+}

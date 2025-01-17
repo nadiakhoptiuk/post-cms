@@ -6,29 +6,57 @@
   "auth.signup": "Реєстрація",
   "auth.deleteAccount": "Видалити акаунт",
 
+  "goToHomePage": "Головна сторінка",
+  "notFound": "Ресурс не знайдено",
+
   "userBarNavLinks": {
     "profile": "Профіль",
-    "myPosts": "Мої пости"
+    "myPosts": "Мої дописи",
+    "dashboard": "Адміністратор"
   },
 
   "aria.toggleMenu": "Відкрити мобільне меню",
+  "aria.searchForm": "Шукати записи",
 
   "formErrorsMessages": {
     "emailError": "Введіть валідний email",
-    "passwordErrorMin": "Не менше 8 символів",
-    "passwordErrorMax": "Не більше 12 символів",
-    "stringErrorMin": "Обов'язкове поле",
-    "stringErrorMax": "Не більше 30 символів"
+    "stringErrorRequired": "Обов'язкове поле",
+    "stringErrorMin": "Мінімальна кількість символів:",
+    "stringErrorMax": "Максимальна кількість символів:",
+    "invalidRegex": "Дозволено тільки латинські літери, цифри та тире"
   },
 
   "buttons": {
     "button.update": "Оновити",
     "button.create": "Створити",
     "button.edit": "Редагувати",
+    "button.view": "Дивитись",
     "button.cancel": "Відміна",
     "button.delete": "Видалити",
-    "button.restore": "Відновити"
+    "button.restore": "Відновити",
+    "button.complain": "Скарга",
+    "button.block": "Забанити допис",
+    "button.reject.complaint": "Відхилити скаргу",
+    "button.publish": "Опублікувати",
+    "button.reject": "Відхилити допис",
+    "button.back": "Назад"
   },
 
-  "modal.title": "Ви впевнені?"
+  "modal.title": "Ви впевнені?",
+
+  "timestampsLabels": {
+    "createdAt": "Створено",
+    "complainedAt": "Подано",
+    "author": "Автор",
+    "updatedAt": "Оновлено",
+    "updatedBy": "Ким оновлено",
+    "publishedAt": "Опубліковано",
+    "moderatedBy": "Ким модеровано",
+    "deletedAt": "Видалено",
+    "deletedBy": "Ким видалено",
+    "blockedAt": "Заблоковано",
+    "blockedBy": "Ким заблоковано"
+  },
+
+  "search.placeholder": "Шукати..."
 }

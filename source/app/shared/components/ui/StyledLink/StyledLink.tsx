@@ -2,19 +2,16 @@ import { Link } from "react-router";
 
 import type { TStyledLink } from "./StyledLink.types";
 
-import s from "./StyledLink.module.css";
+import { Button, type ButtonProps } from "@mantine/core";
 
 export const StyledLink = ({
   children,
-  variant = "unstyled",
+  to,
   ...rest
-}: TStyledLink) => {
+}: TStyledLink & ButtonProps) => {
   return (
-    <Link
-      className={variant === "accent" ? s.accentLink : s.unstyledLink}
-      {...rest}
-    >
+    <Button p="xs" component={Link} to={to} h="100%" size="sm" {...rest}>
       {children}
-    </Link>
+    </Button>
   );
 };

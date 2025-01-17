@@ -1,32 +1,69 @@
-import { Prisma } from "@prisma/client";
+import { DrizzleError } from "drizzle-orm";
+import { data, redirect } from "react-router";
+import { NavigationLink } from "~/shared/constants/navigation";
 
-export const errorHandler = (error: unknown) => {
-  if (error instanceof Prisma.PrismaClientKnownRequestError) {
-    switch (error.code) {
-      case "P2025":
-        return new Response("Record not found", { status: 404 });
-      case "P2002":
-        return new Response("Unique constraint violation", { status: 409 });
-      case "P2003":
-        return new Response("Foreign key constraint failed", { status: 400 });
-      case "P2026":
-        return new Response("Error during data retrieval", { status: 500 });
-      case "P2004":
-        return new Response("Request timed out", { status: 504 });
-      case "P2011":
-        return new Response("Invalid database type", { status: 400 });
-      default:
-        return new Response("Database error", { status: 500 });
-    }
-  }
+export const errorHandler = (error: any) => {
+  console.log("errorHandler", error);
 
-  if (error instanceof Prisma.PrismaClientUnknownRequestError) {
-    return new Response("Database error", { status: 500 });
-  }
-
-  if (error instanceof Response) {
+  if (error instanceof Response && error.status === 302) {
     return error;
   }
 
-  return new Response("Internal Server Error", { status: 500 });
+  if (error instanceof Response && error.status !== 302) {
+    console.log("instanceof Response", error);
+
+    return data(error || "ErrorResponse", {
+      status: error.status,
+    });
+  }
+
+  if (error instanceof Response && error.status === 404) {
+    console.log("error.status === 404");
+    return redirect(NavigationLink.NOT_FOUND);
+  }
+
+  if (error.type === "DataWithResponseInit" && error.init.status === 404) {
+    console.log("DataWithResponseInit", error);
+
+    return redirect(NavigationLink.NOT_FOUND);
+
+    // return data(error.type || error.data || "ErrorResponse", {
+    //   status: error.init.status,
+    // });
+  }
+
+  if (error?.code === "ECONNREFUSED") {
+    console.log("Database isn't connect", error.code);
+
+    throw Error("Database isn't connect");
+  }
+
+  if (error?.name === "PostgresError") {
+    console.log(
+      "instanceof PostgresError",
+      error?.constraint_name || error.message
+    );
+
+    return data(error?.constraint_name || error.message || "PostgresError", {
+      status: 500,
+    });
+  }
+
+  if (error instanceof DrizzleError) {
+    console.log("instanceof DrizzleError", error.message);
+
+    return data(error.message || "DrizzleError", {
+      status: 500,
+    });
+  }
+
+  if (error instanceof Error) {
+    console.log("instanceof Error", error.message);
+
+    return data(error.message, {
+      status: 500,
+    });
+  }
+
+  return data("Internal Server Error", { status: 500 });
 };

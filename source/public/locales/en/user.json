@@ -4,12 +4,7 @@
     "lastName": "Last Name",
     "email": "Email",
     "password": "Password",
-    "role": "Access",
-    "createdAt": "Creation date",
-    "updatedAt": "Update date",
-    "updatedBy": "Updated by",
-    "deletedAt": "Deletion date",
-    "deletedBy": "Deleted by"
+    "role": "Access"
   },
 
   "link.back": "Back to All Users",

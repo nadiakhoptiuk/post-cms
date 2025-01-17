@@ -1,0 +1,1 @@
+ALTER TABLE "Posts" ADD COLUMN "complaintReason" varchar(50);
