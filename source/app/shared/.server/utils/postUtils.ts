@@ -1,17 +1,6 @@
-import { type Params } from "react-router";
 import { v4 as uuidv4 } from "uuid";
 
 import { getAllPostsSlugs } from "../repository/posts";
-
-export const getPostIdFromParams = (params: Params) => {
-  const postId = params?.postId;
-
-  if (!postId) {
-    throw new Error("Post Id not Found");
-  }
-
-  return Number(postId);
-};
 
 export const getPostDataFromRequest = (formData: FormData) => {
   const title = formData.get("title");

@@ -1,5 +1,4 @@
 import bcrypt from "bcryptjs";
-import type { Params } from "react-router";
 import type {
   TDBUser,
   TRolesEnum,
@@ -7,16 +6,6 @@ import type {
   TUserPassword,
 } from "~/shared/types/react";
 import { getUserByEmailWithPassword } from "../repository/users";
-
-export const getUserIdFromParams = (params: Params) => {
-  const userId = params?.userId;
-
-  if (!userId) {
-    throw new Error("User Id not Found");
-  }
-
-  return userId;
-};
 
 export const getUserDataFromRequest = async (formData: FormData) => {
   const firstName = formData.get("firstName");

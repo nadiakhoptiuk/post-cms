@@ -8,7 +8,8 @@ import {
   useLoaderData,
 } from "react-router";
 import { Container, MantineProvider } from "@mantine/core";
-import { Notifications } from "@mantine/notifications";
+import { ModalsProvider } from "@mantine/modals";
+import { notifications, Notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 
@@ -20,6 +21,7 @@ import type { TRootLoader } from "~/shared/.server/root/loader";
 import type { Route } from "./+types/root";
 import stylesheet from "./app.css?url";
 import { useChangeLanguage } from "./shared/services/i18n.react";
+import { useEffect } from "react";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -36,8 +38,19 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { theme, locale } = useLoaderData<TRootLoader>();
+  const { theme, locale, error } = useLoaderData<TRootLoader>();
   useChangeLanguage(locale);
+
+  useEffect(() => {
+    if (!error) return;
+
+    notifications.show({
+      title: "Error",
+      message: error,
+      color: "red",
+      position: "top-center",
+    });
+  }, [error]);
 
   return (
     <html lang={locale} data-mantine-color-scheme={theme}>
@@ -50,8 +63,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       <body>
         <MantineProvider>
-          {children}
-          <Notifications />
+          <ModalsProvider>
+            {children}
+            <Notifications />
+          </ModalsProvider>
         </MantineProvider>
 
         <ScrollRestoration />

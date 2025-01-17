@@ -90,11 +90,10 @@ export const EditUserForm = ({
         <Button
           type="submit"
           loading={form.formState.isSubmitting}
-          mt={25}
+          mt="lg"
           w={200}
-          styles={{
-            root: { marginLeft: "auto", marginRight: "auto", display: "block" },
-          }}
+          mx="auto"
+          display="block"
         >
           {t(
             formType === "update"
@@ -109,7 +108,7 @@ export const EditUserForm = ({
           type="button"
           variant="light"
           mt="lg"
-          w={200}
+          w="fit-content"
           onClick={open}
           styles={{
             root: { marginLeft: "auto", marginRight: "auto", display: "block" },

@@ -17,7 +17,7 @@ export const postValidator = (errors: TErrorsMessages) =>
         .string()
         .trim()
         .min(3, `${errors.stringErrorMin} 3`)
-        .regex(slugRegex, errors.invalidRegex)
+        .regex(slugRegex, errors.invalidSlugRegex)
         .max(1000, `${errors.stringErrorMax} 1000`),
       content: z
         .string()

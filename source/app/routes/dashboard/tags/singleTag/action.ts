@@ -5,13 +5,11 @@ import {
   getActionIdFromRequest,
   getIdFromParams,
 } from "~/shared/.server/utils/commonUtils";
-import { updateUserAction } from "../actions/update";
-import { deleteUserAction } from "../actions/delete";
-import { restoreUserAction } from "../actions/restore";
+import { updateTagAction } from "./actions/update";
+import { deleteTagById, getTagById } from "~/shared/.server/repository/tags";
 
 import {
   ACTION_DELETE,
-  ACTION_RESTORE,
   ACTION_UPDATE,
   ROLE_ADMIN,
 } from "~/shared/constants/common";
@@ -27,43 +25,37 @@ export async function action({ request, params }: Route.ActionArgs) {
       allowedRoles: [ROLE_ADMIN],
     },
     async (sessionUser: TSerializedUser) => {
-      const userId = getIdFromParams(params);
+      const tagId = getIdFromParams(params);
 
       const formData = await request.formData();
       const action = getActionIdFromRequest(formData);
 
-      let resultUser;
+      const existingTag = await getTagById(tagId);
+
+      if (!existingTag) {
+        throw new Error("Tag with such id does not exist");
+      }
+
+      let result;
 
       switch (action) {
         case ACTION_DELETE:
-          resultUser = await deleteUserAction(
-            request,
-            Number(userId),
-            sessionUser
-          );
+          result = await deleteTagById(tagId);
           break;
 
         case ACTION_UPDATE:
-          resultUser = await updateUserAction(
-            formData,
-            sessionUser,
-            Number(userId)
-          );
-          break;
-
-        case ACTION_RESTORE:
-          resultUser = await restoreUserAction(Number(userId), sessionUser);
+          result = await updateTagAction(formData, sessionUser.id, tagId);
           break;
       }
 
-      if (!resultUser) {
-        throw new Error("Something went wrong");
+      if (!result) {
+        throw Error("Something went wrong");
       }
 
-      return redirect(NavigationLink.DASHBOARD_USERS);
+      return redirect(NavigationLink.DASHBOARD_TAGS);
     },
     {
-      failureRedirect: NavigationLink.LOGIN,
+      failureRedirect: NavigationLink.HOME,
     }
   );
 }

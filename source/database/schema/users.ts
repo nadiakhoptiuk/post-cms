@@ -1,5 +1,7 @@
+import { relations } from "drizzle-orm";
 import { pgEnum, pgTable } from "drizzle-orm/pg-core";
 import * as t from "drizzle-orm/pg-core";
+import { posts } from "./posts";
 
 export const rolesEnum = pgEnum("roles", ["admin", "user"]);
 
@@ -18,3 +20,7 @@ export const users = pgTable("Users", {
   restoredAt: t.timestamp(),
   restoredById: t.integer().references((): t.AnyPgColumn => users.id),
 });
+
+export const usersRelations = relations(users, ({ many }) => ({
+  posts: many(posts),
+}));

@@ -41,7 +41,7 @@ export default function DashBoardModerationPage() {
         )}
 
         {posts?.length === 0 && (
-          <Text mx="auto" w="fit-content" mt={30} size="md">
+          <Text mx="auto" w="fit-content" mt="lg" size="md">
             {t("noPosts")}
           </Text>
         )}

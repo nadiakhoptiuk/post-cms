@@ -1,8 +1,8 @@
 import { data } from "react-router";
 
-import { getPostById } from "~/shared/.server/repository/posts";
 import { authGate } from "~/shared/.server/services/auth";
-import { getPostIdFromParams } from "~/shared/.server/utils/postUtils";
+import { getIdFromParams } from "~/shared/.server/utils/commonUtils";
+import { getPostById } from "~/shared/.server/repository/posts";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import { ROLE_ADMIN } from "~/shared/constants/common";
@@ -24,7 +24,7 @@ export async function loader({
       allowedRoles: [ROLE_ADMIN],
     },
     async () => {
-      const postId = getPostIdFromParams(params);
+      const postId = getIdFromParams(params);
 
       const post = await getPostById(postId);
 

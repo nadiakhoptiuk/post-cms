@@ -1,8 +1,10 @@
 import { redirect } from "react-router";
 
 import { authGate } from "~/shared/.server/services/auth";
-import { getPostIdFromParams } from "~/shared/.server/utils/postUtils";
-import { getActionIdFromRequest } from "~/shared/.server/utils/commonUtils";
+import {
+  getActionIdFromRequest,
+  getIdFromParams,
+} from "~/shared/.server/utils/commonUtils";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import {
@@ -23,7 +25,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       allowedRoles: [ROLE_ADMIN],
     },
     async (sessionUser: TSerializedUser) => {
-      const postId = getPostIdFromParams(params);
+      const postId = getIdFromParams(params);
 
       const formData = await request.formData();
       const action = getActionIdFromRequest(formData);

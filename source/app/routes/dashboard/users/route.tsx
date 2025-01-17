@@ -24,7 +24,7 @@ export default function DashBoardUsersPage() {
   return (
     <Box component="section" py="lg">
       <Container>
-        <Group mx="auto" style={{ marginBottom: 30, width: "fit-content" }}>
+        <Group mx="auto" w="fit-content" my="lg">
           <StyledNavLink
             variant="accent"
             to={NavigationLink.DASHBOARD_USERS_NEW}
