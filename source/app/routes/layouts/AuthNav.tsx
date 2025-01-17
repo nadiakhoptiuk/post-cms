@@ -8,16 +8,8 @@ export const AuthNav = ({ burgerMenu = false }: { burgerMenu?: boolean }) => {
   const { t } = useTranslation(["common", "auth"]);
 
   const items = AuthNavLinks.map(({ id, link }) => (
-    <ListItem
-      key={id}
-      w="100%"
-      styles={{
-        itemWrapper: { width: "100%" },
-        itemLabel: { width: "100%" },
-        item: { flexWrap: "nowrap" },
-      }}
-    >
-      <StyledNavLink to={link} fullWidth size="md" c="blue.8">
+    <ListItem key={id} w="100%">
+      <StyledNavLink to={link} fullWidth size="md" c="blue.8" variant="subtle">
         {t(id)}
       </StyledNavLink>
     </ListItem>

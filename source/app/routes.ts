@@ -58,10 +58,14 @@ export default [
       "./routes/dashboard/posts/on-moderation/singlePost/route.tsx"
     ),
 
+    // ----------------------- COMPLAINTS ----------------------------
     route(
       NavigationLink.DASHBOARD_POSTS_COMPLAINTS,
       "./routes/dashboard/posts/complaints/route.tsx"
     ),
+
+    // ----------------------- TAGS ----------------------------
+    route(NavigationLink.DASHBOARD_TAGS, "./routes/dashboard/tags/route.tsx"),
   ]),
 
   route(NavigationLink.DELETE_ACCOUNT, "./routes/api/deleteAccount.ts"),

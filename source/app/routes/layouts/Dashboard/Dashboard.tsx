@@ -52,7 +52,6 @@ export const DashboardLayout = ({
         breakpoint: "xs",
         collapsed: { mobile: !menuOpened },
       }}
-      p={{ base: "xs", sm: "xs", md: "md", xl: "lg" }}
     >
       <AppShell.Header mih={60} bg="blue.2">
         <Group h="100%" px="md">
@@ -68,7 +67,7 @@ export const DashboardLayout = ({
         </Group>
       </AppShell.Header>
 
-      <AppShell.Navbar p="md" bg="blue.1">
+      <AppShell.Navbar p="md" bg="blue.1" withBorder={false}>
         <ScrollArea>
           <Group>
             <List component="div" spacing="xs" w="100%">
@@ -86,13 +85,7 @@ export const DashboardLayout = ({
                 p="xs"
                 justify="flex-start"
                 variant="transparent"
-                leftSection={
-                  <IconLogout
-                    size={22}
-                    stroke={1.5}
-                    style={{ marginRight: 10 }}
-                  />
-                }
+                leftSection={<IconLogout size={22} stroke={1.5} />}
               >
                 {t("auth.logout")}
               </Button>
@@ -101,7 +94,7 @@ export const DashboardLayout = ({
         </Box>
       </AppShell.Navbar>
 
-      <AppShell.Main>{children}</AppShell.Main>
+      <AppShell.Main h="100vh">{children}</AppShell.Main>
     </AppShell>
   );
 };

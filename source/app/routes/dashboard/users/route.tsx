@@ -21,22 +21,8 @@ export default function DashBoardUsersPage() {
   const { t } = useTranslation("user");
   const navigate = useNavigate();
 
-  // const [_, setSearchParams] = useSearchParams();
-
-  // useEffect(() => {
-  //   setSearchParams(
-  //     (prev) => {
-  //       prev.set(PAGE_PARAMETER_NAME, actualPage);
-  //       return prev;
-  //     },
-  //     {
-  //       preventScrollReset: true,
-  //     }
-  //   );
-  // }, []);
-
   return (
-    <Box component="section">
+    <Box component="section" py="lg">
       <Container>
         <Group mx="auto" style={{ marginBottom: 30, width: "fit-content" }}>
           <StyledNavLink
