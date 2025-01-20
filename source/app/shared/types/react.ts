@@ -98,6 +98,7 @@ export type TDBPostRecord = {
   blockedAt?: Date | null;
   blockedById?: number | null;
   blockedBy?: string | null;
+  tags: string[];
 };
 
 export type TPost = {
@@ -106,8 +107,12 @@ export type TPost = {
   content: string;
 };
 
+export type TPostTags = {
+  tags: Array<string>;
+};
+
 export type TPostsTable = {
-  posts: Array<TPost & TDBPostRecord>;
+  posts: Array<TPost & TDBPostRecord & TPostTags>;
 };
 
 export type TDBComplaintRecord = {

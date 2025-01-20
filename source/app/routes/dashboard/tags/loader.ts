@@ -1,15 +1,16 @@
 import { authGate } from "~/shared/.server/services/auth";
 
+import { getAllTagsForAdmin } from "~/shared/.server/repository/tags";
+import { getPaginationDataFromRequest } from "~/shared/.server/utils/commonUtils";
+
 import { ROLE_ADMIN } from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
-import type { Route } from "../+types/route";
-import { getAllTags } from "~/shared/.server/repository/tags";
-import { getPaginationDataFromRequest } from "~/shared/.server/utils/commonUtils";
 import type {
   NewSerializeFrom,
   TSerializedUser,
   TTag,
 } from "~/shared/types/react";
+import type { Route } from "../+types/route";
 
 export async function loader({ request }: Route.LoaderArgs): Promise<{
   tags: Array<TTag> | [];
@@ -27,7 +28,10 @@ export async function loader({ request }: Route.LoaderArgs): Promise<{
     async (sessionUser: TSerializedUser) => {
       const { query, page } = getPaginationDataFromRequest(request);
 
-      const { allTags, actualPage, pagesCount } = await getAllTags(query, page);
+      const { allTags, actualPage, pagesCount } = await getAllTagsForAdmin(
+        query,
+        page
+      );
 
       return {
         tags: allTags || [],

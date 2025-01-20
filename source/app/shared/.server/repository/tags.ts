@@ -2,13 +2,25 @@ import { eq, ilike, sql } from "drizzle-orm";
 
 import { db } from "server/app";
 import { tags } from "~/database/schema/tags";
+import { crt, upd } from "./repositoryUtils";
 import { getCountForPagination } from "../utils/commonUtils";
 
 import { PAGINATION_LIMIT } from "~/shared/constants/common";
 import type { TTagForm } from "~/shared/types/react";
-import { crt, upd } from "./repositoryUtils";
 
-export const getAllTags = async (query: string, page: number) => {
+export const getAllTags = async () => {
+  return await db
+    .select({
+      name: tags.name,
+      id: tags.id,
+      createdAt: tags.createdAt,
+      author: crt.author,
+    })
+    .from(tags)
+    .leftJoin(crt, eq(tags.createdById, crt.id));
+};
+
+export const getAllTagsForAdmin = async (query: string, page: number) => {
   const totalCount = await db.$count(tags, ilike(tags.name, `%${query}%`));
 
   if (totalCount === 0) {
@@ -38,7 +50,7 @@ export const getAllTags = async (query: string, page: number) => {
 
 export const getTagByName = async (name: string) => {
   const existingTags = await db
-    .select({ name: tags.name })
+    .select({ name: tags.name, id: tags.id })
     .from(tags)
     .where(eq(tags.name, name));
 
@@ -75,6 +87,24 @@ export const createNewTag = async (tagData: TTagForm, userId: number) => {
     });
 
   return createdTag[0];
+};
+
+export const createMultipleTagsOrSkip = async (
+  tagData: TTagForm[],
+  userId: number
+) => {
+  const createdTags = await db
+    .insert(tags)
+    .values(tagData.map((tag) => ({ ...tag, createdById: userId })))
+    .onConflictDoNothing({ target: tags.name })
+    .returning({
+      name: tags.name,
+      id: tags.id,
+      createdAt: tags.createdAt,
+      createdById: tags.createdById,
+    });
+
+  return createdTags;
 };
 
 export const updateTagById = async (

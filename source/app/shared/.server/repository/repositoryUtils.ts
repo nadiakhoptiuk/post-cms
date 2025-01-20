@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import { db } from "server/app";
 import { posts } from "~/database/schema/posts";
+import { tags } from "~/database/schema/tags";
 import { users } from "~/database/schema/users";
 
 export const concattedUserName = sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`;
@@ -44,6 +45,14 @@ export const pbl = db
   })
   .from(users)
   .as("pbl");
+
+export const tgnm = db
+  .select({
+    tagId: tags.id,
+    name: tags.name,
+  })
+  .from(tags)
+  .as("tagNames");
 
 export const cmpl = db
   .select({

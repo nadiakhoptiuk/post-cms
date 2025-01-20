@@ -4,6 +4,7 @@ import { z } from "zod";
 import type { TErrorsMessages } from "~/shared/types/react";
 
 const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const tagsRegex = /^[a-z0-9_]+(?:,[a-z0-9_]+)*$/;
 
 export const postValidator = (errors: TErrorsMessages) =>
   withZod(
@@ -24,5 +25,11 @@ export const postValidator = (errors: TErrorsMessages) =>
         .trim()
         .min(1, errors.stringErrorRequired)
         .max(3000, `${errors.stringErrorMax} 3000`),
+      tags: z
+        .string()
+        .refine(
+          (val) => val === "" || tagsRegex.test(val),
+          errors.invalidTagRegex
+        ),
     })
   );

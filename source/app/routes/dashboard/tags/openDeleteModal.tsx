@@ -3,24 +3,26 @@ import { modals } from "@mantine/modals";
 import { IconAlertTriangle } from "@tabler/icons-react";
 
 export const openDeleteModal = ({
+  confirmCb,
   title,
-  text,
   confirmBtnLabel,
   cancelBtnLabel,
-  confirmCb,
+  text,
+  isIrreversibleAction = true,
 }: {
+  confirmCb: () => void;
   title: string;
-  text: string;
   confirmBtnLabel: string;
   cancelBtnLabel: string;
-  confirmCb: () => void;
+  text?: string;
+  isIrreversibleAction?: boolean;
 }) => {
   modals.openConfirmModal({
-    modalId: "delete-tag-modal",
+    modalId: "delete-modal",
     centered: true,
     title: (
       <Group>
-        <IconAlertTriangle color="orange" />
+        {isIrreversibleAction && <IconAlertTriangle color="orange" />}
         <Text size="md" fw={500}>
           {title}
         </Text>
@@ -36,7 +38,7 @@ export const openDeleteModal = ({
       cancel: cancelBtnLabel,
     },
     confirmProps: { color: "red" },
-    onCancel: () => modals.close("delete-tag-modal"),
+    onCancel: () => modals.close("delete-modal"),
     onConfirm: () => {
       confirmCb();
     },
