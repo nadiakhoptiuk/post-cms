@@ -9,7 +9,7 @@ import {
 } from "react-router";
 import { Container, MantineProvider } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
-import { notifications, Notifications } from "@mantine/notifications";
+import { Notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 
@@ -21,7 +21,7 @@ import type { TRootLoader } from "~/shared/.server/root/loader";
 import type { Route } from "./+types/root";
 import stylesheet from "./app.css?url";
 import { useChangeLanguage } from "./shared/services/i18n.react";
-import { useEffect } from "react";
+import { GlobalNotification } from "./shared/components/ui/GlobalNotification";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -38,19 +38,8 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { theme, locale, error } = useLoaderData<TRootLoader>();
+  const { theme, locale, error, success } = useLoaderData<TRootLoader>();
   useChangeLanguage(locale);
-
-  useEffect(() => {
-    if (!error) return;
-
-    notifications.show({
-      title: "Error",
-      message: error,
-      color: "red",
-      position: "top-center",
-    });
-  }, [error]);
 
   return (
     <html lang={locale} data-mantine-color-scheme={theme}>
@@ -66,6 +55,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <ModalsProvider>
             {children}
             <Notifications />
+            <GlobalNotification error={error} success={success} />
           </ModalsProvider>
         </MantineProvider>
 

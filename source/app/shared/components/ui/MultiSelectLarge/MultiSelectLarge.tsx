@@ -13,6 +13,8 @@ import {
 import { getFilteredOptions } from "./getFilteredOptions";
 
 import type { TMultiSelectLargeProps } from "./types";
+import { useTranslation } from "react-i18next";
+import { IconPlus } from "@tabler/icons-react";
 
 export const MultiSelectLarge = <Type extends string>({
   options,
@@ -27,6 +29,7 @@ export const MultiSelectLarge = <Type extends string>({
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
+  const { t } = useTranslation("tags");
 
   const [search, setSearch] = useState<string>("");
   const value = field.value();
@@ -69,14 +72,14 @@ export const MultiSelectLarge = <Type extends string>({
   ));
 
   return (
-    <Box pos="relative" mb={20}>
+    <Box pos="relative" mb="md">
       <Combobox
         store={combobox}
         withinPortal={false}
         onOptionSubmit={(val) => {
           setSearch("");
-          field.value().push(val);
           combobox.closeDropdown();
+          field.value().push(val);
           field.validate();
         }}
       >
@@ -116,10 +119,10 @@ export const MultiSelectLarge = <Type extends string>({
               selectOptions
             ) : (
               <>
-                <Combobox.Empty ta="left">Nothing found</Combobox.Empty>
+                <Combobox.Empty ta="left">{t("link.noTags")}</Combobox.Empty>
                 {creatable && (
-                  <Combobox.Option value="$create">
-                    + Create {search}
+                  <Combobox.Option value={search}>
+                    <IconPlus size={18} /> {t("link.addNewTag")} {search}
                   </Combobox.Option>
                 )}
               </>

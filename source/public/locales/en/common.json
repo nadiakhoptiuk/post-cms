@@ -60,5 +60,10 @@
     "blockedBy": "Blocked by"
   },
 
-  "search.placeholder": "Search..."
+  "search.placeholder": "Search...",
+
+  "notifications": {
+    "error": "Error",
+    "success": "Success"
+  }
 }

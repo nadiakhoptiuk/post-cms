@@ -11,11 +11,13 @@ import {
   ACTION_DELETE,
   ACTION_UPDATE,
   ROLE_ADMIN,
+  SESSION_SUCCESS_KEY,
 } from "~/shared/constants/common";
 import type { TSerializedUser } from "~/shared/types/react";
 import type { Route } from "./+types/route";
 import { deletePostById, getPostById } from "~/shared/.server/repository/posts";
 import { updatePostAction } from "~/shared/.server/actions/updatePost";
+import { commitSession, getSession } from "~/shared/.server/services/session";
 
 export async function action({ request, params }: Route.ActionArgs) {
   return await authGate(
@@ -57,7 +59,12 @@ export async function action({ request, params }: Route.ActionArgs) {
         throw Error("Something went wrong");
       }
 
-      return redirect(NavigationLink.DASHBOARD_ALL_POSTS);
+      const session = await getSession(request.headers.get("cookie"));
+      session.set(SESSION_SUCCESS_KEY, "successfully updated");
+
+      return redirect(NavigationLink.DASHBOARD_ALL_POSTS, {
+        headers: { "Set-Cookie": await commitSession(session) },
+      });
     },
     {
       failureRedirect: NavigationLink.HOME,

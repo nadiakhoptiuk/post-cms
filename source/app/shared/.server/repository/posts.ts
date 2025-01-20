@@ -174,6 +174,8 @@ export async function getPostById(postId: number) {
       content: posts.content,
       createdAt: posts.createdAt,
       updatedAt: posts.updatedAt,
+      updatedById: posts.updatedById,
+      updatedBy: upd.updatedBy,
       publishedAt: posts.publishedAt,
       moderatedBy: pbl.moderatedBy,
       rejectedAt: posts.rejectedAt,
@@ -182,6 +184,7 @@ export async function getPostById(postId: number) {
     })
     .from(posts)
     .leftJoin(crt, eq(posts.ownerId, crt.id))
+    .leftJoin(upd, eq(posts.ownerId, upd.id))
     .leftJoin(pbl, eq(posts.moderatedById, pbl.id))
     .where(eq(posts.id, postId));
 
@@ -229,6 +232,7 @@ export async function getPostBySlug(slug: string) {
       slug: posts.slug,
       content: posts.content,
       createdAt: posts.createdAt,
+      publishedAt: posts.publishedAt,
       updatedAt: posts.updatedAt,
       updatedById: posts.updatedById,
       updatedBy: upd.updatedBy,

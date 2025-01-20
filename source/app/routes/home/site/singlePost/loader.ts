@@ -4,6 +4,7 @@ import DOMPurify from "dompurify";
 
 import { publicGate } from "~/shared/.server/services/auth";
 import { getPostBySlug } from "~/shared/.server/repository/posts";
+import { getTagsWithNamesByPostId } from "~/shared/.server/repository/postsToTags";
 
 import { ROLE_ADMIN, ROLE_USER } from "~/shared/constants/common";
 import type {
@@ -35,11 +36,16 @@ export async function loader({ request, params }: Route.LoaderArgs): Promise<{
         throw data("Post not found", { status: 404 });
       }
 
+      const postTags = await getTagsWithNamesByPostId(post.id);
+
       const { window: serverWindow } = new JSDOM("");
       const purify = DOMPurify(serverWindow);
       const sanitizedHTML = purify.sanitize(post.content);
 
-      return { post: { ...post, content: sanitizedHTML }, user: sessionUser };
+      return {
+        post: { ...post, tags: postTags, content: sanitizedHTML },
+        user: sessionUser,
+      };
     }
   );
 }

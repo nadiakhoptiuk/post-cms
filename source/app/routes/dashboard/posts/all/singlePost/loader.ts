@@ -4,6 +4,7 @@ import { authGate } from "~/shared/.server/services/auth";
 import { getIdFromParams } from "~/shared/.server/utils/commonUtils";
 import { getPostById } from "~/shared/.server/repository/posts";
 import { getAllTags } from "~/shared/.server/repository/tags";
+import { getTagsWithNamesByPostId } from "~/shared/.server/repository/postsToTags";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import { ROLE_ADMIN } from "~/shared/constants/common";
@@ -11,12 +12,13 @@ import type {
   NewSerializeFrom,
   TDBPostRecord,
   TPost,
+  TPostToTag,
   TTag,
 } from "~/shared/types/react";
 import type { Route } from "./+types/route";
 
 export async function loader({ request, params }: Route.LoaderArgs): Promise<{
-  post: TDBPostRecord & TPost;
+  post: TDBPostRecord & TPost & TPostToTag;
   allTags: TTag[];
 }> {
   return await authGate(
@@ -34,10 +36,15 @@ export async function loader({ request, params }: Route.LoaderArgs): Promise<{
         throw data("Not found", { status: 404 });
       }
 
+      const postTags = await getTagsWithNamesByPostId(postId);
       const allTags = await getAllTags();
 
       return {
-        post: { ...post, slug: post.slug.slice(0, -37) },
+        post: {
+          ...post,
+          slug: post.slug.slice(0, -37),
+          tags: postTags.map((tag) => tag.tagName),
+        },
         allTags: allTags,
       };
     },

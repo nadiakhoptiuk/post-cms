@@ -60,5 +60,10 @@
     "blockedBy": "Ким заблоковано"
   },
 
-  "search.placeholder": "Шукати..."
+  "search.placeholder": "Шукати...",
+
+  "notifications": {
+    "error": "Помилка",
+    "success": "Успіх"
+  }
 }

@@ -1,6 +1,7 @@
 export const SESSION_USER_KEY = "user";
 export const SESSION_LOCALE_KEY = "locale";
-export const SESSION_ERROR_KEY = "auth-error";
+export const SESSION_ERROR_KEY = "error";
+export const SESSION_SUCCESS_KEY = "success";
 
 export const ROLE_USER = "user";
 export const ROLE_ADMIN = "admin";

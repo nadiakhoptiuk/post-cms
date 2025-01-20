@@ -1,10 +1,10 @@
 import { authGate } from "~/shared/.server/services/auth";
 import { getIdFromRequest } from "~/shared/.server/utils/commonUtils";
+import { deletePostById, getPostById } from "~/shared/.server/repository/posts";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import { ROLE_ADMIN } from "~/shared/constants/common";
 import type { Route } from "./+types/route";
-import { deletePostById, getPostById } from "~/shared/.server/repository/posts";
 
 export async function action({ request }: Route.ActionArgs) {
   return await authGate(

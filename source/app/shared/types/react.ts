@@ -81,6 +81,44 @@ export interface TTextInput extends MTextInputProps {
   placeholder?: string;
 }
 
+export type TDBComplaintRecord = {
+  id: string;
+  createdAt: Date;
+  createdById: number;
+  reason: string;
+  complainedAboutPostId: number;
+  consideredById?: number | null;
+  status?: (typeof COMPLAINT_STATUS)[keyof typeof COMPLAINT_STATUS];
+
+  postSlug: string;
+  postTitle: string;
+  postId: number;
+  author: string;
+};
+
+export type TTagForm = {
+  name: string;
+};
+
+export type TDBTagRecord = {
+  id: string;
+  createdAt: Date;
+  createdById: number;
+  updatedAt: Date | null;
+  updatedById: number | null;
+
+  updatedBy: string | null;
+  author: string | null;
+};
+
+export type TTag = TTagForm & TDBTagRecord;
+
+export type TPostToTag = {
+  tagName: string;
+  tagId: number;
+  postId: number;
+};
+
 export type TDBPostRecord = {
   id: number;
   ownerId: number;
@@ -114,35 +152,3 @@ export type TPostTags = {
 export type TPostsTable = {
   posts: Array<TPost & TDBPostRecord & TPostTags>;
 };
-
-export type TDBComplaintRecord = {
-  id: string;
-  createdAt: Date;
-  createdById: number;
-  reason: string;
-  complainedAboutPostId: number;
-  consideredById?: number | null;
-  status?: (typeof COMPLAINT_STATUS)[keyof typeof COMPLAINT_STATUS];
-
-  postSlug: string;
-  postTitle: string;
-  postId: number;
-  author: string;
-};
-
-export type TTagForm = {
-  name: string;
-};
-
-export type TDBTagRecord = {
-  id: string;
-  createdAt: Date;
-  createdById: number;
-  updatedAt: Date | null;
-  updatedById: number | null;
-
-  updatedBy: string | null;
-  author: string | null;
-};
-
-export type TTag = TTagForm & TDBTagRecord;

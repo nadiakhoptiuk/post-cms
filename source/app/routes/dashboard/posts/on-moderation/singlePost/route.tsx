@@ -9,6 +9,7 @@ import { ModalRejectPost } from "../ModalsForRejectingPost";
 import { PostContent, PostHeading } from "~/shared/components/ui/PostElements";
 
 import { ACTION_PUBLISH } from "~/shared/constants/common";
+import type { TLoaderData } from "./loader";
 
 export { loader } from "./loader";
 export { action } from "./action";
@@ -16,7 +17,7 @@ export { action } from "./action";
 export const handle = { i18n: ["posts", "common"] };
 
 export default function DashBoardSinglePostPage() {
-  const { post } = useLoaderData();
+  const { post, tags } = useLoaderData<TLoaderData>();
   const submit = useSubmit();
   const [opened, { open, close }] = useDisclosure(false);
   const { t } = useTranslation("common");
@@ -36,8 +37,8 @@ export default function DashBoardSinglePostPage() {
             {t("buttons.button.back")}
           </Button>
         </Group>
-        <PostHeading post={post} />
-        <PostContent content={post.content} title={post.title} />
+        <PostHeading post={post} location="dashboard" />
+        <PostContent content={post.content} title={post.title} tags={tags} />
 
         <Flex mt={30} columnGap={20}>
           <Button
@@ -57,7 +58,6 @@ export default function DashBoardSinglePostPage() {
             {t("buttons.button.reject")}
           </Button>
         </Flex>
-
         {opened && <ModalRejectPost opened={opened} onClose={close} />}
       </Container>
     </Box>
