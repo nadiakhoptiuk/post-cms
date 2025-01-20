@@ -1,3 +1,4 @@
+import type { Params } from "react-router";
 import { getSession } from "../services/session";
 
 import {
@@ -14,6 +15,16 @@ export const getIdFromRequest = (formData: FormData) => {
 
   if (typeof id !== "string") {
     throw new Error("Id not Found");
+  }
+
+  return Number(id);
+};
+
+export const getIdFromParams = (params: Params) => {
+  const id = params?.id;
+
+  if (!id) {
+    throw new Error("Id at params not Found");
   }
 
   return Number(id);

@@ -8,6 +8,7 @@
     "updatedAt": "Updated",
     "updatedBy": "Updated by",
     "status": "Status",
+    "tags": "Tags",
 
     "rejectReason": "Reason for refusal",
     "complaintReason": "Why are you complaining about this post?"

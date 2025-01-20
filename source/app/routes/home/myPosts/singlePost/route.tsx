@@ -7,7 +7,6 @@ import { PostForm } from "~/shared/components/modules/PostForm";
 import { StyledLink } from "~/shared/components/ui/StyledLink";
 import { TimestampItem } from "~/shared/components/ui/TimestampItem";
 import { NavigationLink } from "~/shared/constants/navigation";
-import { formatDateWithTime } from "~/shared/utils/dateFormat";
 import type { TLoaderData } from "./loader";
 
 export const handle = { i18n: ["posts", "common"] };
@@ -16,7 +15,7 @@ export { loader } from "./loader";
 export { action } from "./action";
 
 export default function HomeMyCurrentPostPage() {
-  const { post } = useLoaderData<TLoaderData>();
+  const { post, allTags } = useLoaderData<TLoaderData>();
   const { t } = useTranslation("posts");
 
   const {
@@ -28,18 +27,14 @@ export default function HomeMyCurrentPostPage() {
     title,
     content,
     slug,
+    tags,
   } = post;
-
-  const createdDate = formatDateWithTime(createdAt);
-  const publicationDate = formatDateWithTime(publishedAt);
-  const updatedDate = formatDateWithTime(updatedAt);
 
   return (
     <Box component="section" py="lg">
       <Container>
         <StyledLink
           to={NavigationLink.MY_POSTS}
-          variant="unstyled"
           mb="md"
           leftSection={<IconArrowNarrowLeft size={18} />}
         >
@@ -47,26 +42,32 @@ export default function HomeMyCurrentPostPage() {
         </StyledLink>
 
         <Box mb={25}>
-          <TimestampItem type="created" date={createdDate} />
+          <TimestampItem type="created" date={createdAt} relative />
 
-          {publicationDate && moderatedBy && (
+          {publishedAt && moderatedBy && (
             <TimestampItem
               type="published"
-              date={publicationDate}
+              date={publishedAt}
               madeBy={moderatedBy}
+              relative
             />
           )}
 
-          {updatedDate && updatedBy && (
+          {updatedAt && updatedBy && (
             <TimestampItem
               type="updated"
-              date={updatedDate}
+              date={updatedAt}
               madeBy={updatedBy}
+              relative
             />
           )}
         </Box>
 
-        <PostForm postData={{ title, content, slug }} formType="update" />
+        <PostForm
+          postData={{ title, content, slug, tags }}
+          formType="update"
+          allTags={allTags}
+        />
       </Container>
     </Box>
   );

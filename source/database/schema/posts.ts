@@ -1,6 +1,8 @@
 import { pgEnum, pgTable } from "drizzle-orm/pg-core";
 import * as t from "drizzle-orm/pg-core";
 import { users } from "./users";
+import { relations } from "drizzle-orm";
+import { postsToTags } from "./postsToTags";
 
 export const postStatusEnum = pgEnum("postStatus", [
   "published",
@@ -29,3 +31,11 @@ export const posts = pgTable("Posts", {
   blockedAt: t.timestamp(),
   blockedById: t.integer().references((): t.AnyPgColumn => users.id),
 });
+
+export const postsRelations = relations(posts, ({ many, one }) => ({
+  author: one(users, {
+    fields: [posts.ownerId],
+    references: [users.id],
+  }),
+  postsToTags: many(postsToTags),
+}));

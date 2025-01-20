@@ -66,6 +66,14 @@ export default [
 
     // ----------------------- TAGS ----------------------------
     route(NavigationLink.DASHBOARD_TAGS, "./routes/dashboard/tags/route.tsx"),
+    route(
+      NavigationLink.DASHBOARD_CURRENT_TAG,
+      "./routes/dashboard/tags/singleTag/route.tsx"
+    ),
+    route(
+      NavigationLink.DASHBOARD_TAGS_NEW,
+      "./routes/dashboard/tags/new/route.tsx"
+    ),
   ]),
 
   route(NavigationLink.DELETE_ACCOUNT, "./routes/api/deleteAccount.ts"),

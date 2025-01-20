@@ -16,22 +16,25 @@ export const enum NavigationLink {
   HOME = "/",
   MY_POSTS = "/my-posts",
   MY_POSTS_NEW = "/my-posts/new",
-  MY_CURRENT_POST = "/my-posts/:postId",
+  MY_CURRENT_POST = "/my-posts/:id",
   PROFILE = "/profile",
 
   DASHBOARD = "/dashboard",
   DASHBOARD_SINGLE_POST_TO_VIEW = "/dashboard/:slug",
 
   DASHBOARD_ALL_POSTS = "/dashboard/posts",
-  DASHBOARD_POSTS_SINGLE_POST = "/dashboard/posts/:postId",
+  DASHBOARD_POSTS_SINGLE_POST = "/dashboard/posts/:id",
   DASHBOARD_POSTS_ON_MODERATION = "/dashboard/posts/on-moderation",
-  DASHBOARD_SINGLE_POST_ON_MODERATION = "/dashboard/posts/on-moderation/:postId",
+  DASHBOARD_SINGLE_POST_ON_MODERATION = "/dashboard/posts/on-moderation/:id",
   DASHBOARD_POSTS_COMPLAINTS = "/dashboard/posts/complaints",
 
   DASHBOARD_USERS = "/dashboard/users",
   DASHBOARD_USERS_NEW = "/dashboard/users/new",
-  DASHBOARD_CURRENT_USER = "/dashboard/users/:userId",
+  DASHBOARD_CURRENT_USER = "/dashboard/users/:id",
+
   DASHBOARD_TAGS = "/dashboard/tags",
+  DASHBOARD_TAGS_NEW = "/dashboard/tags/new",
+  DASHBOARD_CURRENT_TAG = "/dashboard/tags/:id",
 
   LOGIN = "/login",
   LOGOUT = "/logout",

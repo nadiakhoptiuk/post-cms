@@ -1,12 +1,14 @@
 import { redirect } from "react-router";
 
 import { authGate } from "~/shared/.server/services/auth";
-import { getPostIdFromParams } from "~/shared/.server/utils/postUtils";
 import {
   getPostById,
   moderatePostById,
 } from "~/shared/.server/repository/posts";
-import { getActionIdFromRequest } from "~/shared/.server/utils/commonUtils";
+import {
+  getActionIdFromRequest,
+  getIdFromParams,
+} from "~/shared/.server/utils/commonUtils";
 import { rejectPublishPostAction } from "../actions/reject";
 
 import {
@@ -26,7 +28,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       allowedRoles: [ROLE_ADMIN],
     },
     async (sessionUser: TSerializedUser) => {
-      const postId = getPostIdFromParams(params);
+      const postId = getIdFromParams(params);
 
       const existingPost = await getPostById(postId);
 

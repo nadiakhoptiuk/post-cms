@@ -79,7 +79,7 @@ export const PostCard = ({ item, userId, location, setPostId }: TPostCard) => {
               to={`/${slug}`}
               variant="light"
               fullWidth
-              style={{ height: "100%" }}
+              h="100%"
               leftSection={<IconEye size={18} style={{ flexShrink: 0 }} />}
             >
               {t("buttons.button.view")}

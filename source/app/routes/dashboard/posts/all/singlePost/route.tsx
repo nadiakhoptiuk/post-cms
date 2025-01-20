@@ -10,7 +10,7 @@ export { loader } from "./loader";
 export { action } from "./action";
 
 export default function DashBoardHomePage() {
-  const { post } = useLoaderData<TLoaderData>();
+  const { post, allTags } = useLoaderData<TLoaderData>();
   const {
     title,
     content,
@@ -50,8 +50,10 @@ export default function DashBoardHomePage() {
             title,
             content,
             slug,
+            tags: [],
           }}
           formType="update"
+          allTags={allTags}
         />
       </Container>
     </Box>

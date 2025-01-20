@@ -1,8 +1,10 @@
 import { redirect } from "react-router";
 
 import { authGate } from "~/shared/.server/services/auth";
-import { getUserIdFromParams } from "~/shared/.server/utils/usersUtils";
-import { getActionIdFromRequest } from "~/shared/.server/utils/commonUtils";
+import {
+  getActionIdFromRequest,
+  getIdFromParams,
+} from "~/shared/.server/utils/commonUtils";
 import { updateUserAction } from "../actions/update";
 import { deleteUserAction } from "../actions/delete";
 import { restoreUserAction } from "../actions/restore";
@@ -25,7 +27,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       allowedRoles: [ROLE_ADMIN],
     },
     async (sessionUser: TSerializedUser) => {
-      const userId = getUserIdFromParams(params);
+      const userId = getIdFromParams(params);
 
       const formData = await request.formData();
       const action = getActionIdFromRequest(formData);

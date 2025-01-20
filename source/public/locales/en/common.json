@@ -23,7 +23,8 @@
     "stringErrorRequired": "Required field",
     "stringErrorMin": "Minimal count of symbols:",
     "stringErrorMax": "Maximum count of symbols:",
-    "invalidRegex": "Only Latin letters, numbers and dashes are allowed"
+    "invalidSlugRegex": "Only lowercase Latin letters, numbers and dashes are allowed",
+    "invalidTagRegex": "Only lowercase Latin letters, numbers and _ are allowed"
   },
 
   "buttons": {
@@ -43,6 +44,7 @@
   },
 
   "modal.title": "Are you sure?",
+  "modal.irreversibleWarning": "This action is irreversible",
 
   "timestampsLabels": {
     "createdAt": "Created",

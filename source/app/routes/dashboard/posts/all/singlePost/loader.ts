@@ -1,8 +1,9 @@
 import { data } from "react-router";
 
-import { getPostById } from "~/shared/.server/repository/posts";
 import { authGate } from "~/shared/.server/services/auth";
-import { getPostIdFromParams } from "~/shared/.server/utils/postUtils";
+import { getIdFromParams } from "~/shared/.server/utils/commonUtils";
+import { getPostById } from "~/shared/.server/repository/posts";
+import { getAllTags } from "~/shared/.server/repository/tags";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import { ROLE_ADMIN } from "~/shared/constants/common";
@@ -10,13 +11,14 @@ import type {
   NewSerializeFrom,
   TDBPostRecord,
   TPost,
+  TTag,
 } from "~/shared/types/react";
 import type { Route } from "./+types/route";
 
-export async function loader({
-  request,
-  params,
-}: Route.LoaderArgs): Promise<{ post: TDBPostRecord & TPost }> {
+export async function loader({ request, params }: Route.LoaderArgs): Promise<{
+  post: TDBPostRecord & TPost;
+  allTags: TTag[];
+}> {
   return await authGate(
     request,
     {
@@ -24,7 +26,7 @@ export async function loader({
       allowedRoles: [ROLE_ADMIN],
     },
     async () => {
-      const postId = getPostIdFromParams(params);
+      const postId = getIdFromParams(params);
 
       const post = await getPostById(postId);
 
@@ -32,7 +34,12 @@ export async function loader({
         throw data("Not found", { status: 404 });
       }
 
-      return { post: { ...post, slug: post.slug.slice(0, -37) } };
+      const allTags = await getAllTags();
+
+      return {
+        post: { ...post, slug: post.slug.slice(0, -37) },
+        allTags: allTags,
+      };
     },
     {
       failureRedirect: NavigationLink.LOGIN,

@@ -9,14 +9,28 @@ import { SlugInput } from "../../ui/SlugInput";
 import { RichTextEditor } from "../../ui/RichTextEditor";
 import { Button } from "../../ui/Button";
 import { ModalForDeletingPost } from "../ModalsForDeleting";
+import { MultiSelectLarge } from "../../ui/MultiSelectLarge";
 
 import { postValidator } from "~/shared/utils/validators/postValidator";
 
-import { ACTION_CREATE, ACTION_UPDATE } from "~/shared/constants/common";
-import type { TErrorsMessages, TFormType, TLocale } from "~/shared/types/react";
+import {
+  ACTION_CREATE,
+  ACTION_UPDATE,
+  TAGS_OPTIONS_LIMIT,
+} from "~/shared/constants/common";
+import type {
+  TErrorsMessages,
+  TFormType,
+  TLocale,
+  TTag,
+} from "~/shared/types/react";
 import type { TPostForm } from "./PostForm.types";
 
-export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
+export const PostForm = ({
+  postData,
+  formType,
+  allTags,
+}: TPostForm & TFormType & { allTags: TTag[] }) => {
   const submit = useSubmit();
 
   const [opened, { open, close }] = useDisclosure(false);
@@ -27,19 +41,19 @@ export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
     returnObjects: true,
   }) as TErrorsMessages;
 
+  const options = allTags?.map((el: TTag) => el.name);
+
   const form = useForm({
     validator: postValidator(errorMessages),
     defaultValues: postData,
     handleSubmit: (data) => {
-      {
-        submit(
-          {
-            ...data,
-            actionId: formType === "update" ? ACTION_UPDATE : ACTION_CREATE,
-          },
-          { method: "post" }
-        );
-      }
+      submit(
+        {
+          ...data,
+          actionId: formType === "update" ? ACTION_UPDATE : ACTION_CREATE,
+        },
+        { method: "post" }
+      );
     },
   });
 
@@ -61,10 +75,15 @@ export const PostForm = ({ postData, formType }: TPostForm & TFormType) => {
               locale={i18n.language as TLocale}
             />
           </Box>
-
           <RichTextEditor
             label={p("postData.content")}
             scope={form.scope("content")}
+          />
+          <MultiSelectLarge
+            label={p("postData.tags")}
+            scope={form.scope("tags")}
+            visibleOptionsLimit={TAGS_OPTIONS_LIMIT}
+            options={options}
           />
 
           <Button

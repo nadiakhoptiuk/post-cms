@@ -1,7 +1,9 @@
 import { Box, Container, Title } from "@mantine/core";
 import { useTranslation } from "react-i18next";
+import { useLoaderData } from "react-router";
 
 import { PostForm } from "~/shared/components/modules/PostForm";
+import type { TLoaderData } from "./loader";
 
 export { action } from "./action";
 export { loader } from "./loader";
@@ -9,6 +11,7 @@ export { loader } from "./loader";
 export const handle = { i18n: ["posts", "common"] };
 
 export default function HomeNewPostPage() {
+  const { allTags } = useLoaderData<TLoaderData>();
   const { t } = useTranslation("posts");
 
   return (
@@ -23,8 +26,9 @@ export default function HomeNewPostPage() {
         </Title>
 
         <PostForm
-          postData={{ title: "", content: "", slug: "" }}
+          postData={{ title: "", content: "", slug: "", tags: [] }}
           formType="create"
+          allTags={allTags}
         />
       </Container>
     </Box>

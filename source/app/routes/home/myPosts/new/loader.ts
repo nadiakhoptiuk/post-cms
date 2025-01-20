@@ -1,12 +1,13 @@
 import { authGate } from "~/shared/.server/services/auth";
+import { getAllTags } from "~/shared/.server/repository/tags";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import { ROLE_ADMIN, ROLE_USER } from "~/shared/constants/common";
-import type { NewSerializeFrom, TSerializedUser } from "~/shared/types/react";
+import type { NewSerializeFrom, TTag } from "~/shared/types/react";
 import type { Route } from "../+types/route";
 
 export async function loader({ request }: Route.LoaderArgs): Promise<{
-  user: TSerializedUser;
+  allTags: TTag[];
 }> {
   return await authGate(
     request,
@@ -14,9 +15,11 @@ export async function loader({ request }: Route.LoaderArgs): Promise<{
       isPublicRoute: false,
       allowedRoles: [ROLE_ADMIN, ROLE_USER],
     },
-    async (sessionUser: TSerializedUser) => {
+    async () => {
+      const allTags = await getAllTags();
+
       return {
-        user: sessionUser,
+        allTags,
       };
     },
     {

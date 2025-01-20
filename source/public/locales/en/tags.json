@@ -1,0 +1,10 @@
+{
+  "tagData": {
+    "name": "Name",
+    "author": "Added by"
+  },
+
+  "link.addNewTag": "Add a new Tag",
+  "link.editTag": "Edit the Tag",
+  "noTags": "No tags found..."
+}

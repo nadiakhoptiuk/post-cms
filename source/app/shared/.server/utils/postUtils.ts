@@ -1,32 +1,23 @@
-import { type Params } from "react-router";
 import { v4 as uuidv4 } from "uuid";
 
 import { getAllPostsSlugs } from "../repository/posts";
-
-export const getPostIdFromParams = (params: Params) => {
-  const postId = params?.postId;
-
-  if (!postId) {
-    throw new Error("Post Id not Found");
-  }
-
-  return Number(postId);
-};
 
 export const getPostDataFromRequest = (formData: FormData) => {
   const title = formData.get("title");
   const slug = formData.get("slug");
   const content = formData.get("content");
+  const tags = formData.get("tags");
 
   if (
     typeof title !== "string" ||
     typeof slug !== "string" ||
-    typeof content !== "string"
+    typeof content !== "string" ||
+    typeof tags !== "string"
   ) {
     throw new Error("Some field is not a string");
   }
 
-  return { title, slug, content };
+  return { title, slug, content, tags };
 };
 
 export const checkIfIdExists = async (id: string) => {
