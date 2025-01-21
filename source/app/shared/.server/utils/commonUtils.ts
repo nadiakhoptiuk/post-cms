@@ -9,22 +9,30 @@ import {
   SESSION_USER_KEY,
 } from "~/shared/constants/common";
 import type { TSerializedUser } from "~/shared/types/react";
+import { HTTP_STATUS_CODES, InternalError } from "./InternalError";
+import type { TFunction } from "i18next";
 
-export const getIdFromRequest = (formData: FormData) => {
+export const getIdFromRequest = (formData: FormData, t: TFunction) => {
   const id = formData.get("id");
 
   if (typeof id !== "string") {
-    throw new Error("Id not Found");
+    throw new InternalError(
+      t("responseErrors.notFound"),
+      HTTP_STATUS_CODES.NOT_FOUND_404
+    );
   }
 
   return Number(id);
 };
 
-export const getIdFromParams = (params: Params) => {
+export const getIdFromParams = (params: Params, t: TFunction) => {
   const id = params?.id;
 
   if (!id) {
-    throw new Error("Id at params not Found");
+    throw new InternalError(
+      t("responseErrors.notFound"),
+      HTTP_STATUS_CODES.NOT_FOUND_404
+    );
   }
 
   return Number(id);
@@ -57,7 +65,10 @@ export const getActionIdFromRequest = (formData: FormData) => {
   const actionId = formData.get(ACTION_ID_KEY_NAME);
 
   if (typeof actionId !== "string") {
-    throw new Error("Action id is not a string");
+    throw new InternalError(
+      "Action Id is missing",
+      HTTP_STATUS_CODES.BAD_REQUEST_400
+    );
   }
 
   return actionId;

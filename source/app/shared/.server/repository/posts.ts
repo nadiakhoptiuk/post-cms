@@ -314,7 +314,10 @@ export async function moderatePostById(
 }
 
 export async function deletePostById(postId: number) {
-  const deletedPost = await db.delete(posts).where(eq(posts.id, postId));
+  const deletedPost = await db
+    .delete(posts)
+    .where(eq(posts.id, postId))
+    .returning({ id: posts.id });
 
   return deletedPost[0];
 }

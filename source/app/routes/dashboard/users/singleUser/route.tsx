@@ -24,7 +24,7 @@ export default function DashBoardEditUserPage() {
     user;
 
   return (
-    <Box component="section">
+    <Box component="section" my="lg">
       <Container>
         <StyledLink
           to={NavigationLink.DASHBOARD_USERS}

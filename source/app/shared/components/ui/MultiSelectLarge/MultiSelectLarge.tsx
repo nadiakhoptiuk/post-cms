@@ -9,12 +9,12 @@ import {
   Text,
   useCombobox,
 } from "@mantine/core";
+import { useTranslation } from "react-i18next";
+import { IconPlus } from "@tabler/icons-react";
 
 import { getFilteredOptions } from "./getFilteredOptions";
 
 import type { TMultiSelectLargeProps } from "./types";
-import { useTranslation } from "react-i18next";
-import { IconPlus } from "@tabler/icons-react";
 
 export const MultiSelectLarge = <Type extends string>({
   options,
@@ -28,9 +28,9 @@ export const MultiSelectLarge = <Type extends string>({
   const field = useField(scope);
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
+    onDropdownOpen: () => combobox.updateSelectedOptionIndex("active"),
   });
   const { t } = useTranslation("tags");
-
   const [search, setSearch] = useState<string>("");
   const value = field.value();
 
@@ -77,9 +77,8 @@ export const MultiSelectLarge = <Type extends string>({
         store={combobox}
         withinPortal={false}
         onOptionSubmit={(val) => {
+          field.setValue([...value, val]);
           setSearch("");
-          combobox.closeDropdown();
-          field.value().push(val);
           field.validate();
         }}
       >
@@ -119,10 +118,11 @@ export const MultiSelectLarge = <Type extends string>({
               selectOptions
             ) : (
               <>
-                <Combobox.Empty ta="left">{t("link.noTags")}</Combobox.Empty>
-                {creatable && (
+                <Combobox.Empty ta="left">{t("noTags")}</Combobox.Empty>
+                {creatable && search && (
                   <Combobox.Option value={search}>
-                    <IconPlus size={18} /> {t("link.addNewTag")} {search}
+                    <IconPlus size={18} />
+                    {` ${t("link.addNewTag")} '${search}'`}
                   </Combobox.Option>
                 )}
               </>

@@ -5,6 +5,9 @@ import {
   getActionIdFromRequest,
   getIdFromParams,
 } from "~/shared/.server/utils/commonUtils";
+import { deletePostById, getPostById } from "~/shared/.server/repository/posts";
+import { updatePostAction } from "~/shared/.server/actions/updatePost";
+import { commitSession } from "~/shared/.server/services/session";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 import {
@@ -13,11 +16,11 @@ import {
   ROLE_ADMIN,
   SESSION_SUCCESS_KEY,
 } from "~/shared/constants/common";
-import type { TSerializedUser } from "~/shared/types/react";
 import type { Route } from "./+types/route";
-import { deletePostById, getPostById } from "~/shared/.server/repository/posts";
-import { updatePostAction } from "~/shared/.server/actions/updatePost";
-import { commitSession, getSession } from "~/shared/.server/services/session";
+import {
+  HTTP_STATUS_CODES,
+  InternalError,
+} from "~/shared/.server/utils/InternalError";
 
 export async function action({ request, params }: Route.ActionArgs) {
   return await authGate(
@@ -26,7 +29,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       isPublicRoute: false,
       allowedRoles: [ROLE_ADMIN],
     },
-    async (sessionUser: TSerializedUser) => {
+    async (sessionUser, t, session) => {
       const postId = getIdFromParams(params);
 
       const formData = await request.formData();
@@ -35,14 +38,19 @@ export async function action({ request, params }: Route.ActionArgs) {
       const existingPost = await getPostById(postId);
 
       if (!existingPost) {
-        throw new Error("Post with such id does not exist");
+        throw new InternalError(
+          t("responseErrors.notFound"),
+          HTTP_STATUS_CODES.NOT_FOUND_404
+        );
       }
 
       let result;
+      let notifyMessage;
 
       switch (action) {
         case ACTION_DELETE:
           result = await deletePostById(postId);
+          notifyMessage = t("notifications.success.deleted");
           break;
 
         case ACTION_UPDATE:
@@ -52,15 +60,18 @@ export async function action({ request, params }: Route.ActionArgs) {
             postId,
             existingPost.slug
           );
+          notifyMessage = t("notifications.success.updated");
           break;
       }
 
       if (!result) {
-        throw Error("Something went wrong");
+        throw new InternalError(
+          t("responseErrors.internalError"),
+          HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR_500
+        );
       }
 
-      const session = await getSession(request.headers.get("cookie"));
-      session.set(SESSION_SUCCESS_KEY, "successfully updated");
+      session.set(SESSION_SUCCESS_KEY, notifyMessage);
 
       return redirect(NavigationLink.DASHBOARD_ALL_POSTS, {
         headers: { "Set-Cookie": await commitSession(session) },

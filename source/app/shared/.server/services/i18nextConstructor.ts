@@ -48,11 +48,11 @@ export class LanguageDetector {
   private async fromSessionStorage(request: Request): Promise<string | null> {
     if (!this.options.sessionStorage) return null;
 
-    let session = await this.options.sessionStorage.getSession(
+    const session = await this.options.sessionStorage.getSession(
       request.headers.get("Cookie")
     );
 
-    let lng = session.get(this.options.sessionKey ?? "lng");
+    const lng = session.get(this.options.sessionKey ?? "lng");
 
     if (!lng) return null;
 
@@ -64,7 +64,7 @@ export class LanguageDetector {
 
     locale = await this.fromSessionStorage(request);
 
-    if (!locale) {
+    if (!locale || !this.options.supportedLanguages.includes(locale)) {
       return this.options.fallbackLanguage;
     }
 
@@ -84,7 +84,7 @@ export class MyRemixI18Next {
   }
 
   public getRouteNamespaces(context: EntryContext): string[] {
-    let namespaces = Object.values(context.routeModules).flatMap((route) => {
+    const namespaces = Object.values(context.routeModules).flatMap((route) => {
       if (typeof route?.handle !== "object") return [];
       if (!route.handle) return [];
       if (!("i18n" in route.handle)) return [];
@@ -107,11 +107,31 @@ export class MyRemixI18Next {
       | readonly [FlatNamespace, ...FlatNamespace[]] = DefaultNamespace,
     KPrefix extends KeyPrefix<FallbackNs<N>> = undefined
   >(
+    locale: string,
+    namespaces?: N,
+    options?: Omit<InitOptions, "react"> & { keyPrefix?: KPrefix }
+  ): Promise<TFunction<FallbackNs<N>, KPrefix>>;
+  async getFixedT<
+    N extends
+      | FlatNamespace
+      | readonly [FlatNamespace, ...FlatNamespace[]] = DefaultNamespace,
+    KPrefix extends KeyPrefix<FallbackNs<N>> = undefined
+  >(
+    request: Request,
+    namespaces?: N,
+    options?: Omit<InitOptions, "react"> & { keyPrefix?: KPrefix }
+  ): Promise<TFunction<FallbackNs<N>, KPrefix>>;
+  async getFixedT<
+    N extends
+      | FlatNamespace
+      | readonly [FlatNamespace, ...FlatNamespace[]] = DefaultNamespace,
+    KPrefix extends KeyPrefix<FallbackNs<N>> = undefined
+  >(
     requestOrLocale: Request | string,
     namespaces?: N,
     options: Omit<InitOptions, "react"> & { keyPrefix?: KPrefix } = {}
   ): Promise<TFunction<FallbackNs<N>, KPrefix>> {
-    let [instance, locale] = await Promise.all([
+    const [instance, locale] = await Promise.all([
       this.createInstance({ ...this.options.i18next, ...options }),
       typeof requestOrLocale === "string"
         ? requestOrLocale
@@ -133,8 +153,8 @@ export class MyRemixI18Next {
   }
 
   private async createInstance(options: Omit<InitOptions, "react"> = {}) {
-    let instance = createInstance();
-    let plugins = [
+    const instance = createInstance();
+    const plugins = [
       ...(this.options.backend ? [this.options.backend] : []),
       ...(this.options.plugins || []),
     ];

@@ -6,8 +6,13 @@ import type {
   TUserPassword,
 } from "~/shared/types/react";
 import { getUserByEmailWithPassword } from "../repository/users";
+import { HTTP_STATUS_CODES, InternalError } from "./InternalError";
+import type { TFunction } from "i18next";
 
-export const getUserDataFromRequest = async (formData: FormData) => {
+export const getUserDataFromRequest = async (
+  formData: FormData,
+  t: TFunction
+) => {
   const firstName = formData.get("firstName");
   const lastName = formData.get("lastName");
   const email = formData.get("email");
@@ -21,7 +26,10 @@ export const getUserDataFromRequest = async (formData: FormData) => {
     typeof email !== "string" ||
     typeof password !== "string"
   ) {
-    throw new Error("Some field data is not a string");
+    throw new InternalError(
+      t("responseErrors.invalidField"),
+      HTTP_STATUS_CODES.BAD_REQUEST_400
+    );
   }
 
   return { firstName, lastName, email, password, role };
@@ -51,27 +59,41 @@ export const serializeUser = (
 
 export const verifyPasswordAndSerialize = async (
   user: TDBUser & TUserPassword,
-  enteredPassword: string
+  enteredPassword: string,
+  t: TFunction
 ): Promise<TSerializedUser> => {
   const isPasswordValid = await checkPassword(enteredPassword, user.password);
 
   if (!isPasswordValid) {
-    throw new Error("Invalid username or password");
+    throw new InternalError(
+      t("responseErrors.invalidField"),
+      HTTP_STATUS_CODES.UNAUTHORIZED_401
+    );
   }
 
   return serializeUser(user);
 };
 
-export async function verifyUserAndSerialize(email: string, password: string) {
+export async function verifyUserAndSerialize(
+  email: string,
+  password: string,
+  t: TFunction
+) {
   const existingUser = await getUserByEmailWithPassword(email);
 
   if (!existingUser) {
-    throw new Error("User with such email does not exist in database");
+    throw new InternalError(
+      t("responseErrors.notFound"),
+      HTTP_STATUS_CODES.NOT_FOUND_404
+    );
   }
 
   if (existingUser && existingUser.deletedAt !== null) {
-    throw new Error("This account was deleted");
+    throw new InternalError(
+      t("responseErrors.deletedAccount"),
+      HTTP_STATUS_CODES.NOT_FOUND_404
+    );
   }
 
-  return await verifyPasswordAndSerialize(existingUser, password);
+  return await verifyPasswordAndSerialize(existingUser, password, t);
 }

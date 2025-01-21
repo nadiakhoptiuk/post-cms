@@ -1,4 +1,9 @@
+import type { TFunction } from "i18next";
 import { getUserById, updateUserById } from "~/shared/.server/repository/users";
+import {
+  HTTP_STATUS_CODES,
+  InternalError,
+} from "~/shared/.server/utils/InternalError";
 import {
   getUserDataFromRequest,
   passwordHash,
@@ -8,7 +13,8 @@ import type { TSerializedUser } from "~/shared/types/react";
 export const updateUserAction = async (
   formData: FormData,
   sessionUser: TSerializedUser,
-  userId: number
+  userId: number,
+  t: TFunction
 ) => {
   const { firstName, lastName, email, password, role } =
     await getUserDataFromRequest(formData);
@@ -16,12 +22,15 @@ export const updateUserAction = async (
   const existingUser = await getUserById(userId);
 
   if (!existingUser) {
-    throw new Error("User with such id does not exist");
+    throw new InternalError(
+      t("responseErrors.notFound"),
+      HTTP_STATUS_CODES.NOT_FOUND_404
+    );
   }
 
   const hashedPassword = await passwordHash(password);
 
-  return await updateUserById(userId, {
+  const updatedUser = await updateUserById(userId, {
     firstName,
     lastName,
     email,
@@ -29,4 +38,13 @@ export const updateUserAction = async (
     password: hashedPassword,
     updatedById: sessionUser.id,
   });
+
+  if (!updatedUser) {
+    throw new InternalError(
+      t("responseErrors.failed"),
+      HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR_500
+    );
+  }
+
+  return updatedUser;
 };

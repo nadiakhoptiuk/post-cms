@@ -11,9 +11,17 @@ import {
 import { addTagToPost } from "~/shared/.server/repository/postsToTags";
 
 import { NavigationLink } from "~/shared/constants/navigation";
-import { ROLE_ADMIN, ROLE_USER } from "~/shared/constants/common";
-import type { TSerializedUser } from "~/shared/types/react";
+import {
+  ROLE_ADMIN,
+  ROLE_USER,
+  SESSION_SUCCESS_KEY,
+} from "~/shared/constants/common";
 import type { Route } from "../../+types/route";
+import {
+  HTTP_STATUS_CODES,
+  InternalError,
+} from "~/shared/.server/utils/InternalError";
+import { commitSession } from "~/shared/.server/services/session";
 
 export async function action({ request }: Route.ActionArgs) {
   return await authGate(
@@ -22,7 +30,7 @@ export async function action({ request }: Route.ActionArgs) {
       isPublicRoute: false,
       allowedRoles: [ROLE_ADMIN, ROLE_USER],
     },
-    async (sessionUser: TSerializedUser) => {
+    async (sessionUser, t, session) => {
       const formData = await request.formData();
       const { title, slug, content, tags } = getPostDataFromRequest(formData);
 
@@ -35,7 +43,10 @@ export async function action({ request }: Route.ActionArgs) {
       });
 
       if (!createdPost) {
-        throw Error("Something went wrong");
+        throw new InternalError(
+          t("responseErrors.failed"),
+          HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR_500
+        );
       }
 
       const tagsArr =
@@ -52,7 +63,13 @@ export async function action({ request }: Route.ActionArgs) {
         await addTagToPost(existingTag.id, createdPost.id);
       }
 
-      return redirect(NavigationLink.MY_POSTS);
+      session.set(SESSION_SUCCESS_KEY, t("notifications.success.created"));
+
+      return redirect(NavigationLink.MY_POSTS, {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
     },
     {
       failureRedirect: NavigationLink.LOGIN,

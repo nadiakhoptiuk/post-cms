@@ -7,6 +7,10 @@ import { NavigationLink } from "~/shared/constants/navigation";
 import { ROLE_ADMIN } from "~/shared/constants/common";
 import type { NewSerializeFrom, TDBUser } from "~/shared/types/react";
 import type { Route } from "./+types/route";
+import {
+  HTTP_STATUS_CODES,
+  InternalError,
+} from "~/shared/.server/utils/InternalError";
 
 export const loader = async ({
   request,
@@ -18,11 +22,14 @@ export const loader = async ({
       isPublicRoute: false,
       allowedRoles: [ROLE_ADMIN],
     },
-    async () => {
-      const user = await getUserById(Number(params.userId));
+    async (_, t) => {
+      const user = await getUserById(Number(params.id));
 
       if (!user) {
-        throw new Response("Not Found", { status: 404 });
+        throw new InternalError(
+          t("responseErrors.notFound"),
+          HTTP_STATUS_CODES.NOT_FOUND_404
+        );
       }
 
       return data({ user });

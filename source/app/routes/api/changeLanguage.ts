@@ -1,3 +1,4 @@
+import { data } from "react-router";
 import { commitSession, getSession } from "~/shared/.server/services/session";
 import i18n from "~/shared/services/i18n";
 
@@ -14,7 +15,7 @@ export async function action({ request }: Route.LoaderArgs) {
     session.set(SESSION_LOCALE_KEY, locale);
   }
 
-  return Response.json(
+  return data(
     { locale },
     {
       headers: {

@@ -1,12 +1,15 @@
 import { authGate } from "~/shared/.server/services/auth";
 import { getIdFromParams } from "~/shared/.server/utils/commonUtils";
+import { getTagById } from "~/shared/.server/repository/tags";
 
 import { ROLE_ADMIN } from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
-import type { Route } from "../+types/route";
 import type { NewSerializeFrom, TTag } from "~/shared/types/react";
-import { data } from "react-router";
-import { getTagById } from "~/shared/.server/repository/tags";
+import {
+  HTTP_STATUS_CODES,
+  InternalError,
+} from "~/shared/.server/utils/InternalError";
+import type { Route } from "../+types/route";
 
 export async function loader({ request, params }: Route.LoaderArgs): Promise<{
   tag: TTag;
@@ -17,13 +20,16 @@ export async function loader({ request, params }: Route.LoaderArgs): Promise<{
       isPublicRoute: false,
       allowedRoles: [ROLE_ADMIN],
     },
-    async () => {
+    async (_, t) => {
       const tagId = getIdFromParams(params);
 
       const tag = await getTagById(tagId);
 
       if (!tag) {
-        throw data("Not found", { status: 404 });
+        throw new InternalError(
+          t("responseErrors.notFound"),
+          HTTP_STATUS_CODES.NOT_FOUND_404
+        );
       }
 
       return {

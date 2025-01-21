@@ -91,7 +91,6 @@ export const EditUserForm = ({
           type="submit"
           loading={form.formState.isSubmitting}
           mt="lg"
-          w={200}
           mx="auto"
           display="block"
         >

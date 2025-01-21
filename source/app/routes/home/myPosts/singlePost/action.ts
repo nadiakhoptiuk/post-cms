@@ -1,4 +1,4 @@
-import { data, redirect } from "react-router";
+import { redirect } from "react-router";
 
 import { authGate } from "~/shared/.server/services/auth";
 import {
@@ -6,17 +6,22 @@ import {
   getIdFromParams,
 } from "~/shared/.server/utils/commonUtils";
 import { deletePostById, getPostById } from "~/shared/.server/repository/posts";
+import { updatePostAction } from "~/shared/.server/actions/updatePost";
+import { commitSession } from "~/shared/.server/services/session";
 
 import {
   ACTION_DELETE,
   ACTION_UPDATE,
   ROLE_ADMIN,
   ROLE_USER,
+  SESSION_SUCCESS_KEY,
 } from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
-import type { TSerializedUser } from "~/shared/types/react";
+import {
+  HTTP_STATUS_CODES,
+  InternalError,
+} from "~/shared/.server/utils/InternalError";
 import type { Route } from "../../+types/route";
-import { updatePostAction } from "~/shared/.server/actions/updatePost";
 
 export async function action({ request, params }: Route.ActionArgs) {
   return await authGate(
@@ -25,7 +30,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       isPublicRoute: false,
       allowedRoles: [ROLE_ADMIN, ROLE_USER],
     },
-    async (sessionUser: TSerializedUser) => {
+    async (sessionUser, t, session) => {
       const postId = getIdFromParams(params);
 
       const formData = await request.formData();
@@ -34,9 +39,15 @@ export async function action({ request, params }: Route.ActionArgs) {
       const existingPost = await getPostById(postId);
 
       if (!existingPost) {
-        throw Error("Post with such id does not exists");
+        throw new InternalError(
+          t("responseErrors.notFound"),
+          HTTP_STATUS_CODES.NOT_FOUND_404
+        );
       } else if (existingPost && existingPost?.ownerId !== sessionUser.id) {
-        throw data("Operation is permitted", { status: 403 });
+        throw new InternalError(
+          t("responseErrors.forbidden"),
+          HTTP_STATUS_CODES.FORBIDDEN_403
+        );
       }
 
       let result;
@@ -57,10 +68,19 @@ export async function action({ request, params }: Route.ActionArgs) {
       }
 
       if (!result) {
-        throw Error("Somethong went wrong");
+        throw new InternalError(
+          t("responseErrors.notFound"),
+          HTTP_STATUS_CODES.NOT_FOUND_404
+        );
       }
 
-      return redirect(NavigationLink.MY_POSTS);
+      session.set(SESSION_SUCCESS_KEY, t("notifications.success.update"));
+
+      return redirect(NavigationLink.MY_POSTS, {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
     },
     {
       failureRedirect: NavigationLink.HOME,

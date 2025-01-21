@@ -14,7 +14,18 @@ import { getCountForPagination } from "../utils/commonUtils";
 import { del, rstr, upd } from "./repositoryUtils";
 
 export async function createNewUser(userData: TSignupData & TUserPassword) {
-  return await db.insert(users).values({ ...userData });
+  const newUser = await db
+    .insert(users)
+    .values({ ...userData })
+    .returning({
+      id: users.id,
+      email: users.email,
+      firstName: users.firstName,
+      lastName: users.lastName,
+      role: users.role,
+    });
+
+  return newUser[0];
 }
 
 export async function getAllUsers(query: string, page: number) {

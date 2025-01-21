@@ -10,7 +10,7 @@ export default function NotFound() {
     <Box component="section" py="lg">
       <Container>
         <Title order={1} w="fit-content" mx="auto">
-          404 - {t("notFound")}
+          404 - {t("responseErrors.notFound")}
         </Title>
 
         <StyledLink

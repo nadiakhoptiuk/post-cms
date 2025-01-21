@@ -1,10 +1,17 @@
+import { data } from "react-router";
+
+import { commitSession } from "~/shared/.server/services/session";
 import { authGate } from "~/shared/.server/services/auth";
 import { getIdFromRequest } from "~/shared/.server/utils/commonUtils";
 import { deleteTagById, getTagById } from "~/shared/.server/repository/tags";
 
-import { ROLE_ADMIN } from "~/shared/constants/common";
+import { ROLE_ADMIN, SESSION_SUCCESS_KEY } from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
 import type { Route } from "./+types/route";
+import {
+  HTTP_STATUS_CODES,
+  InternalError,
+} from "~/shared/.server/utils/InternalError";
 
 export async function action({ request }: Route.ActionArgs) {
   return await authGate(
@@ -13,17 +20,38 @@ export async function action({ request }: Route.ActionArgs) {
       isPublicRoute: false,
       allowedRoles: [ROLE_ADMIN],
     },
-    async () => {
+    async (_, t, session) => {
       const formData = await request.formData();
       const tagId = getIdFromRequest(formData);
 
       const existingTag = await getTagById(tagId);
 
       if (!existingTag) {
-        throw new Error("Post with such id does not exist");
+        throw new InternalError(
+          t("responseErrors.notFound"),
+          HTTP_STATUS_CODES.NOT_FOUND_404
+        );
       }
 
-      return await deleteTagById(tagId);
+      const deletedTag = await deleteTagById(tagId);
+
+      if (!deletedTag) {
+        throw new InternalError(
+          t("responseErrors.failed"),
+          HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR_500
+        );
+      }
+
+      session.set(SESSION_SUCCESS_KEY, t("notifications.success.delete"));
+
+      return data(
+        { deletedTag },
+        {
+          headers: {
+            "Set-Cookie": await commitSession(session),
+          },
+        }
+      );
     },
     {
       failureRedirect: NavigationLink.HOME,

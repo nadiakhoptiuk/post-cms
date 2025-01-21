@@ -7,7 +7,6 @@
   "auth.deleteAccount": "Delete account",
 
   "goToHomePage": "Home Page",
-  "notFound": "Resource not found",
 
   "userBarNavLinks": {
     "profile": "Profile",
@@ -17,15 +16,6 @@
 
   "aria.toggleMenu": "Open Mobile Menu",
   "aria.searchForm": "Search records",
-
-  "formErrorsMessages": {
-    "emailError": "Must be a valid email",
-    "stringErrorRequired": "Required field",
-    "stringErrorMin": "Minimal count of symbols:",
-    "stringErrorMax": "Maximum count of symbols:",
-    "invalidSlugRegex": "Only lowercase Latin letters, numbers and dashes are allowed",
-    "invalidTagRegex": "Only lowercase Latin letters, numbers and _ are allowed"
-  },
 
   "buttons": {
     "button.update": "Update",
@@ -62,8 +52,44 @@
 
   "search.placeholder": "Search...",
 
+  "formErrorsMessages": {
+    "emailError": "Must be a valid email",
+    "stringErrorRequired": "Required field",
+    "stringErrorMin": "Minimal count of symbols:",
+    "stringErrorMax": "Maximum count of symbols:",
+    "invalidSlugRegex": "Only lowercase Latin letters, numbers and dashes are allowed",
+    "invalidTagRegex": "Only lowercase Latin letters, numbers and _ are allowed"
+  },
+
+  "responseErrors": {
+    "notFound": "Resource not found",
+    "conflict": "",
+    "conflictModerated": "Post has been moderated",
+    "conflictDeleted": "User has been already deleted",
+    "conflictRestored": "User has been already restored",
+    "conflictExisted": "User with such email is already exists",
+    "conflictConsidered": "Complaint has been already considered",
+    "internalError": "Internal Server Error",
+    "failed": "Failed",
+    "invalidField": "Type of data is wrong",
+    "forbidden": "Insufficient permissions",
+    "unauth": "You are not authorized",
+    "deletedAccount": "This account has been deleted"
+  },
+
   "notifications": {
     "error": "Error",
-    "success": "Success"
+    "success": "Success",
+
+    "success.sent": "Sent for consideration",
+    "success.signup": "Signed up",
+    "success.logout": "Logged out",
+    "success.deleted": "Deleted",
+    "success.restored": "User has been restored",
+    "success.updated": "Updated",
+    "success.created": "Created",
+    "success.rejected": "Rejected",
+    "success.accepted": "Post has been blocked",
+    "success.published": "Post has been published"
   }
 }
