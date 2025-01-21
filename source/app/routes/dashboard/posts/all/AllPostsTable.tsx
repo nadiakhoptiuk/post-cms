@@ -21,9 +21,10 @@ const TableRow = ({
   author,
   status,
 }: TPost & TDBPostRecord) => {
-  const { t } = useTranslation("common");
+  const { i18n, t } = useTranslation("common");
+  const locale = i18n.language;
   const [opened, { open, close }] = useDisclosure(false);
-  const createdRelDate = formatDateToRelative(createdAt);
+  const createdRelDate = formatDateToRelative(createdAt, locale);
 
   return (
     <MTable.Tr key={id}>

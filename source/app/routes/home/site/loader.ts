@@ -26,7 +26,7 @@ export async function loader({ request }: Route.LoaderArgs): Promise<{
       isPublicRoute: true,
       allowedRoles: [ROLE_ADMIN, ROLE_USER],
     },
-    async (sessionUser: TSerializedUser | null) => {
+    async (sessionUser) => {
       const { query, page } = getPaginationDataFromRequest(request);
 
       const { allPosts, actualPage, pagesCount } = await getAllPublishedPosts(

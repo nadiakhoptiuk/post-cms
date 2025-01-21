@@ -17,12 +17,13 @@ import { NavigationLink } from "~/shared/constants/navigation";
 import type { TPostCard } from "./PostCard.types";
 
 export const PostCard = ({ item, userId, location, setPostId }: TPostCard) => {
-  const { t } = useTranslation("common");
+  const { i18n, t } = useTranslation("common");
+  const locale = i18n.language;
   const { id, title, slug, author, publishedAt, updatedAt, status } = item;
   const isUserOwner = userId === item.ownerId;
 
-  const publishedDate = formatDateToRelative(publishedAt);
-  const updatedDate = formatDateToRelative(updatedAt);
+  const publishedDate = formatDateToRelative(publishedAt, locale);
+  const updatedDate = formatDateToRelative(updatedAt, locale);
 
   return (
     <Card

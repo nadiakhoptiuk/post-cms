@@ -6,6 +6,8 @@ import type { TDBPostRecord, TPost } from "~/shared/types/react";
 import { PAGINATION_LIMIT, POST_STATUS } from "~/shared/constants/common";
 import { getCountForPagination } from "../utils/commonUtils";
 import { crt, pbl, upd } from "./repositoryUtils";
+import { postsToTags } from "~/database/schema/postsToTags";
+import { tags } from "~/database/schema/tags";
 
 export async function createNewPost(userId: number, postData: TPost) {
   const createdPost = await db
@@ -61,9 +63,12 @@ export async function getAllPublishedPosts(query: string, page: number) {
       publishedAt: posts.publishedAt,
       ownerId: posts.ownerId,
       author: crt.author,
+      tags: tags.name,
     })
     .from(posts)
     .leftJoin(crt, eq(posts.ownerId, crt.id))
+    .leftJoin(postsToTags, eq(posts.id, postsToTags.postId))
+    .leftJoin(tags, eq(postsToTags.tagId, tags.id))
     .where(
       and(
         or(

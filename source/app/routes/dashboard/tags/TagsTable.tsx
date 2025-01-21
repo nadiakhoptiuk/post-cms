@@ -14,8 +14,9 @@ import type { TTag } from "~/shared/types/react";
 import { openDeleteModal } from "./openDeleteModal";
 
 const TableRow = ({ createdAt, id, name, author }: TTag) => {
-  const { t } = useTranslation("common");
-  const createdRelDate = formatDateToRelative(createdAt);
+  const { i18n, t } = useTranslation("common");
+  const locale = i18n.language;
+  const createdRelDate = formatDateToRelative(createdAt, locale);
   const fetcher = useFetcher();
 
   const openModal = () =>

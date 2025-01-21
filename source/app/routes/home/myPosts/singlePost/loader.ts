@@ -10,16 +10,17 @@ import type {
   NewSerializeFrom,
   TDBPostRecord,
   TPost,
+  TPostTags,
   TTag,
 } from "~/shared/types/react";
-import type { Route } from "../../+types/route";
 import {
   HTTP_STATUS_CODES,
   InternalError,
 } from "~/shared/.server/utils/InternalError";
+import type { Route } from "../../+types/route";
 
 export async function loader({ request, params }: Route.LoaderArgs): Promise<{
-  post: TPost & TDBPostRecord;
+  post: TPost & TDBPostRecord & TPostTags;
   allTags: TTag[];
 }> {
   return await authGate(
@@ -29,7 +30,7 @@ export async function loader({ request, params }: Route.LoaderArgs): Promise<{
       allowedRoles: [ROLE_ADMIN, ROLE_USER],
     },
     async (sessionUser, t) => {
-      const postId = getIdFromParams(params);
+      const postId = getIdFromParams(params, t);
 
       const post = await getUserPostById(sessionUser.id, postId);
 

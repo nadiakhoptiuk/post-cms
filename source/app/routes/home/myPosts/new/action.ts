@@ -1,4 +1,6 @@
 import { redirect } from "react-router";
+import { JSDOM } from "jsdom";
+import DOMPurify from "dompurify";
 
 import { authGate } from "~/shared/.server/services/auth";
 import { createNewPost } from "~/shared/.server/repository/posts";
@@ -36,10 +38,14 @@ export async function action({ request }: Route.ActionArgs) {
 
       const idForSlug = await generateUniqueIdForSlug();
 
+      const { window: serverWindow } = new JSDOM("");
+      const purify = DOMPurify(serverWindow);
+      const sanitizedHTML = purify.sanitize(content);
+
       const createdPost = await createNewPost(sessionUser.id, {
         title,
         slug: `${slug}-${idForSlug}`,
-        content,
+        content: sanitizedHTML,
       });
 
       if (!createdPost) {
@@ -53,7 +59,12 @@ export async function action({ request }: Route.ActionArgs) {
         tags === "" ? [] : tags.split(",").map((el) => ({ name: el }));
 
       if (tagsArr.length === 0) {
-        return redirect(NavigationLink.MY_POSTS);
+        session.set(SESSION_SUCCESS_KEY, t("notifications.success.created"));
+        return redirect(NavigationLink.MY_POSTS, {
+          headers: {
+            "Set-Cookie": await commitSession(session),
+          },
+        });
       }
 
       await createMultipleTagsOrSkip(tagsArr, sessionUser.id);

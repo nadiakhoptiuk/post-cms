@@ -30,7 +30,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       allowedRoles: [ROLE_ADMIN],
     },
     async (sessionUser, t, session) => {
-      const postId = getIdFromParams(params);
+      const postId = getIdFromParams(params, t);
 
       const formData = await request.formData();
       const action = getActionIdFromRequest(formData);
@@ -58,7 +58,8 @@ export async function action({ request, params }: Route.ActionArgs) {
             formData,
             sessionUser.id,
             postId,
-            existingPost.slug
+            existingPost.slug,
+            t
           );
           notifyMessage = t("notifications.success.updated");
           break;

@@ -17,14 +17,15 @@ export const ComplaintsTable = ({
 }: {
   complaints: Array<TDBComplaintRecord>;
 }) => {
-  const { t } = useTranslation("common");
+  const { i18n, t } = useTranslation("common");
+  const locale = i18n.language;
   const { t: c } = useTranslation("complaints");
   const { t: p } = useTranslation("posts");
   const fetcher = useFetcher();
 
   const rows = complaints.map(
     ({ id, postSlug, postId, postTitle, reason, createdAt, author }) => {
-      const createdRelDate = formatDateToRelative(createdAt);
+      const createdRelDate = formatDateToRelative(createdAt, locale);
 
       return (
         <MTable.Tr key={id}>

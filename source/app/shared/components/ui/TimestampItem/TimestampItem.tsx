@@ -17,9 +17,10 @@ export const TimestampItem = ({
   relative?: boolean;
   withLabel?: boolean;
 }) => {
-  const { t } = useTranslation("common");
+  const { i18n, t } = useTranslation("common");
+  const locale = i18n.language;
   const formattedDate = relative
-    ? formatDateToRelative(date)
+    ? formatDateToRelative(date, locale)
     : formatDateWithTime(date);
 
   if (type === "created") {
