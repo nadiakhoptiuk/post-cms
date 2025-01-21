@@ -12,13 +12,13 @@ import type {
   NewSerializeFrom,
   TDBPostRecord,
   TPost,
-  TPostToTag,
   TTag,
+  TTagsArray,
 } from "~/shared/types/react";
 import type { Route } from "./+types/route";
 
 export async function loader({ request, params }: Route.LoaderArgs): Promise<{
-  post: TDBPostRecord & TPost & TPostToTag;
+  post: TDBPostRecord & TPost & TTagsArray;
   allTags: TTag[];
 }> {
   return await authGate(

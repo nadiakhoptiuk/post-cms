@@ -11,12 +11,13 @@ import type {
   NewSerializeFrom,
   TDBPostRecord,
   TPost,
+  TPostToTag,
   TSerializedUser,
 } from "~/shared/types/react";
 import type { Route } from "../../+types/route";
 
 export async function loader({ request, params }: Route.LoaderArgs): Promise<{
-  post: TPost & TDBPostRecord;
+  post: TPost & TDBPostRecord & { tags: TPostToTag[] };
   user: TSerializedUser | null;
 }> {
   return await publicGate(

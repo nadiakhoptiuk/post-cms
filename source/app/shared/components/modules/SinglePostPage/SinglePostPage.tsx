@@ -1,12 +1,12 @@
 import { PostContent, PostHeading } from "../../ui/PostElements";
 
-import type { TDBPostRecord, TPost } from "~/shared/types/react";
+import type { TDBPostRecord, TPost, TPostToTag } from "~/shared/types/react";
 
 export const SinglePostPage = ({
   post,
   location,
 }: {
-  post: TDBPostRecord & TPost;
+  post: TDBPostRecord & TPost & { tags: TPostToTag[] };
   location: "dashboard" | "site" | "profile";
 }) => {
   return (
