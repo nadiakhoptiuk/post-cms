@@ -1,9 +1,11 @@
 import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
 
-import type { TPost } from "../types/react";
+import type { TDBPostRecord, TPost } from "../types/react";
 
-export const getPostsWithSlicedString = (posts: Array<TPost>) => {
+export const getPostsWithSlicedString = (
+  posts: Array<TPost & TDBPostRecord>
+) => {
   const { window: serverWindow } = new JSDOM("");
   const purify = DOMPurify(serverWindow);
 

@@ -1,6 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { getAllPostsSlugs } from "../repository/posts";
+import type {
+  TPostQuery,
+  TPostsToTagQuery,
+  TPostToTag,
+} from "~/shared/types/react";
 
 export const getPostDataFromRequest = (formData: FormData) => {
   const title = formData.get("title");
@@ -14,7 +19,7 @@ export const getPostDataFromRequest = (formData: FormData) => {
     typeof content !== "string" ||
     typeof tags !== "string"
   ) {
-    throw new Error("Some field is not a string");
+    throw new Error("Some field is not a string"); //TODO
   }
 
   return { title, slug, content, tags };
@@ -34,4 +39,19 @@ export const generateUniqueIdForSlug = async () => {
   }
 
   return id;
+};
+
+export const transformPostData = (post: TPostQuery) => {
+  const { postsToTags, author, ...rest } = post;
+
+  const tagsData: TPostToTag[] =
+    postsToTags.length > 0
+      ? postsToTags.map(({ tag, postId }: TPostsToTagQuery) => ({
+          tagName: tag.name,
+          tagId: tag.id,
+          postId,
+        }))
+      : [];
+
+  return { ...rest, tags: tagsData, author: author.fullName };
 };

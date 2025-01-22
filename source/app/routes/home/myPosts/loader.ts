@@ -22,11 +22,11 @@ export async function loader({ request }: Route.LoaderArgs): Promise<{
       isPublicRoute: false,
       allowedRoles: [ROLE_ADMIN, ROLE_USER],
     },
-    async (sessionUser: TSerializedUser) => {
+    async (sessionUser) => {
       const allUserPosts = await getAllUserPostsById(sessionUser.id);
 
       return {
-        posts: getPostsWithSlicedString(allUserPosts),
+        posts: getPostsWithSlicedString(allUserPosts), //TODO
         user: sessionUser,
       };
     },

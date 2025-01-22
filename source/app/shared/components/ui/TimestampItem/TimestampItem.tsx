@@ -78,13 +78,17 @@ export const TimestampItem = ({
   if (type === "updated") {
     return (
       <Group>
-        <Text mb="md" size="md">
+        <Text
+          mb="md"
+          size="md"
+          styles={{ root: { display: "flex", alignItems: "center" } }}
+        >
           {withLabel ? (
             <Text component="span" fw="bolder">
               {t("timestampsLabels.updatedAt")}:{" "}
             </Text>
           ) : (
-            <IconPencil size={18} color="gray" />
+            <IconPencil size={18} strokeWidth={1} />
           )}
           {formattedDate}
         </Text>

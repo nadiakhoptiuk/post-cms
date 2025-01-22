@@ -6,7 +6,7 @@ import type {
 import type { FormScope } from "@rvf/react-router";
 
 import type { LANG_EN, LANG_UK } from "../constants/locale";
-import type { COMPLAINT_STATUS, POST_STATUS } from "../constants/common";
+import type { COMPLAINT_STATUS } from "../constants/common";
 
 export type NewSerializeFrom<T> = ReturnType<typeof useLoaderData<T>>;
 
@@ -123,11 +123,11 @@ export type TDBPostRecord = {
   id: number;
   ownerId: number;
   createdAt: Date;
-  status: (typeof POST_STATUS)[keyof typeof POST_STATUS];
-  author?: string;
+  postStatus: string;
   updatedAt?: Date | null;
   updatedBy?: string | null;
   updatedById?: number | null;
+  moderatedAt?: Date | null;
   publishedAt?: Date | null;
   rejectedAt?: Date | null;
   rejectReason?: string | null;
@@ -136,6 +136,15 @@ export type TDBPostRecord = {
   blockedAt?: Date | null;
   blockedById?: number | null;
   blockedBy?: string | null;
+};
+
+export type TModeratedAt = {
+  moderatedAt: Date;
+};
+
+export type TPostAdditionalFields = {
+  author: string;
+  tags: TPostToTag[];
 };
 
 export type TPost = {
@@ -155,3 +164,21 @@ export type TPostTags = {
 export type TPostsTable = {
   posts: Array<TPost & TDBPostRecord>;
 };
+
+export type TAuthorQuery = {
+  firstName: string;
+  lastName: string;
+  fullName: string | unknown;
+};
+
+export type TPostsToTagQuery = {
+  tag: { name: string; id: number };
+  postId: number;
+  tagId: number;
+};
+
+export type TPostQuery = TPost &
+  TDBPostRecord & {
+    author: TAuthorQuery;
+    postsToTags: TPostsToTagQuery[];
+  };

@@ -9,7 +9,11 @@ import dotenv from "dotenv";
 dotenv.config({ path: "../.env" });
 
 import { DatabaseContext } from "~/database/context";
-import * as schema from "~/database/schema/complaints";
+import * as posts from "~/database/schema/posts";
+import * as tags from "~/database/schema/tags";
+import * as complaints from "~/database/schema/complaints";
+import * as postsToTags from "~/database/schema/postsToTags";
+import * as users from "~/database/schema/users";
 
 declare module "react-router" {
   interface AppLoadContext {
@@ -25,7 +29,15 @@ const client = postgres(process.env.DATABASE_URL, {
   max: 10,
   idle_timeout: 30,
 });
-export const db = drizzle(client, { schema });
+export const db = drizzle(client, {
+  schema: {
+    ...posts,
+    ...tags,
+    ...complaints,
+    ...postsToTags,
+    ...users,
+  },
+});
 
 app.use((_, __, next) => DatabaseContext.run(db, next));
 

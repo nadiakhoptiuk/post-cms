@@ -22,7 +22,7 @@ export async function action({ request }: Route.ActionArgs) {
     },
     async (_, t, session) => {
       const formData = await request.formData();
-      const tagId = getIdFromRequest(formData);
+      const tagId = getIdFromRequest(formData, t);
 
       const existingTag = await getTagById(tagId);
 
@@ -42,7 +42,7 @@ export async function action({ request }: Route.ActionArgs) {
         );
       }
 
-      session.set(SESSION_SUCCESS_KEY, t("notifications.success.delete"));
+      session.set(SESSION_SUCCESS_KEY, t("notifications.success.deleted"));
 
       return data(
         { deletedTag },

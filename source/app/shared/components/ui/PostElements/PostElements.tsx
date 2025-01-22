@@ -1,9 +1,10 @@
 import parse from "html-react-parser";
-import { Badge, Box, Group, Paper, Title } from "@mantine/core";
+import { Box, Paper, Title } from "@mantine/core";
 
 import { TimestampItem } from "../TimestampItem";
 
 import type { TDBPostRecord, TPost, TPostToTag } from "~/shared/types/react";
+import { TagsGroup } from "../TagsGroup/TagsGroup";
 
 export const PostContent = ({
   content,
@@ -22,15 +23,7 @@ export const PostContent = ({
 
       {parse(content)}
 
-      {tags.length > 0 && (
-        <Group mt="xl">
-          {tags.map(({ tagName, tagId }) => (
-            <Badge variant="light" size="lg" tt="lowercase" key={tagId}>
-              {tagName}
-            </Badge>
-          ))}
-        </Group>
-      )}
+      {tags.length > 0 && <TagsGroup tags={tags} />}
     </Paper>
   );
 };

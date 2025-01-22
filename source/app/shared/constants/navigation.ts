@@ -9,12 +9,14 @@ import {
   IconUserScan,
   IconUserPlus,
   IconShieldLock,
+  IconBell,
 } from "@tabler/icons-react";
 
 export const enum NavigationLink {
   HOME_SINGLE_POST = "/:slug",
   HOME = "/",
   MY_POSTS = "/my-posts",
+  NOTIFICATIONS = "/notifications",
   MY_POSTS_NEW = "/my-posts/new",
   MY_CURRENT_POST = "/my-posts/:id",
   PROFILE = "/profile",
@@ -43,6 +45,10 @@ export const enum NavigationLink {
   SIGNUP = "/signup",
 
   NOT_FOUND = "/404",
+
+  // ADDITIONAL
+  NOTIFICATIONS_COMPLAINTS = "complaints",
+  NOTIFICATIONS_POSTS = "posts",
 
   // FOR ACTIONS
   CHANGE_LANGUAGE = "change-language",
@@ -92,5 +98,10 @@ export const AuthNavLinks = [
 export const UserBarNavLinks = [
   { id: "profile", link: NavigationLink.PROFILE, icon: IconUserScan },
   { id: "myPosts", link: NavigationLink.MY_POSTS, icon: IconPencilMinus },
+  {
+    id: "notifications",
+    link: NavigationLink.NOTIFICATIONS,
+    icon: IconBell,
+  },
   { id: "dashboard", link: NavigationLink.DASHBOARD, icon: IconShieldLock },
 ];
