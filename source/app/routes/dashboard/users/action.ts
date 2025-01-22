@@ -29,7 +29,7 @@ export async function action({ request }: Route.ActionArgs) {
     async (sessionUser, t, session) => {
       const formData = await request.formData();
       const action = getActionIdFromRequest(formData);
-      const userId = getIdFromRequest(formData);
+      const userId = getIdFromRequest(formData, t);
 
       let resultUser;
 

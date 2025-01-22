@@ -82,9 +82,8 @@ export const EditUserForm = ({
           label={u("userData.role")}
           scope={form.scope("role")}
           options={ROLE_SELECT_OPTIONS}
-          styles={{
-            root: { width: "50%", marginLeft: "auto", marginRight: "auto" },
-          }}
+          mx="auto"
+          w="50%"
         />
 
         <Button
@@ -109,9 +108,8 @@ export const EditUserForm = ({
           mt="lg"
           w="fit-content"
           onClick={open}
-          styles={{
-            root: { marginLeft: "auto", marginRight: "auto", display: "block" },
-          }}
+          mx="auto"
+          display="block"
         >
           {hasBeenDeleted
             ? t("buttons.button.restore")

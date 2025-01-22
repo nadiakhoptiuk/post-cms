@@ -42,9 +42,9 @@ export const ComplaintsTable = ({
             <Flex columnGap={4}>
               <StyledNavLink
                 variant="unstyled"
+                p="md"
                 aria-label={t("buttons.button.view")}
                 to={`/${postSlug}`}
-                style={{ padding: 8 }}
               >
                 <IconEye size={18} stroke={1.5} />
               </StyledNavLink>
@@ -53,7 +53,7 @@ export const ComplaintsTable = ({
                 <Button
                   type="button"
                   variant="subtle"
-                  p={8}
+                  p="md"
                   aria-label={t("buttons.button.block")}
                   onClick={() => {
                     fetcher.submit(
@@ -77,7 +77,7 @@ export const ComplaintsTable = ({
                   aria-label={t("buttons.button.reject.complaint", {
                     ns: "common",
                   })}
-                  p={8}
+                  p="md"
                   variant="subtle"
                 >
                   <IconX size={18} stroke={1.5} />

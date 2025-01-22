@@ -8,6 +8,7 @@ import { NavigationLink } from "~/shared/constants/navigation";
 import { ROLE_ADMIN } from "~/shared/constants/common";
 import type {
   NewSerializeFrom,
+  TAuthor,
   TDBPostRecord,
   TPost,
   TTag,
@@ -20,7 +21,7 @@ import {
 } from "~/shared/.server/utils/InternalError";
 
 export async function loader({ request, params }: Route.LoaderArgs): Promise<{
-  post: TDBPostRecord & TPost & TTagsArray;
+  post: TDBPostRecord & TPost & TTagsArray & TAuthor;
   allTags: TTag[];
 }> {
   return await authGate(
@@ -30,7 +31,7 @@ export async function loader({ request, params }: Route.LoaderArgs): Promise<{
       allowedRoles: [ROLE_ADMIN],
     },
     async (_, t) => {
-      const postId = getIdFromParams(params);
+      const postId = getIdFromParams(params, t);
 
       const post = await getPostById(postId);
 

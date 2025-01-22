@@ -30,7 +30,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       allowedRoles: [ROLE_ADMIN],
     },
     async (sessionUser, t, session) => {
-      const tagId = getIdFromParams(params);
+      const tagId = getIdFromParams(params, t);
 
       const formData = await request.formData();
       const action = getActionIdFromRequest(formData);

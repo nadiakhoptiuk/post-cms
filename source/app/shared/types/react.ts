@@ -142,10 +142,13 @@ export type TModeratedAt = {
   moderatedAt: Date;
 };
 
-export type TPostAdditionalFields = {
+export type TAuthor = {
   author: string;
-  tags: TPostToTag[];
 };
+
+export type TPostAdditionalFields = {
+  tags: TPostToTag[];
+} & TAuthor;
 
 export type TPost = {
   title: string;
@@ -162,7 +165,7 @@ export type TPostTags = {
 };
 
 export type TPostsTable = {
-  posts: Array<TPost & TDBPostRecord>;
+  posts: Array<TPost & TDBPostRecord & TAuthor>;
 };
 
 export type TAuthorQuery = {

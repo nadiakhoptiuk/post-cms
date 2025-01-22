@@ -8,13 +8,14 @@ import type {
   NewSerializeFrom,
   TDBPostRecord,
   TPost,
+  TPostAdditionalFields,
   TSerializedUser,
 } from "~/shared/types/react";
 import type { Route } from "../+types/route";
 
 export async function loader({ request }: Route.LoaderArgs): Promise<{
   user: TSerializedUser;
-  posts: Array<TPost & TDBPostRecord>;
+  posts: Array<TPost & TDBPostRecord & TPostAdditionalFields>;
 }> {
   return await authGate(
     request,
@@ -26,7 +27,7 @@ export async function loader({ request }: Route.LoaderArgs): Promise<{
       const allUserPosts = await getAllUserPostsById(sessionUser.id);
 
       return {
-        posts: getPostsWithSlicedString(allUserPosts), //TODO
+        posts: getPostsWithSlicedString(allUserPosts), //TODO sanitize
         user: sessionUser,
       };
     },

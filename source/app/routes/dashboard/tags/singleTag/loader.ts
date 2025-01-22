@@ -21,7 +21,7 @@ export async function loader({ request, params }: Route.LoaderArgs): Promise<{
       allowedRoles: [ROLE_ADMIN],
     },
     async (_, t) => {
-      const tagId = getIdFromParams(params);
+      const tagId = getIdFromParams(params, t);
 
       const tag = await getTagById(tagId);
 

@@ -3,6 +3,8 @@ import { Outlet, useLocation } from "react-router";
 import { Box, Container, Title } from "@mantine/core";
 import { Tabs } from "./Tabs";
 
+export const handle = { i18n: ["notifications", "common"] };
+
 export { loader } from "./loader";
 
 export default function HomeNotificationsPage() {

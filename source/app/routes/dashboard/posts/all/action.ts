@@ -21,7 +21,7 @@ export async function action({ request }: Route.ActionArgs) {
     },
     async (_, t, session) => {
       const formData = await request.formData();
-      const postId = getIdFromRequest(formData);
+      const postId = getIdFromRequest(formData, t);
 
       const existingPost = await getPostById(postId);
 

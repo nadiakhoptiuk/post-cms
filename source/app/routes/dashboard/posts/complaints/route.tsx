@@ -2,12 +2,11 @@ import { Box, Container, Pagination, Text } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useNavigate } from "react-router";
 
+import { ComplaintsTable } from "./ComplaintsTable";
 import { SearchForm } from "~/shared/components/modules/SearchForm";
-// import { PostsTable } from "../all/AllPostsTable";
 
 import { PAGE_PARAMETER_NAME } from "~/shared/constants/common";
 import type { TLoaderData } from "./loader";
-import { ComplaintsTable } from "./ComplaintsTable";
 
 export { loader } from "./loader";
 export { action } from "./action";

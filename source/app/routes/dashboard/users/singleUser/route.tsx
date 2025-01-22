@@ -29,7 +29,7 @@ export default function DashBoardEditUserPage() {
         <StyledLink
           to={NavigationLink.DASHBOARD_USERS}
           variant="unstyled"
-          style={{ marginBottom: "20px" }}
+          mb="lg"
         >
           <IconArrowNarrowLeft size={18} />
           {t("link.back")}

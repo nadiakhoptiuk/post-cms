@@ -32,7 +32,7 @@ export async function action({ request }: Route.ActionArgs) {
     async (sessionUser, t, session) => {
       const formData = await request.formData();
 
-      const complaintId = getIdFromRequest(formData);
+      const complaintId = getIdFromRequest(formData, t);
       const existingComplaint = await getComplaintById(complaintId);
 
       if (existingComplaint && existingComplaint.status !== null) {

@@ -50,7 +50,7 @@ const TableRow = ({
               <StyledNavLink
                 aria-label={t("buttons.button.edit")}
                 to={`${NavigationLink.DASHBOARD_USERS}/${id}`}
-                style={{ padding: 8 }}
+                p="md"
               >
                 <IconPencil size={18} stroke={1.5} />
               </StyledNavLink>
@@ -66,7 +66,7 @@ const TableRow = ({
               <Button
                 onClick={open}
                 c={deletedAt === null ? "red" : "green"}
-                p={8}
+                p="md"
                 variant="subtle"
               >
                 {deletedAt === null ? (

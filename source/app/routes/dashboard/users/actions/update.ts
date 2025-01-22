@@ -17,7 +17,7 @@ export const updateUserAction = async (
   t: TFunction
 ) => {
   const { firstName, lastName, email, password, role } =
-    await getUserDataFromRequest(formData);
+    await getUserDataFromRequest(formData, t);
 
   const existingUser = await getUserById(userId);
 

@@ -27,7 +27,7 @@ export async function action({ request }: Route.ActionArgs) {
       const formData = await request.formData();
 
       const { firstName, lastName, email, password, role } =
-        await getUserDataFromRequest(formData);
+        await getUserDataFromRequest(formData, t);
 
       const existingUser = await getUserByEmailWithPassword(email);
 
