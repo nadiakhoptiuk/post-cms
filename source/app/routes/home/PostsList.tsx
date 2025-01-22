@@ -8,13 +8,17 @@ import { ModalForComplaint } from "./site/ModalForComplaint";
 import { PostCard } from "~/shared/components/ui/PostCard";
 
 import { NavigationLink } from "~/shared/constants/navigation";
-import type { TDBPostRecord, TPost } from "~/shared/types/react";
+import type {
+  TDBPostRecord,
+  TPost,
+  TPostAdditionalFields,
+} from "~/shared/types/react";
 
 export const PostsList = ({
   posts,
   userId,
 }: {
-  posts: Array<TPost & TDBPostRecord>;
+  posts: Array<TPost & TDBPostRecord & TPostAdditionalFields>;
   userId: number | undefined;
 }) => {
   const { t } = useTranslation("posts");
@@ -34,8 +38,9 @@ export const PostsList = ({
   return (
     <>
       {posts && posts?.length > 0 && (
-        <Grid styles={{ root: { width: "100%" } }}>
+        <Grid w="100%">
           {posts.map((itemData) => {
+            console.log(itemData);
             return (
               <Grid.Col
                 w="100%"

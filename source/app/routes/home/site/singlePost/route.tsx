@@ -10,8 +10,6 @@ import { useLoaderData, useNavigate } from "react-router";
 import { SinglePostPage } from "~/shared/components/modules/SinglePostPage";
 import { Button } from "~/shared/components/ui/Button";
 
-import { StyledLink } from "~/shared/components/ui/StyledLink";
-import { NavigationLink } from "~/shared/constants/navigation";
 import { ModalForComplaint } from "../ModalForComplaint";
 import type { TLoaderData } from "./loader";
 
@@ -30,7 +28,7 @@ export default function HomeSinglePostPage() {
   return (
     <Box component="section" my="lg">
       <Container>
-        <Group mb={30}>
+        <Group mb="lg">
           <Button
             onClick={() => navigate(-1)}
             type="button"
@@ -40,19 +38,14 @@ export default function HomeSinglePostPage() {
           >
             {t("buttons.button.back")}
           </Button>
-
-          <StyledLink to={NavigationLink.HOME} variant="filled">
-            {t("link.toAll")}
-          </StyledLink>
         </Group>
 
-        <SinglePostPage post={post} />
+        <SinglePostPage post={post} location="site" />
 
         {user?.id && !isOwnPost && (
           <Button
             variant="subtle"
-            mt={10}
-            styles={{ label: { gap: 10 } }}
+            mt="md"
             aria-label={t("buttons.button.complain")}
             onClick={open}
             leftSection={<IconAlertSquareRounded size={18} color="pink" />}

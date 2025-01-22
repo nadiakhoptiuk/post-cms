@@ -1,4 +1,6 @@
 import { redirect } from "react-router";
+import { JSDOM } from "jsdom";
+import DOMPurify from "dompurify";
 
 import { authGate } from "~/shared/.server/services/auth";
 import { createNewPost } from "~/shared/.server/repository/posts";
@@ -11,9 +13,17 @@ import {
 import { addTagToPost } from "~/shared/.server/repository/postsToTags";
 
 import { NavigationLink } from "~/shared/constants/navigation";
-import { ROLE_ADMIN, ROLE_USER } from "~/shared/constants/common";
-import type { TSerializedUser } from "~/shared/types/react";
+import {
+  ROLE_ADMIN,
+  ROLE_USER,
+  SESSION_SUCCESS_KEY,
+} from "~/shared/constants/common";
 import type { Route } from "../../+types/route";
+import {
+  HTTP_STATUS_CODES,
+  InternalError,
+} from "~/shared/.server/utils/InternalError";
+import { commitSession } from "~/shared/.server/services/session";
 
 export async function action({ request }: Route.ActionArgs) {
   return await authGate(
@@ -22,27 +32,39 @@ export async function action({ request }: Route.ActionArgs) {
       isPublicRoute: false,
       allowedRoles: [ROLE_ADMIN, ROLE_USER],
     },
-    async (sessionUser: TSerializedUser) => {
+    async (sessionUser, t, session) => {
       const formData = await request.formData();
       const { title, slug, content, tags } = getPostDataFromRequest(formData);
 
       const idForSlug = await generateUniqueIdForSlug();
 
+      const { window: serverWindow } = new JSDOM("");
+      const purify = DOMPurify(serverWindow);
+      const sanitizedHTML = purify.sanitize(content);
+
       const createdPost = await createNewPost(sessionUser.id, {
         title,
         slug: `${slug}-${idForSlug}`,
-        content,
+        content: sanitizedHTML,
       });
 
       if (!createdPost) {
-        throw Error("Something went wrong");
+        throw new InternalError(
+          t("responseErrors.failed"),
+          HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR_500
+        );
       }
 
       const tagsArr =
         tags === "" ? [] : tags.split(",").map((el) => ({ name: el }));
 
       if (tagsArr.length === 0) {
-        return redirect(NavigationLink.MY_POSTS);
+        session.set(SESSION_SUCCESS_KEY, t("notifications.success.created"));
+        return redirect(NavigationLink.MY_POSTS, {
+          headers: {
+            "Set-Cookie": await commitSession(session),
+          },
+        });
       }
 
       await createMultipleTagsOrSkip(tagsArr, sessionUser.id);
@@ -52,7 +74,13 @@ export async function action({ request }: Route.ActionArgs) {
         await addTagToPost(existingTag.id, createdPost.id);
       }
 
-      return redirect(NavigationLink.MY_POSTS);
+      session.set(SESSION_SUCCESS_KEY, t("notifications.success.created"));
+
+      return redirect(NavigationLink.MY_POSTS, {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
     },
     {
       failureRedirect: NavigationLink.LOGIN,

@@ -22,6 +22,7 @@ export default function DashBoardHomePage() {
     updatedBy,
     publishedAt,
     moderatedBy,
+    tags,
   } = post;
 
   return (
@@ -50,7 +51,7 @@ export default function DashBoardHomePage() {
             title,
             content,
             slug,
-            tags: [],
+            tags,
           }}
           formType="update"
           allTags={allTags}

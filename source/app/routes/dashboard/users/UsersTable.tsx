@@ -23,9 +23,10 @@ const TableRow = ({
   email,
   role,
 }: TDBUser) => {
-  const { t } = useTranslation("common");
+  const { i18n, t } = useTranslation("common");
+  const locale = i18n.language;
   const [opened, { open, close }] = useDisclosure(false);
-  const createdRelDate = formatDateToRelative(createdAt);
+  const createdRelDate = formatDateToRelative(createdAt, locale);
 
   return (
     <>
@@ -49,7 +50,7 @@ const TableRow = ({
               <StyledNavLink
                 aria-label={t("buttons.button.edit")}
                 to={`${NavigationLink.DASHBOARD_USERS}/${id}`}
-                style={{ padding: 8 }}
+                p="md"
               >
                 <IconPencil size={18} stroke={1.5} />
               </StyledNavLink>
@@ -65,7 +66,7 @@ const TableRow = ({
               <Button
                 onClick={open}
                 c={deletedAt === null ? "red" : "green"}
-                p={8}
+                p="md"
                 variant="subtle"
               >
                 {deletedAt === null ? (

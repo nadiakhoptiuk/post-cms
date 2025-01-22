@@ -54,7 +54,8 @@ export const addNewTagsFromPost = async (
     const tagData = await getTagByName(tag);
 
     if (!tagData) {
-      await createNewTag({ name: tag }, sessionUserId);
+      const newTag = await createNewTag({ name: tag }, sessionUserId);
+      await addTagToPost(newTag.id, postId);
     } else {
       await addTagToPost(tagData.id, postId);
     }

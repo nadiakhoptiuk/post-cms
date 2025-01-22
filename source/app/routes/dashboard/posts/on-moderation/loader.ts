@@ -10,6 +10,7 @@ import type {
 } from "~/shared/.server/types/common";
 import type {
   NewSerializeFrom,
+  TAuthor,
   TDBPostRecord,
   TPost,
 } from "~/shared/types/react";
@@ -18,7 +19,8 @@ import type { Route } from "./+types/route";
 export async function loader({
   request,
 }: Route.LoaderArgs): Promise<
-  { posts: Array<TPost & TDBPostRecord> } & WithPaginationData & WithSearchData
+  { posts: Array<TPost & TDBPostRecord & TAuthor> } & WithPaginationData &
+    WithSearchData
 > {
   return await authGate(
     request,

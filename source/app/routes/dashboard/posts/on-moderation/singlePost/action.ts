@@ -1,5 +1,6 @@
 import { redirect } from "react-router";
 
+import { commitSession } from "~/shared/.server/services/session";
 import { authGate } from "~/shared/.server/services/auth";
 import {
   getPostById,
@@ -15,10 +16,14 @@ import {
   ACTION_PUBLISH,
   ACTION_REJECT,
   ROLE_ADMIN,
+  SESSION_SUCCESS_KEY,
 } from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
-import type { TSerializedUser } from "~/shared/types/react";
 import type { Route } from "./+types/route";
+import {
+  HTTP_STATUS_CODES,
+  InternalError,
+} from "~/shared/.server/utils/InternalError";
 
 export async function action({ request, params }: Route.ActionArgs) {
   return await authGate(
@@ -27,24 +32,31 @@ export async function action({ request, params }: Route.ActionArgs) {
       isPublicRoute: false,
       allowedRoles: [ROLE_ADMIN],
     },
-    async (sessionUser: TSerializedUser) => {
+    async (sessionUser, t, session) => {
       const postId = getIdFromParams(params);
 
       const existingPost = await getPostById(postId);
 
       if (!existingPost) {
-        throw new Error("Post with such id does not exist");
+        throw new InternalError(
+          t("responseErrors.notFound"),
+          HTTP_STATUS_CODES.NOT_FOUND_404
+        );
       } else if (
         (existingPost && existingPost.publishedAt !== null) ||
         (existingPost && existingPost.rejectedAt !== null)
       ) {
-        throw new Error("Post has been already moderated");
+        throw new InternalError(
+          t("responseErrors.conflictModerated"),
+          HTTP_STATUS_CODES.CONFLICT_409
+        );
       }
 
       const formData = await request.formData();
       const action = getActionIdFromRequest(formData);
 
       let result;
+      let notifyMessage;
 
       switch (action) {
         case ACTION_PUBLISH:
@@ -55,22 +67,34 @@ export async function action({ request, params }: Route.ActionArgs) {
             },
             { confirmed: true }
           );
+          notifyMessage = t("notifications.success.published");
           break;
 
         case ACTION_REJECT:
           result = await rejectPublishPostAction(
             formData,
             postId,
-            sessionUser.id
+            sessionUser.id,
+            t
           );
+          notifyMessage = t("notifications.success.rejected");
           break;
       }
 
       if (!result) {
-        throw Error("Something went wrong");
+        throw new InternalError(
+          t("responseErrors.failed"),
+          HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR_500
+        );
       }
 
-      return redirect(NavigationLink.DASHBOARD_POSTS_ON_MODERATION);
+      session.set(SESSION_SUCCESS_KEY, notifyMessage);
+
+      return redirect(NavigationLink.DASHBOARD_POSTS_ON_MODERATION, {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
     },
     {
       failureRedirect: NavigationLink.HOME,

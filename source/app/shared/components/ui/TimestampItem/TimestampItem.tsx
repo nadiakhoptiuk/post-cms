@@ -1,4 +1,5 @@
 import { Group, Text } from "@mantine/core";
+import { IconPencil } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 import { formatDateWithTime } from "~/shared/utils/dateFormat";
 import { formatDateToRelative } from "~/shared/utils/dateRelativeFormat";
@@ -8,32 +9,39 @@ export const TimestampItem = ({
   date,
   madeBy,
   relative = false,
+  withLabel = true,
 }: {
   type: "created" | "updated" | "deleted" | "published" | "blocked";
   date: Date | null | undefined;
+  madeBy?: string | null;
   relative?: boolean;
-  madeBy?: string | undefined | null;
+  withLabel?: boolean;
 }) => {
-  const { t } = useTranslation("common");
+  const { i18n, t } = useTranslation("common");
+  const locale = i18n.language;
   const formattedDate = relative
-    ? formatDateToRelative(date)
+    ? formatDateToRelative(date, locale)
     : formatDateWithTime(date);
 
   if (type === "created") {
     return (
       <Group>
-        <Text mb={15} size="md">
-          <Text component="span" fw="bolder">
-            {t("timestampsLabels.createdAt")}:{" "}
-          </Text>
+        <Text mb="md" size="md">
+          {withLabel && (
+            <Text component="span" fw="bolder">
+              {t("timestampsLabels.createdAt")}:{"  "}
+            </Text>
+          )}
           {formattedDate}
         </Text>
 
         {madeBy && (
-          <Text mb={15} size="md">
-            <Text component="span" fw="bolder">
-              {t("timestampsLabels.author")}:{"  "}
-            </Text>
+          <Text mb="md" size="md">
+            {withLabel && (
+              <Text component="span" fw="bolder">
+                {t("timestampsLabels.author")}:{"  "}
+              </Text>
+            )}
             {madeBy}
           </Text>
         )}
@@ -44,18 +52,22 @@ export const TimestampItem = ({
   if (type === "published") {
     return (
       <Group>
-        <Text mb={15} size="md">
-          <Text component="span" fw="bolder">
-            {t("timestampsLabels.publishedAt")}:{" "}
-          </Text>
+        <Text mb="md" size="md">
+          {withLabel && (
+            <Text component="span" fw="bolder">
+              {t("timestampsLabels.publishedAt")}:{" "}
+            </Text>
+          )}
           {formattedDate}
         </Text>
 
         {madeBy && (
-          <Text mb={15} size="md">
-            <Text component="span" fw="bolder">
-              {t("timestampsLabels.moderatedBy")}:{"  "}
-            </Text>
+          <Text mb="md" size="md">
+            {withLabel && (
+              <Text component="span" fw="bolder">
+                {t("timestampsLabels.moderatedBy")}:{"  "}
+              </Text>
+            )}
             {madeBy}
           </Text>
         )}
@@ -66,18 +78,28 @@ export const TimestampItem = ({
   if (type === "updated") {
     return (
       <Group>
-        <Text mb={15} size="md">
-          <Text component="span" fw="bolder">
-            {t("timestampsLabels.updatedAt")}:{" "}
-          </Text>
+        <Text
+          mb="md"
+          size="md"
+          styles={{ root: { display: "flex", alignItems: "center" } }}
+        >
+          {withLabel ? (
+            <Text component="span" fw="bolder">
+              {t("timestampsLabels.updatedAt")}:{" "}
+            </Text>
+          ) : (
+            <IconPencil size={18} strokeWidth={1} />
+          )}
           {formattedDate}
         </Text>
 
         {madeBy && (
-          <Text mb={15} size="md">
-            <Text component="span" fw="bolder">
-              {t("timestampsLabels.updatedBy")}:{" "}
-            </Text>
+          <Text mb="md" size="md">
+            {withLabel && (
+              <Text component="span" fw="bolder">
+                {t("timestampsLabels.updatedBy")}:{" "}
+              </Text>
+            )}
             {madeBy}
           </Text>
         )}
@@ -88,7 +110,7 @@ export const TimestampItem = ({
   if (type === "deleted") {
     return (
       <Group>
-        <Text mb={15} size="md">
+        <Text mb="md" size="md">
           <Text component="span" fw="bolder">
             {t("timestampsLabels.deletedAt")}:{" "}
           </Text>
@@ -96,7 +118,7 @@ export const TimestampItem = ({
         </Text>
 
         {madeBy && (
-          <Text mb={15} size="md">
+          <Text mb="md" size="md">
             <Text component="span" fw="bolder">
               {t("timestampsLabels.deletedBy")}:{" "}
             </Text>
@@ -110,7 +132,7 @@ export const TimestampItem = ({
   if (type === "blocked") {
     return (
       <Group>
-        <Text mb={15} size="md">
+        <Text mb="md" size="md">
           <Text component="span" fw="bolder">
             {t("timestampsLabels.blockedAt")}:{" "}
           </Text>
@@ -118,7 +140,7 @@ export const TimestampItem = ({
         </Text>
 
         {madeBy && (
-          <Text mb={15} size="md">
+          <Text mb="md" size="md">
             <Text component="span" fw="bolder">
               {t("timestampsLabels.blockedBy")}:{" "}
             </Text>

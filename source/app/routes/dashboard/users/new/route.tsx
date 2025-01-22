@@ -20,18 +20,13 @@ export default function DashBoardCreateUserPage() {
         <StyledLink
           to={NavigationLink.DASHBOARD_USERS}
           variant="unstyled"
-          style={{ marginBottom: "20px" }}
+          mb="lg"
         >
           <IconArrowNarrowLeft size={18} />
           {t("link.back")}
         </StyledLink>
 
-        <Text
-          fw="bold"
-          mb={30}
-          styles={{ root: { textAlign: "center" } }}
-          size="xl"
-        >
+        <Text fw="bold" mb="lg" ta="center" size="xl">
           {t("title.newUser")}
         </Text>
 

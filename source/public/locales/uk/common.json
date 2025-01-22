@@ -7,25 +7,16 @@
   "auth.deleteAccount": "Видалити акаунт",
 
   "goToHomePage": "Головна сторінка",
-  "notFound": "Ресурс не знайдено",
 
   "userBarNavLinks": {
     "profile": "Профіль",
     "myPosts": "Мої дописи",
+    "notifications": "Сповіщення",
     "dashboard": "Адміністратор"
   },
 
   "aria.toggleMenu": "Відкрити мобільне меню",
   "aria.searchForm": "Шукати записи",
-
-  "formErrorsMessages": {
-    "emailError": "Введіть валідний email",
-    "stringErrorRequired": "Обов'язкове поле",
-    "stringErrorMin": "Мінімальна кількість символів:",
-    "stringErrorMax": "Максимальна кількість символів:",
-    "invalidSlugRegex": "Дозволено тільки малі латинські літери, цифри та тире",
-    "invalidTagRegex": "Дозволено тільки малі латинські літери, цифри та _"
-  },
 
   "buttons": {
     "button.update": "Оновити",
@@ -60,5 +51,46 @@
     "blockedBy": "Ким заблоковано"
   },
 
-  "search.placeholder": "Шукати..."
+  "search.placeholder": "Шукати...",
+
+  "formErrorsMessages": {
+    "emailError": "Введіть валідний email",
+    "stringErrorRequired": "Обов'язкове поле",
+    "stringErrorMin": "Мінімальна кількість символів:",
+    "stringErrorMax": "Максимальна кількість символів:",
+    "invalidSlugRegex": "Дозволено тільки малі латинські літери, цифри та тире",
+    "invalidTagRegex": "Дозволено тільки малі латинські літери, цифри та _"
+  },
+
+  "responseErrors": {
+    "notFound": "Ресурс не знайдено",
+    "conflict": "",
+    "conflictModerated": "Пост уже модерований",
+    "conflictDeleted": "Користувач вже був видалений",
+    "conflictRestored": "Користувач вже був відновлений",
+    "conflictExisted": "Користувач з таким email уже існує",
+    "conflictConsidered": "Скарга уже розглянута",
+    "internalError": "Внутрішня помилка сервера",
+    "failed": "Не вдалося",
+    "invalidField": "Дані неправильного типу",
+    "forbidden": "Недостатньо прав",
+    "unauth": "Ви не авторизовані",
+    "deletedAccount": "Цей акаунт було видалено"
+  },
+
+  "notifications": {
+    "error": "Помилка",
+    "success": "Успіх",
+
+    "success.sent": "Надіслано на розгляд",
+    "success.signup": "Зареєстровано",
+    "success.logout": "Ви вийшли",
+    "success.deleted": "Видалено",
+    "success.restored": "Користувача відновлено",
+    "success.updated": "Оновлено",
+    "success.created": "Створено",
+    "success.rejected": "Відхилено",
+    "success.accepted": "Пост заблоковано",
+    "success.published": "Пост опубліковано"
+  }
 }

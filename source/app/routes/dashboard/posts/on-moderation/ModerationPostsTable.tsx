@@ -1,6 +1,6 @@
 import { useFetcher } from "react-router";
 import { useTranslation } from "react-i18next";
-import {  Group, Table as MTable, Text, Tooltip } from "@mantine/core";
+import { Group, Table as MTable, Text, Tooltip } from "@mantine/core";
 import { IconCheck, IconEye, IconX } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -12,12 +12,23 @@ import { Button } from "~/shared/components/ui/Button";
 import { ModalRejectPostWithoutRedirect } from "./ModalsForRejectingPost";
 
 import { ACTION_PUBLISH } from "~/shared/constants/common";
-import type { TDBPostRecord, TPost, TPostsTable } from "~/shared/types/react";
+import type {
+  TAuthor,
+  TDBPostRecord,
+  TPost,
+  TPostsTable,
+} from "~/shared/types/react";
 
-const TableRow = ({ id, title, createdAt, author }: TPost & TDBPostRecord) => {
+const TableRow = ({
+  id,
+  title,
+  createdAt,
+  author,
+}: TPost & TDBPostRecord & TAuthor) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { t } = useTranslation("common");
-  const createdRelDate = formatDateToRelative(createdAt);
+  const { i18n, t } = useTranslation("common");
+  const locale = i18n.language;
+  const createdRelDate = formatDateToRelative(createdAt, locale);
   const fetcher = useFetcher();
 
   return (

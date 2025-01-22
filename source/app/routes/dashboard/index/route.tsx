@@ -9,11 +9,11 @@ export default function DashBoardHomePage() {
   return (
     <Box component="section">
       <Container>
-        <Text mx="auto" w="fit-content" mt={30} size="xl" fw={700}>
+        <Text mx="auto" w="fit-content" mt="lg" size="xl" fw={700}>
           {t("adminGreeting")}
         </Text>
 
-        <Text mx="auto" w="fit-content" mt={30} size="md">
+        <Text mx="auto" w="fit-content" mt="lg" size="md">
           {t("adminChoose")}
         </Text>
       </Container>

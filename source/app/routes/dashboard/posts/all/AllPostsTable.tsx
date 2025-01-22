@@ -12,18 +12,25 @@ import { StyledNavLink } from "~/shared/components/ui/StyledNavLink";
 import { Button } from "~/shared/components/ui/Button";
 import { ModalForDeletingWithoutRedirect } from "~/shared/components/modules/ModalsForDeleting";
 
-import type { TDBPostRecord, TPost, TPostsTable } from "~/shared/types/react";
+import type {
+  TAuthor,
+  TDBPostRecord,
+  TPost,
+  TPostsTable,
+} from "~/shared/types/react";
+import type { POST_STATUS } from "~/shared/constants/common";
 
 const TableRow = ({
   createdAt,
   id,
   title,
   author,
-  status,
-}: TPost & TDBPostRecord) => {
-  const { t } = useTranslation("common");
+  postStatus,
+}: TPost & TDBPostRecord & TAuthor) => {
+  const { i18n, t } = useTranslation("common");
+  const locale = i18n.language;
   const [opened, { open, close }] = useDisclosure(false);
-  const createdRelDate = formatDateToRelative(createdAt);
+  const createdRelDate = formatDateToRelative(createdAt, locale);
 
   return (
     <MTable.Tr key={id}>
@@ -36,7 +43,7 @@ const TableRow = ({
       <TableTd>{createdRelDate}</TableTd>
 
       <TableTd>
-        <StatusBadge status={status} />
+        <StatusBadge status={postStatus as POST_STATUS} />
       </TableTd>
 
       <TableTd>

@@ -1,0 +1,12 @@
+{
+  "tabs": {
+    "posts": "Posts",
+    "complaints": "Complaints"
+  },
+
+  "post": {
+    "published": "Your post has been published",
+    "rejected": "Your post has been rejected by admin",
+    "reason": "Reason:"
+  }
+}

@@ -7,7 +7,6 @@ import { StyledLink } from "~/shared/components/ui/StyledLink";
 
 import { NavigationLink } from "~/shared/constants/navigation";
 
-import { formatDateWithTime } from "~/shared/utils/dateFormat";
 import { TimestampItem } from "~/shared/components/ui/TimestampItem";
 import { EditUserForm } from "../EditUserForm";
 import type { TLoaderData } from "./loader";
@@ -24,46 +23,34 @@ export default function DashBoardEditUserPage() {
   const { createdAt, updatedAt, updatedBy, deletedAt, deletedBy, ...userData } =
     user;
 
-  const createdDate = formatDateWithTime(createdAt);
-  const updatedDate = formatDateWithTime(updatedAt);
-  const deletedDate = formatDateWithTime(deletedAt);
-
   return (
-    <Box component="section">
+    <Box component="section" my="lg">
       <Container>
         <StyledLink
           to={NavigationLink.DASHBOARD_USERS}
           variant="unstyled"
-          style={{ marginBottom: "20px" }}
+          mb="lg"
         >
           <IconArrowNarrowLeft size={18} />
           {t("link.back")}
         </StyledLink>
 
-        <Box mb={25}>
-          <TimestampItem type="created" date={createdDate} />
+        <Box mb="lg">
+          <TimestampItem type="created" date={createdAt} />
 
-          {updatedDate && updatedBy && (
-            <TimestampItem
-              type="updated"
-              date={updatedDate}
-              madeBy={updatedBy}
-            />
+          {updatedAt && updatedBy && (
+            <TimestampItem type="updated" date={updatedAt} madeBy={updatedBy} />
           )}
 
-          {deletedDate && deletedBy && (
-            <TimestampItem
-              type="deleted"
-              date={deletedDate}
-              madeBy={deletedBy}
-            />
+          {deletedAt && deletedBy && (
+            <TimestampItem type="deleted" date={deletedAt} madeBy={deletedBy} />
           )}
         </Box>
 
         <EditUserForm
           userData={userData}
           formType="update"
-          hasBeenDeleted={!!deletedDate}
+          hasBeenDeleted={!!deletedAt}
         />
       </Container>
     </Box>

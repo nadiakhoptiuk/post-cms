@@ -1,24 +1,35 @@
-import { data } from "react-router";
+import type { TFunction } from "i18next";
 import { complainAboutPost } from "~/shared/.server/repository/complaints";
 import {
   getOnlyAnotherUserPostById,
   getPostById,
 } from "~/shared/.server/repository/posts";
+import {
+  HTTP_STATUS_CODES,
+  InternalError,
+} from "~/shared/.server/utils/InternalError";
 
 export const complainAction = async (
   formData: FormData,
-  sessionUserId: number
+  sessionUserId: number,
+  t: TFunction
 ) => {
   const postId = formData.get("postId");
   const complaintReason = formData.get("complaintReason");
 
   if (typeof postId !== "string" || typeof complaintReason !== "string") {
-    throw new Error("Reason or postId is not a string");
+    throw new InternalError(
+      t("responseErrors.invalidField"),
+      HTTP_STATUS_CODES.BAD_REQUEST_400
+    );
   }
 
   const existingPost = await getPostById(Number(postId));
   if (!existingPost) {
-    throw data("Post with such id does not exist", { status: 404 });
+    throw new InternalError(
+      t("responseErrors.notFound"),
+      HTTP_STATUS_CODES.NOT_FOUND_404
+    );
   }
 
   const existingAnotherUserPost = await getOnlyAnotherUserPostById(
@@ -26,7 +37,10 @@ export const complainAction = async (
     Number(postId)
   );
   if (!existingAnotherUserPost) {
-    throw data("Permitted operation for your own post", { status: 403 });
+    throw new InternalError(
+      t("responseErrors.forbidden"),
+      HTTP_STATUS_CODES.FORBIDDEN_403
+    );
   }
 
   return await complainAboutPost(

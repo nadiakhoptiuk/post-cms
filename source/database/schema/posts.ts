@@ -23,6 +23,7 @@ export const posts = pgTable("Posts", {
   postStatus: postStatusEnum().notNull().default("on moderation"),
   createdAt: t.timestamp().defaultNow().notNull(),
   updatedAt: t.timestamp(),
+  moderatedAt: t.timestamp(),
   updatedById: t.integer().references((): t.AnyPgColumn => users.id),
   publishedAt: t.timestamp(),
   rejectedAt: t.timestamp(),

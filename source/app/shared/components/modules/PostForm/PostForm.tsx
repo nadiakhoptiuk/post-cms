@@ -9,8 +9,8 @@ import { SlugInput } from "../../ui/SlugInput";
 import { RichTextEditor } from "../../ui/RichTextEditor";
 import { Button } from "../../ui/Button";
 import { ModalForDeletingPost } from "../ModalsForDeleting";
-import { MultiSelectLarge } from "../../ui/MultiSelectLarge";
 
+import { MultiSelectLarge } from "../../ui/MultiSelectLarge";
 import { postValidator } from "~/shared/utils/validators/postValidator";
 
 import {
@@ -41,7 +41,7 @@ export const PostForm = ({
     returnObjects: true,
   }) as TErrorsMessages;
 
-  const options = allTags?.map((el: TTag) => el.name);
+  const options = allTags?.map((el) => el.name);
 
   const form = useForm({
     validator: postValidator(errorMessages),

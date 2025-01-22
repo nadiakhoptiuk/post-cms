@@ -1,10 +1,16 @@
+import { data } from "react-router";
 import { authGate } from "~/shared/.server/services/auth";
 import { getIdFromRequest } from "~/shared/.server/utils/commonUtils";
+import { deletePostById, getPostById } from "~/shared/.server/repository/posts";
+import { commitSession } from "~/shared/.server/services/session";
 
 import { NavigationLink } from "~/shared/constants/navigation";
-import { ROLE_ADMIN } from "~/shared/constants/common";
+import { ROLE_ADMIN, SESSION_SUCCESS_KEY } from "~/shared/constants/common";
 import type { Route } from "./+types/route";
-import { deletePostById, getPostById } from "~/shared/.server/repository/posts";
+import {
+  HTTP_STATUS_CODES,
+  InternalError,
+} from "~/shared/.server/utils/InternalError";
 
 export async function action({ request }: Route.ActionArgs) {
   return await authGate(
@@ -13,17 +19,38 @@ export async function action({ request }: Route.ActionArgs) {
       isPublicRoute: false,
       allowedRoles: [ROLE_ADMIN],
     },
-    async () => {
+    async (_, t, session) => {
       const formData = await request.formData();
-      const postId = getIdFromRequest(formData);
+      const postId = getIdFromRequest(formData, t);
 
       const existingPost = await getPostById(postId);
 
       if (!existingPost) {
-        throw new Error("Post with such id does not exist");
+        throw new InternalError(
+          t("responseErrors.notFound"),
+          HTTP_STATUS_CODES.NOT_FOUND_404
+        );
       }
 
-      return await deletePostById(postId);
+      const deletedPost = await deletePostById(postId);
+
+      if (!deletedPost) {
+        throw new InternalError(
+          t("responseErrors.notFound"),
+          HTTP_STATUS_CODES.NOT_FOUND_404
+        );
+      }
+
+      session.set(SESSION_SUCCESS_KEY, t("notifications.success.deleted"));
+
+      return data(
+        { deletedPost },
+        {
+          headers: {
+            "Set-Cookie": await commitSession(session),
+          },
+        }
+      );
     },
     {
       failureRedirect: NavigationLink.HOME,

@@ -15,7 +15,7 @@ export default [
       "react/react-in-jsx-scope": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "no-extra-boolean-cast": 0,
-      "react/require-default-props": "error",
+      // "react/require-default-props": "error",
     },
   },
 ];

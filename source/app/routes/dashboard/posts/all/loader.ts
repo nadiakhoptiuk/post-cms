@@ -6,6 +6,7 @@ import { ROLE_ADMIN } from "~/shared/constants/common";
 import { NavigationLink } from "~/shared/constants/navigation";
 import type {
   NewSerializeFrom,
+  TAuthor,
   TDBPostRecord,
   TPost,
   TSerializedUser,
@@ -18,7 +19,7 @@ import type { Route } from "./+types/route";
 
 export async function loader({ request }: Route.LoaderArgs): Promise<
   {
-    posts: Array<TDBPostRecord & TPost>;
+    posts: Array<TDBPostRecord & TPost & TAuthor>;
     user: TSerializedUser;
   } & WithPaginationData &
     WithSearchData

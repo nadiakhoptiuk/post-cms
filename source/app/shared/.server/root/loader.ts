@@ -6,7 +6,10 @@ import { DEFAULT_LANG, LANGUAGES } from "~/shared/constants/locale";
 import type { NewSerializeFrom, TLocale } from "~/shared/types/react";
 import type { Route } from ".react-router/types/app/+types/root";
 import { data } from "react-router";
-import { SESSION_ERROR_KEY } from "~/shared/constants/common";
+import {
+  SESSION_ERROR_KEY,
+  SESSION_SUCCESS_KEY,
+} from "~/shared/constants/common";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const locale = await i18next.getLocale(request);
@@ -20,11 +23,14 @@ export async function loader({ request }: Route.LoaderArgs) {
     request.headers.get("cookie")
   );
   const error = session.get(SESSION_ERROR_KEY);
+  const success = session.get(SESSION_SUCCESS_KEY);
 
   session.unset(SESSION_ERROR_KEY);
+  session.unset(SESSION_SUCCESS_KEY);
 
   return data(
     {
+      success: success,
       error: error,
       theme: "light" satisfies "light" | "dark",
       locale: LANGUAGES.includes(locale) ? locale : DEFAULT_LANG,
@@ -45,5 +51,6 @@ export type TRootLoader = {
     title: string;
   };
   error?: string;
+  success?: string;
 };
 export type TRootLoaderData = NewSerializeFrom<TRootLoader>;

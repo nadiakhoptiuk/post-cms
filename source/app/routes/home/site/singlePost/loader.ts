@@ -1,21 +1,23 @@
-import { data } from "react-router";
-import { JSDOM } from "jsdom";
-import DOMPurify from "dompurify";
-
 import { publicGate } from "~/shared/.server/services/auth";
 import { getPostBySlug } from "~/shared/.server/repository/posts";
+import { getTagsWithNamesByPostId } from "~/shared/.server/repository/postsToTags";
 
 import { ROLE_ADMIN, ROLE_USER } from "~/shared/constants/common";
 import type {
   NewSerializeFrom,
   TDBPostRecord,
   TPost,
+  TPostToTag,
   TSerializedUser,
 } from "~/shared/types/react";
 import type { Route } from "../../+types/route";
+import {
+  HTTP_STATUS_CODES,
+  InternalError,
+} from "~/shared/.server/utils/InternalError";
 
 export async function loader({ request, params }: Route.LoaderArgs): Promise<{
-  post: TPost & TDBPostRecord;
+  post: TPost & TDBPostRecord & { tags: TPostToTag[] };
   user: TSerializedUser | null;
 }> {
   return await publicGate(
@@ -24,22 +26,29 @@ export async function loader({ request, params }: Route.LoaderArgs): Promise<{
       isPublicRoute: true,
       allowedRoles: [ROLE_ADMIN, ROLE_USER],
     },
-    async (sessionUser: TSerializedUser | null) => {
+    async (sessionUser, t) => {
       if (!params.slug) {
-        throw data("Not Found", { status: 404 });
+        throw new InternalError(
+          t("responseErrors.notFound"),
+          HTTP_STATUS_CODES.NOT_FOUND_404
+        );
       }
 
       const post = await getPostBySlug(params.slug);
 
       if (!post) {
-        throw data("Post not found", { status: 404 });
+        throw new InternalError(
+          t("responseErrors.notFound"),
+          HTTP_STATUS_CODES.NOT_FOUND_404
+        );
       }
 
-      const { window: serverWindow } = new JSDOM("");
-      const purify = DOMPurify(serverWindow);
-      const sanitizedHTML = purify.sanitize(post.content);
+      const postTags = await getTagsWithNamesByPostId(post.id);
 
-      return { post: { ...post, content: sanitizedHTML }, user: sessionUser };
+      return {
+        post: { ...post, tags: postTags },
+        user: sessionUser,
+      };
     }
   );
 }

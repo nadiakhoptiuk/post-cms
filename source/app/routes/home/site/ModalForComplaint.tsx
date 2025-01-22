@@ -61,10 +61,6 @@ export const ModalForComplaint = ({
           label={p("postData.complaintReason")}
           scope={form.scope("complaintReason")}
           options={selectOptions}
-          styles={{
-            wrapper: { marginBottom: 30 },
-            error: { position: "absolute", bottom: -17 },
-          }}
         />
         <Button
           type="submit"

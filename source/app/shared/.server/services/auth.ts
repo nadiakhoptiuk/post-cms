@@ -1,4 +1,5 @@
-import { data, redirect } from "react-router";
+import { data, redirect, type Session } from "react-router";
+import type { TFunction } from "i18next";
 
 import {
   createNewUser,
@@ -7,28 +8,39 @@ import {
   getUserById,
 } from "../repository/users";
 import { commitSession, getSession } from "./session";
+import i18next from "~/shared/.server/services/i18n";
 
 import type { GetCurrentUserOptions, GetRouteOptions } from "../types/common";
 import { NavigationLink } from "~/shared/constants/navigation";
-import { SESSION_ERROR_KEY, SESSION_USER_KEY } from "~/shared/constants/common";
+import {
+  SESSION_ERROR_KEY,
+  SESSION_SUCCESS_KEY,
+  SESSION_USER_KEY,
+} from "~/shared/constants/common";
 import { getSessionUserFromRequest } from "../utils/commonUtils";
+import { passwordHash, verifyUserAndSerialize } from "../utils/usersUtils";
 import { errorHandler } from "../utils/errorHandler";
 
 import type { TSerializedUser } from "~/shared/types/react";
-import { passwordHash, verifyUserAndSerialize } from "../utils/usersUtils";
+import { HTTP_STATUS_CODES, InternalError } from "../utils/InternalError";
 
 export const loginUser = async (request: Request): Promise<Response> => {
   const form = await request.formData();
   const email = form.get("email");
   const password = form.get("password");
 
+  const t = await i18next.getFixedT(request);
+
   if (typeof email !== "string" || typeof password !== "string") {
-    throw new Error("invalid data");
+    throw new InternalError(
+      t("responseErrors.invalidField"),
+      HTTP_STATUS_CODES.BAD_REQUEST_400
+    );
   }
 
   const session = await getSession(request.headers.get("cookie"));
 
-  const serializedUser = await verifyUserAndSerialize(email, password);
+  const serializedUser = await verifyUserAndSerialize(email, password, t);
 
   session.set(SESSION_USER_KEY, serializedUser);
 
@@ -45,13 +57,18 @@ export const signupUser = async (request: Request): Promise<Response> => {
   const lastName = formData.get("lastName");
   const password = formData.get("password");
 
+  const t = await i18next.getFixedT(request);
+
   if (
     typeof firstName !== "string" ||
     typeof email !== "string" ||
     typeof lastName !== "string" ||
     typeof password !== "string"
   ) {
-    throw new Error("Invalid data");
+    throw new InternalError(
+      t("responseErrors.invalidField"),
+      HTTP_STATUS_CODES.BAD_REQUEST_400
+    );
   }
 
   const session = await getSession(request.headers.get("cookie"));
@@ -59,17 +76,29 @@ export const signupUser = async (request: Request): Promise<Response> => {
   const existingUser = await getUserByEmailWithPassword(email);
 
   if (existingUser) {
-    throw new Error("User with such email has already exist in database");
+    throw new InternalError(
+      t("responseErrors.conflictExisted"),
+      HTTP_STATUS_CODES.CONFLICT_409
+    );
   }
 
   const hashedPassword = await passwordHash(password);
 
-  await createNewUser({
+  const newUser = await createNewUser({
     firstName,
     lastName,
     email,
     password: hashedPassword,
   });
+
+  if (!newUser) {
+    throw new InternalError(
+      t("responseErrors.failed"),
+      HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR_500
+    );
+  }
+
+  session.set(SESSION_SUCCESS_KEY, t("notifications.success.signup"));
 
   return redirect(NavigationLink.LOGIN, {
     headers: { "Set-Cookie": await commitSession(session) },
@@ -84,6 +113,9 @@ export const logoutUser = async (
 
   const session = await getSession(request.headers.get("Cookie"));
   session.unset(SESSION_USER_KEY);
+
+  const t = await i18next.getFixedT(request);
+  session.set(SESSION_SUCCESS_KEY, t("notifications.success.logout"));
 
   return redirect(successRedirect || NavigationLink.HOME, {
     headers: {
@@ -101,10 +133,21 @@ export const deleteUserAccount = async (
 
   const userId = sessionUser.id;
 
-  await deleteUserById(userId, userId);
+  const deletedUser = await deleteUserById(userId, userId);
+
+  if (!deletedUser) {
+    const t = await i18next.getFixedT(request);
+    throw new InternalError(
+      t("responseErrors.failed"),
+      HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR_500
+    );
+  }
 
   const session = await getSession(request.headers.get("Cookie"));
   session.unset(SESSION_USER_KEY);
+
+  const t = await i18next.getFixedT(request);
+  session.set(SESSION_SUCCESS_KEY, t("notifications.success.deleted"));
 
   return redirect(successRedirect || NavigationLink.HOME, {
     headers: {
@@ -125,7 +168,11 @@ export const getAuthUser = async (
   const sessionUser = await getSessionUserFromRequest(request);
 
   if (!sessionUser && !isPublicRoute) {
-    throw redirect(failureRedirect || NavigationLink.LOGIN);
+    const t = await i18next.getFixedT(request);
+    throw new InternalError(
+      t("responseErrors.failed"),
+      HTTP_STATUS_CODES.UNAUTHORIZED_401
+    );
   }
 
   if ((!sessionUser && isAuthRoute) || (!sessionUser && isPublicRoute)) {
@@ -158,7 +205,12 @@ export const getAuthUser = async (
   }
 
   if (existingUser && !allowedRoles.includes(sessionUser.role)) {
-    throw redirect(NavigationLink.HOME);
+    // throw redirect(NavigationLink.HOME);
+    const t = await i18next.getFixedT(request);
+    throw new InternalError(
+      t("responseErrors.forbidden"),
+      HTTP_STATUS_CODES.FORBIDDEN_403
+    );
   }
 
   return sessionUser;
@@ -167,13 +219,15 @@ export const getAuthUser = async (
 export const publicGate = async (
   request: Request,
   routeOptions: GetRouteOptions,
-  cb: (sessionUser: TSerializedUser | null) => Promise<any>,
+  cb: (sessionUser: TSerializedUser | null, t: TFunction) => Promise<any>,
   options?: GetCurrentUserOptions
 ) => {
   try {
     const sessionUser = await getAuthUser(request, routeOptions, options);
 
-    return await cb(sessionUser);
+    const t = await i18next.getFixedT(request, "common");
+
+    return await cb(sessionUser, t);
   } catch (error) {
     const res = errorHandler(error);
 
@@ -193,17 +247,23 @@ export const publicGate = async (
 export const authGate = async (
   request: Request,
   routeOptions: GetRouteOptions,
-  cb: (sessionUser: TSerializedUser) => Promise<any>,
+  cb: (
+    sessionUser: TSerializedUser,
+    t: TFunction,
+    session: Session
+  ) => Promise<any>,
   options?: GetCurrentUserOptions
 ) => {
   try {
+    const session = await getSession(request.headers.get("cookie"));
     const sessionUser = await getAuthUser(request, routeOptions, options);
 
     if (!sessionUser) {
       throw redirect(NavigationLink.LOGIN);
     }
+    const t = await i18next.getFixedT(request, "common");
 
-    return await cb(sessionUser);
+    return await cb(sessionUser, t, session);
   } catch (error) {
     const res = errorHandler(error);
 

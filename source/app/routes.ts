@@ -10,6 +10,21 @@ export default [
       "./routes/home/site/singlePost/route.tsx"
     ),
     route(NavigationLink.MY_POSTS, "./routes/home/myPosts/route.tsx"),
+
+    route(
+      NavigationLink.NOTIFICATIONS,
+      "./routes/home/notifications/route.tsx",
+      [
+        route(
+          NavigationLink.NOTIFICATIONS_COMPLAINTS,
+          "./routes/home/notifications/complaints/route.tsx"
+        ),
+        route(
+          NavigationLink.NOTIFICATIONS_POSTS,
+          "./routes/home/notifications/posts/route.tsx"
+        ),
+      ]
+    ),
     route(
       NavigationLink.MY_CURRENT_POST,
       "./routes/home/myPosts/singlePost/route.tsx"

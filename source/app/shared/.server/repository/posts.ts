@@ -2,10 +2,11 @@ import { db } from "server/app";
 import { and, asc, desc, eq, ilike, not, or, sql } from "drizzle-orm";
 import { posts } from "~/database/schema/posts";
 
-import type { TDBPostRecord, TPost } from "~/shared/types/react";
+import type { TDBPostRecord, TPost, TPostQuery } from "~/shared/types/react";
 import { PAGINATION_LIMIT, POST_STATUS } from "~/shared/constants/common";
 import { getCountForPagination } from "../utils/commonUtils";
 import { crt, pbl, upd } from "./repositoryUtils";
+import { users } from "~/database/schema/users";
 
 export async function createNewPost(userId: number, postData: TPost) {
   const createdPost = await db
@@ -51,33 +52,97 @@ export async function getAllPublishedPosts(query: string, page: number) {
     page
   );
 
-  const allPosts = await db
-    .select({
-      id: posts.id,
-      title: posts.title,
-      slug: posts.slug,
-      status: posts.postStatus,
-      content: posts.content,
-      publishedAt: posts.publishedAt,
-      ownerId: posts.ownerId,
-      author: crt.author,
-    })
-    .from(posts)
-    .leftJoin(crt, eq(posts.ownerId, crt.id))
-    .where(
+  const allPosts: TPostQuery[] = await db.query.posts.findMany({
+    where: (posts) =>
       and(
         or(
           ilike(posts.title, `%${query}%`),
           ilike(posts.content, `%${query}%`)
         ),
         eq(posts.postStatus, POST_STATUS.PUBLISHED)
+      ),
+    limit: PAGINATION_LIMIT,
+    offset: offset,
+    orderBy: (posts, { desc }) => [desc(posts.publishedAt)],
+    with: {
+      postsToTags: {
+        with: {
+          tag: {
+            columns: {
+              name: true,
+              id: true,
+            },
+          },
+        },
+      },
+      author: {
+        extras: {
+          fullName: sql`${users.firstName} || ' ' || ${users.lastName}`.as(
+            "fullName"
+          ),
+        },
+        columns: {
+          lastName: true,
+          firstName: true,
+        },
+      },
+    },
+  });
+
+  return { allPosts, actualPage, pagesCount };
+}
+
+export async function getAllUserModeratedPosts(userId: number, page: number) {
+  const totalCount = await db.$count(
+    posts,
+
+    and(
+      eq(posts.ownerId, userId),
+      or(
+        eq(posts.postStatus, POST_STATUS.REJECTED),
+        eq(posts.postStatus, POST_STATUS.PUBLISHED)
+      )
+    )
+  );
+
+  if (totalCount === 0) {
+    return { posts: [], actualPage: 1, pagesCount: 1 };
+  }
+
+  const { offset, actualPage, pagesCount } = getCountForPagination(
+    totalCount,
+    page
+  );
+
+  const allPosts = await db
+    .select({
+      id: posts.id,
+      ownerId: posts.ownerId,
+      createdAt: posts.createdAt,
+      moderatedAt: posts.moderatedAt,
+      postStatus: posts.postStatus,
+      slug: posts.slug,
+      title: posts.title,
+      content: posts.content,
+      publishedAt: posts.publishedAt,
+      rejectedAt: posts.rejectedAt,
+      rejectReason: posts.rejectReason,
+    })
+    .from(posts)
+    .where(
+      and(
+        eq(posts.ownerId, userId),
+        or(
+          eq(posts.postStatus, POST_STATUS.REJECTED),
+          eq(posts.postStatus, POST_STATUS.PUBLISHED)
+        )
       )
     )
     .limit(PAGINATION_LIMIT)
     .offset(offset)
-    .orderBy(desc(posts.publishedAt));
+    .orderBy(desc(posts.moderatedAt));
 
-  return { allPosts, actualPage, pagesCount };
+  return { posts: allPosts, pagesCount, actualPage };
 }
 
 export async function getAllPostsForAdmin(query: string, page: number) {
@@ -100,7 +165,7 @@ export async function getAllPostsForAdmin(query: string, page: number) {
       id: posts.id,
       title: posts.title,
       slug: posts.slug,
-      status: posts.postStatus,
+      postStatus: posts.postStatus,
       createdAt: posts.createdAt,
       updatedAt: posts.updatedAt,
       ownerId: posts.ownerId,
@@ -174,6 +239,8 @@ export async function getPostById(postId: number) {
       content: posts.content,
       createdAt: posts.createdAt,
       updatedAt: posts.updatedAt,
+      updatedById: posts.updatedById,
+      updatedBy: upd.updatedBy,
       publishedAt: posts.publishedAt,
       moderatedBy: pbl.moderatedBy,
       rejectedAt: posts.rejectedAt,
@@ -182,6 +249,7 @@ export async function getPostById(postId: number) {
     })
     .from(posts)
     .leftJoin(crt, eq(posts.ownerId, crt.id))
+    .leftJoin(upd, eq(posts.ownerId, upd.id))
     .leftJoin(pbl, eq(posts.moderatedById, pbl.id))
     .where(eq(posts.id, postId));
 
@@ -229,6 +297,7 @@ export async function getPostBySlug(slug: string) {
       slug: posts.slug,
       content: posts.content,
       createdAt: posts.createdAt,
+      publishedAt: posts.publishedAt,
       updatedAt: posts.updatedAt,
       updatedById: posts.updatedById,
       updatedBy: upd.updatedBy,
@@ -252,7 +321,7 @@ export async function getAllUserPostsById(userId: number) {
       ownerId: posts.ownerId,
       title: posts.title,
       slug: posts.slug,
-      status: posts.postStatus,
+      postStatus: posts.postStatus,
       content: posts.content,
       createdAt: posts.createdAt,
       publishedAt: posts.publishedAt,
@@ -260,7 +329,7 @@ export async function getAllUserPostsById(userId: number) {
     })
     .from(posts)
     .where(eq(posts.ownerId, userId))
-    .orderBy(desc(posts.publishedAt), desc(posts.createdAt));
+    .orderBy(desc(posts.createdAt));
 
   return allUserPosts;
 }
@@ -302,6 +371,7 @@ export async function moderatePostById(
       postStatus: confirmed ? "published" : "rejected",
       publishedAt: confirmed ? sql`NOW()` : null,
       rejectedAt: confirmed ? null : sql`NOW()`,
+      moderatedAt: sql`NOW()`,
     })
     .where(eq(posts.id, postId))
     .returning({ id: posts.id, postStatus: posts.postStatus });
@@ -310,7 +380,10 @@ export async function moderatePostById(
 }
 
 export async function deletePostById(postId: number) {
-  const deletedPost = await db.delete(posts).where(eq(posts.id, postId));
+  const deletedPost = await db
+    .delete(posts)
+    .where(eq(posts.id, postId))
+    .returning({ id: posts.id });
 
   return deletedPost[0];
 }

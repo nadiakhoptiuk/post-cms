@@ -17,14 +17,15 @@ export const ComplaintsTable = ({
 }: {
   complaints: Array<TDBComplaintRecord>;
 }) => {
-  const { t } = useTranslation("common");
+  const { i18n, t } = useTranslation("common");
+  const locale = i18n.language;
   const { t: c } = useTranslation("complaints");
   const { t: p } = useTranslation("posts");
   const fetcher = useFetcher();
 
   const rows = complaints.map(
     ({ id, postSlug, postId, postTitle, reason, createdAt, author }) => {
-      const createdRelDate = formatDateToRelative(createdAt);
+      const createdRelDate = formatDateToRelative(createdAt, locale);
 
       return (
         <MTable.Tr key={id}>
@@ -41,9 +42,9 @@ export const ComplaintsTable = ({
             <Flex columnGap={4}>
               <StyledNavLink
                 variant="unstyled"
+                p="md"
                 aria-label={t("buttons.button.view")}
                 to={`/${postSlug}`}
-                style={{ padding: 8 }}
               >
                 <IconEye size={18} stroke={1.5} />
               </StyledNavLink>
@@ -52,7 +53,7 @@ export const ComplaintsTable = ({
                 <Button
                   type="button"
                   variant="subtle"
-                  p={8}
+                  p="md"
                   aria-label={t("buttons.button.block")}
                   onClick={() => {
                     fetcher.submit(
@@ -76,7 +77,7 @@ export const ComplaintsTable = ({
                   aria-label={t("buttons.button.reject.complaint", {
                     ns: "common",
                   })}
-                  p={8}
+                  p="md"
                   variant="subtle"
                 >
                   <IconX size={18} stroke={1.5} />
